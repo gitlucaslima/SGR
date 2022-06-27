@@ -1,2 +1,2 @@
 # SGR
-Sistema de Gerenciamento de Documentação do projeto WebAcademy/UFAC
+Sistema Gerenciador de Relatórios para o projeto WebAcademy/UFAC
