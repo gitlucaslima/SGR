@@ -31,21 +31,22 @@ def cadastrar_tutor(request):
 def login(request):
     if request.method == "GET":
         if request.user.is_authenticated:
-            return redirect(reverse('plataforma'))
+            return redirect(reverse('cadastrar_tutor.html'))
         return render(request, 'login.html')
     elif request.method == "POST":
         login = request.POST.get('email')
         senha = request.POST.get('senha')
 
         user = auth.authenticate(username=login, password=senha)
+        
 
         if not user:
             #TODO: redirecionar com mensagem de erro
             return HttpResponse('Usuário inválido')
         
         auth.login(request, user)
-        return HttpResponse('Usuario logado com sucesso')
+        return render(request, 'base.html')
 
 def logout(request):
     request.session.flush()
-    return redirect(reverse('login'))
+    return redirect('login')
