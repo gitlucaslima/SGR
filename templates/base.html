@@ -25,7 +25,7 @@
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link href={% static "css/sb-admin-2.min.css"%} rel="stylesheet">
+    <link href={% static "css/sb-admin-2.min.css" %} rel="stylesheet">
 
 </head>
 
@@ -34,7 +34,8 @@
     <!-- Page Wrapper -->
     <div id="wrapper">
 
-        {% block barralateral %} <!-- Sidebar -->
+        {% block barralateral %}
+        <!-- Sidebar -->
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
@@ -151,9 +152,10 @@
             </div>
 
         </ul>
-        {% endblock barralateral %} <!-- End of Sidebar -->
+        {% endblock barralateral %}
+        <!-- End of Sidebar -->
 
-        
+
         {% block conteudo %}
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
@@ -168,7 +170,7 @@
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                         <i class="fa fa-bars"></i>
                     </button>
-                    
+
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
 
@@ -263,8 +265,7 @@
                                 </h6>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_1.svg"
-                                            alt="...">
+                                        <img class="rounded-circle" src="img/undraw_profile_1.svg" alt="...">
                                         <div class="status-indicator bg-success"></div>
                                     </div>
                                     <div class="font-weight-bold">
@@ -275,8 +276,7 @@
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_2.svg"
-                                            alt="...">
+                                        <img class="rounded-circle" src="img/undraw_profile_2.svg" alt="...">
                                         <div class="status-indicator"></div>
                                     </div>
                                     <div>
@@ -287,8 +287,7 @@
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_3.svg"
-                                            alt="...">
+                                        <img class="rounded-circle" src="img/undraw_profile_3.svg" alt="...">
                                         <div class="status-indicator bg-warning"></div>
                                     </div>
                                     <div>
@@ -320,8 +319,7 @@
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
-                                <img class="img-profile rounded-circle"
-                                    src="img/undraw_profile.svg">
+                                <img class="img-profile rounded-circle" src="img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -339,7 +337,8 @@
                                     Activity Log
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <a class="dropdown-item" href="{% url 'login' %}" data-toggle="modal"
+                                    data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>
@@ -357,9 +356,9 @@
                     <!-- Page Heading -->
                     <h1 class="h3 mb-4 text-gray-800">{% block 'titlepage' %}{% endblock 'titlepage' %}</h1>
                     {% block 'body' %}
-                    
 
-                    
+
+
                     {% endblock 'body' %}
                 </div>
                 <!-- /.Área de Conteudo -->
@@ -404,21 +403,21 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+                    <a class="btn btn-primary" href="{% url 'logout' %}">Logout</a>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Bootstrap core JavaScript-->
-    <script src={% static "jquery/jquery.min.js"%}></script>
-    <script src={% static "bootstrap/js/bootstrap.bundle.min.js"%}></script>
+    <script src={% static "jquery/jquery.min.js" %}></script>
+    <script src={% static "bootstrap/js/bootstrap.bundle.min.js" %}></script>
 
     <!-- Core plugin JavaScript-->
-    <script src={% static "jquery-easing/jquery.easing.min.js"%}></script>
+    <script src={% static "jquery-easing/jquery.easing.min.js" %}></script>
 
     <!-- Custom scripts for all pages-->
-    <script src={% static "js/sb-admin-2.min.js"%}></script>
+    <script src={% static "js/sb-admin-2.min.js" %}></script>
 
 </body>
 
