@@ -131,5 +131,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Config Auth
 AUTH_USER_MODEL = 'usuarios.Users'
 
-#Role permissions
-ROLEPERMISSIONS_MODULE = 'sgr.roles'
+LOGOUT_REDIRECT_URL = 'login'
+LOGIN_REDIRECT_URL = 'index'
+LOGIN_URL = 'login'

@@ -1,12 +1,10 @@
-from django.contrib import auth
+from django.contrib import auth, messages
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
-from django.urls import reverse
-from rolepermissions.decorators import has_permission_decorator
 
 # Create your views here.
 
-def login(request):
+def login(request):             #Login e validação
     if request.method == "GET":
         if request.user.is_authenticated:
             return redirect('/')
@@ -16,15 +14,15 @@ def login(request):
         senha = request.POST.get('senha')
 
         user = auth.authenticate(username=login, password=senha)
-        
 
         if not user:
             #TODO: redirecionar com mensagem de erro
-            return HttpResponse('Usuário inválido')
+            messages.info(request, 'Email ou senha incorreto.')
+            return redirect('login')
         
         auth.login(request, user)
         return redirect('/')
 
-def logout(request):
+def logout(request):            #Logout e destruição da sessão
     request.session.flush()
     return redirect('login')
