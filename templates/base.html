@@ -2,6 +2,8 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 
+{% block 'head' %}
+
 <head>
 
     <meta charset="utf-8">
@@ -11,12 +13,14 @@
     <meta name="author" content="">
 
 
-    {% block 'head' %}
-
-    {% endblock 'head' %}
 
 
-    <title> {% block 'title' %}{% endblock 'title' %} </title>
+
+    {% block 'title' %}
+
+    <title>Home</title>
+
+    {% endblock 'title' %}
 
     <!-- Custom fonts for this template-->
     <link href={% static "fontawesome-free/css/all.min.css" %} rel="stylesheet" type="text/css">
@@ -28,6 +32,9 @@
     <link href={% static "css/sb-admin-2.min.css" %} rel="stylesheet">
 
 </head>
+
+{% endblock 'head' %}
+
 
 <body id="page-top">
 
@@ -183,7 +190,7 @@
                             <!-- Dropdown - Messages -->
                             <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
                                 aria-labelledby="searchDropdown">
-                                <form class="form-inline mr-auto w-100 navbar-search">
+                                <form class="form-inline mr-auto w-100 navbar-search">{% csrf_token %}
                                     <div class="input-group">
                                         <input type="text" class="form-control bg-light border-0 small"
                                             placeholder="Search for..." aria-label="Search"
@@ -318,7 +325,7 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ request.user}}</span>
                                 <img class="img-profile rounded-circle" src="img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
