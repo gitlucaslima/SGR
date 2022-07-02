@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'usuarios',
+    'rolepermissions',
 ]
 
 MIDDLEWARE = [
@@ -131,6 +132,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Config Auth
 AUTH_USER_MODEL = 'usuarios.Users'
 
-LOGOUT_REDIRECT_URL = 'login'
-LOGIN_REDIRECT_URL = 'index'
-LOGIN_URL = 'login'
+#Role permissions
+ROLEPERMISSIONS_MODULE = 'sgr.roles'

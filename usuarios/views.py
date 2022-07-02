@@ -1,28 +1,52 @@
-from django.contrib import auth, messages
+from django.contrib import auth
+from django.forms import PasswordInput
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
+from django.urls import reverse
+from rolepermissions.decorators import has_permission_decorator
+
+from .models import Users
 
 # Create your views here.
 
-def login(request):             #Login e validação
+@has_permission_decorator('cadastrar_tutor')
+def cadastrar_tutor(request):
+    if request.method == "GET":
+        return render(request, 'cadastrar_tutor.html')
+    if request.method == "POST":
+        email = request.POST.get('email')
+        senha = request.POST.get('senha')
+
+        user = Users.objects.filter(email=email)
+
+        if user.exists():
+            #TODO: utilizar messages do Django
+            return HttpResponse('Email já existe.')
+        
+        user = Users.objects.create_user(username=email, email=email, password=senha, funcao="T")
+
+        #TODO: Redirecionar com message
+        return HttpResponse('Conta Criada')
+
+def login(request):
     if request.method == "GET":
         if request.user.is_authenticated:
-            return redirect('/')
+            return redirect(reverse('cadastrar_tutor.html'))
         return render(request, 'login.html')
     elif request.method == "POST":
         login = request.POST.get('email')
         senha = request.POST.get('senha')
 
         user = auth.authenticate(username=login, password=senha)
+        
 
         if not user:
             #TODO: redirecionar com mensagem de erro
-            messages.info(request, 'Email ou senha incorreto.')
-            return redirect('login')
+            return HttpResponse('Usuário inválido')
         
         auth.login(request, user)
-        return redirect('/')
+        return render(request, 'base.html')
 
-def logout(request):            #Logout e destruição da sessão
+def logout(request):
     request.session.flush()
     return redirect('login')

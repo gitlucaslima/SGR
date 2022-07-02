@@ -2,8 +2,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 
-{% block 'head' %}
-
 <head>
 
     <meta charset="utf-8">
@@ -13,14 +11,12 @@
     <meta name="author" content="">
 
 
+    {% block 'head' %}
+
+    {% endblock 'head' %}
 
 
-
-    {% block 'title' %}
-
-    <title>Home</title>
-
-    {% endblock 'title' %}
+    <title> {% block 'title' %}{% endblock 'title' %} </title>
 
     <!-- Custom fonts for this template-->
     <link href={% static "fontawesome-free/css/all.min.css" %} rel="stylesheet" type="text/css">
@@ -32,9 +28,6 @@
     <link href={% static "css/sb-admin-2.min.css" %} rel="stylesheet">
 
 </head>
-
-{% endblock 'head' %}
-
 
 <body id="page-top">
 
@@ -190,7 +183,7 @@
                             <!-- Dropdown - Messages -->
                             <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
                                 aria-labelledby="searchDropdown">
-                                <form class="form-inline mr-auto w-100 navbar-search">{% csrf_token %}
+                                <form class="form-inline mr-auto w-100 navbar-search">
                                     <div class="input-group">
                                         <input type="text" class="form-control bg-light border-0 small"
                                             placeholder="Search for..." aria-label="Search"
@@ -325,7 +318,7 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ request.user}}</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
                                 <img class="img-profile rounded-circle" src="img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
@@ -402,15 +395,15 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Pronto para sair?</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <div class="modal-body">Selecione "Sair" abaixo se estiver pronto para encerrar sua sessão atual.</div>
+                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
-                    <a class="btn btn-primary" href="{% url 'logout' %}">Sair</a>
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="{% url 'logout' %}">Logout</a>
                 </div>
             </div>
         </div>
