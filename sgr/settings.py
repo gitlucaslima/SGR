@@ -126,12 +126,4 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-<<<<<<< HEAD
-=======
 
-# Config Auth
-AUTH_USER_MODEL = 'usuarios.Users'
-
-#Role permissions
-ROLEPERMISSIONS_MODULE = 'sgr.roles'
->>>>>>> 21d037cb81d31b3753d1edf36d1bed0ffe0570a0
