@@ -1,8 +1,9 @@
 {% extends 'paginas/modelo.html' %}
+{% load static %}
 
-{% block titulo %}
+{% block title %}
 <title>Home</title>
-{% endblock titulo %}
+{% endblock title %}
 
 {% block barralateral %}
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
@@ -24,3 +25,31 @@
 
 </ul>
 {% endblock barralateral %}
+
+{% block conteudo %}
+	<div class="text-center">
+		<img src="{% static 'img/logos.png' %}">
+	</div>
+			<script>
+
+				const a = ['Básico','Intermediario','Avançado']
+
+				function repeticao() {
+					a.forEach{(element) =>
+					  (function loop(i) {
+						setTimeout(function() {
+							document.querySelector('.typed').innerHTML = element;
+						}, 2000*i)
+					  })(i);
+					}
+				  }
+				  
+				  repeticao();
+
+			</script>
+		  <div class="container">
+			<p><h1>WEB ACADEMY</h1>
+			<h3>Capacitação em Desenvolvimento Web Full-Stack</h3></p>
+			<p> Módulos <span  class="typed"> </span> </p>
+		  </div>
+{% endblock conteudo %}

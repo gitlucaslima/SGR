@@ -150,12 +150,14 @@
         <!-- End of Sidebar -->
         
         <!-- Content Wrapper -->
-        {% block conteudo %}
         <div id="content-wrapper" class="d-flex flex-column">
+
+            {% block conteudo %}
 
             <!-- Main Content -->
             <div id="content">
-
+                
+                {% block cabecalho %}
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
@@ -359,7 +361,8 @@
 
                 </nav>
                 <!-- End of Topbar -->
-
+                {% endblock cabecalho %}
+                
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
@@ -371,6 +374,7 @@
 
             </div>
             <!-- End of Main Content -->
+            {% endblock conteudo %}
 
             <!-- Footer -->
             <footer class="sticky-footer bg-white">
@@ -383,7 +387,6 @@
             <!-- End of Footer -->
 
         </div>
-        {% endblock conteudo %}
 
         <!-- End of Content Wrapper -->
 

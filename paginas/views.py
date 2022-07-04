@@ -1,9 +1,10 @@
 from django.views.generic import TemplateView
 
-
 # Create your views here.
-class IndexView(TemplateView):
-    template_name = 'paginas/modelo.html'
 
-class VisitaView(TemplateView):
-    template_name = 'paginas/visita.html'
+# class NomedaPaginaView(TemplateView):
+#     template_name = 'paginas/NomedaPagina.html'
+
+class IndexView(TemplateView):
+    template_name = 'paginas/visita.html' #Pagina de visitantes(usuario deslogado)
+
