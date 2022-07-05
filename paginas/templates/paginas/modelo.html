@@ -154,13 +154,13 @@
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
 
-            {% block conteudo %}
+            {% block corpo %}
 
             <!-- Main Content -->
             <div id="content">
 
                 {% block cabecalho %}
-                <!-- Topbar -->
+                <!-- cabeçalho/barra de epsquisa  -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
                     <!-- Sidebar Toggle (Topbar) -->
@@ -325,7 +325,8 @@
 
                         <div class="topbar-divider d-none d-sm-block"></div>
 
-                        <!-- Nav Item - User Information -->
+                        {% block inforusuario %}
+                        <!-- Perfil - Informação do usuario -->
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -354,25 +355,29 @@
                                 </a>
                             </div>
                         </li>
+                        <!-- perfil- Informação do usuario -->
+                        {% endblock inforusuario %}
 
                     </ul>
 
                 </nav>
-                <!-- End of Topbar -->
+                <!-- fim do cabeçalho/barra de epsquisa -->
                 {% endblock cabecalho %}
-
-                <!-- Begin Page Content -->
+                
+                <!-- Conteudo -->
                 <div class="container-fluid">
+                    {% block conteudo %}
 
                     <!-- Page Heading -->
                     <h1 class="h3 mb-4 text-gray-800">Blank Page</h1>
+                    {% endblock conteudo %}
 
                 </div>
-                <!-- /.container-fluid -->
+                <!-- fim Conteudo-->
 
             </div>
             <!-- End of Main Content -->
-            {% endblock conteudo %}
+            {% endblock corpo %}
 
             {% block 'footer' %}
             <!-- Footer -->
