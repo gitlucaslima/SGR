@@ -16,40 +16,48 @@
 		<div class="sidebar-brand-text mx-3">WebAcademy</div>
 	</a>
 
-	                <!-- Nav Item - Dashboard -->
-					<li class="nav-item">
-						<a class="nav-link" href="">
-							<i class="fas fa-fw fa-tachometer-alt"></i>
-							<span>Entrar</span></a>
-					</li>
+	<!-- Nav Item - Dashboard -->
+	<li class="nav-item">
+		<a class="nav-link" href="">
+			<i class="fas fa-fw fa-tachometer-alt"></i>
+			<span>Entrar</span></a>
+	</li>
 
 </ul>
 {% endblock barralateral %}
 
 {% block conteudo %}
-	<div class="text-center">
-		<img src="{% static 'img/logos.png' %}">
-	</div>
-			<script>
+<div class="text-center">
+	<img src="{% static 'img/logos.png' %}">
+</div>
+<!-- <script>
 
-				const a = ['Básico','Intermediario','Avançado']
+	let a = ['Básico', 'Intermediario', 'Avançado']
 
-				function repeticao() {
-					a.forEach{(element) =>
-					  (function loop(i) {
-						setTimeout(function() {
-							document.querySelector('.typed').innerHTML = element;
-						}, 2000*i)
-					  })(i);
-					}
-				  }
-				  
-				  repeticao();
+	let i = 0
+	setInterval(function () {
+		document.querySelector('.typed').innerHTML = a[i]
+		i++
+		i = i % a.length
+	}, 1500);
 
-			</script>
-		  <div class="container">
-			<p><h1>WEB ACADEMY</h1>
-			<h3>Capacitação em Desenvolvimento Web Full-Stack</h3></p>
-			<p> Módulos <span  class="typed"> </span> </p>
-		  </div>
+
+</script> -->
+<div class="container">
+	<p>
+	<h1>WEB ACADEMY</h1>
+	<h3>Capacitação em Desenvolvimento Web Full-Stack</h3>
+	</p>
+	<p> Módulos <span class="typed-text"></span><span class="cursor">&nbsp;</span></p>
+</div>
 {% endblock conteudo %}
+
+{% block 'footer' %}
+<footer class="sticky-footer bg-white">
+	<div class="container my-auto">
+		<div class="copyright text-center my-auto">
+			<span>Copyright &copy; UFAC 2022</span>
+		</div>
+	</div>
+</footer>
+{% endblock 'footer' %}

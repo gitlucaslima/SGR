@@ -106,6 +106,36 @@ address {
   line-height: inherit;
 }
 
+.container p {
+  font-size: 2rem;
+  padding: 0.5rem;
+  font-weight: bold;
+  letter-spacing: 0.1rem;
+  text-align: left;
+  overflow: hidden;
+}
+.container p span.typed-text {
+  font-weight: normal;
+  color: #3846dd;
+}
+.container p span.cursor {
+  display: inline-block;
+  background-color: #ccc;
+  margin-left: 0.1rem;
+  width: 3px;
+  animation: blink 1s infinite;
+}
+.container p span.cursor.typing {
+  animation: none;
+}
+@keyframes blink {
+  0%  { background-color: #ccc; }
+  49% { background-color: #ccc; }
+  50% { background-color: transparent; }
+  99% { background-color: transparent; }
+  100%  { background-color: #ccc; }
+}
+
 ol,
 ul,
 dl {
@@ -467,6 +497,7 @@ mark,
 }
 
 .blockquote-footer {
+  
   display: block;
   font-size: 80%;
   color: #858796;
@@ -474,6 +505,7 @@ mark,
 
 .blockquote-footer::before {
   content: "\2014\00A0";
+  
 }
 
 .img-fluid {
@@ -4520,6 +4552,7 @@ input[type="button"].btn-block {
 .card > .card-header + .list-group,
 .card > .list-group + .card-footer {
   border-top: 0;
+  
 }
 
 .card-body {
@@ -4564,10 +4597,12 @@ input[type="button"].btn-block {
   padding: 0.75rem 1.25rem;
   background-color: #f8f9fc;
   border-top: 1px solid #e3e6f0;
+  
 }
 
 .card-footer:last-child {
   border-radius: 0 0 calc(0.35rem - 1px) calc(0.35rem - 1px);
+  
 }
 
 .card-header-tabs {
@@ -5798,6 +5833,7 @@ a.close.disabled {
   border-top: 1px solid #e3e6f0;
   border-bottom-right-radius: calc(0.3rem - 1px);
   border-bottom-left-radius: calc(0.3rem - 1px);
+  
 }
 
 .modal-footer > * {
@@ -11274,8 +11310,10 @@ footer.sticky-footer {
 footer.sticky-footer .copyright {
   line-height: 1;
   font-size: 0.8rem;
+  
 }
 
 body.sidebar-toggled footer.sticky-footer {
   width: 100%;
+  
 }
