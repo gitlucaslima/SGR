@@ -5,8 +5,12 @@ from django.views.generic import TemplateView
 # class NomedaPaginaView(TemplateView):
 #     template_name = 'paginas/NomedaPagina.html'
 
-class IndexView(TemplateView):
-    template_name = 'paginas/Coordenador/CoordenadorInicio.html' #Pagina de visitantes(usuario deslogado)
+class CodInicioView(TemplateView):
+    template_name = 'paginas/Coordenador/Inicio.html' #Pagina de coord inicial
+class CodAvisosView(TemplateView):
+    template_name = 'paginas/Coordenador/Avisos.html' #Pagina de coord criar avisos
+class CodPrazosView(TemplateView):
+    template_name = 'paginas/Coordenador/Prazos.html' #Pagina de coord editar datas de envios
 
 class ModeloView(TemplateView):
-    template_name = 'paginas/modelo.html' #Pagina de visitantes(usuario deslogado)
+    template_name = 'paginas/modelo.html' 

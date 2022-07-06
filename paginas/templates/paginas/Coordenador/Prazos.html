@@ -1,0 +1,68 @@
+{% extends 'paginas/Coordenador/ModeloCoordenador.html' %}
+{% load static %}
+
+{% block Titulo %}
+    <title>Prazos</title>
+{% endblock Titulo %}
+
+{% block paginaatual %}
+    Editar Prazos
+{% endblock paginaatual %}
+
+{% block nomeusuario %}
+    User
+{% endblock nomeusuario %}
+
+
+{% comment %} CARD Alunos  {% endcomment %}
+{% block totalalunos %}
+    Alunos (Bolsistas)
+{% endblock totalalunos %}
+
+{% block quantidadealunos %}
+            33
+{% endblock quantidadealunos %}</div>
+
+{% comment %} CARD Relatorios esperados {% endcomment %}
+{% block relatoriosesperados %}
+    Relatórios Esperados
+{% endblock relatoriosesperados %}
+
+{% block quantidaderelatorios %}
+        33
+{% endblock quantidaderelatorios %}
+
+
+{% comment %} CARD Relatorios Entregues {% endcomment %}
+
+{% block relatoriosentregues %}
+
+Relatorios Entregues
+
+{% endblock relatoriosentregues %}
+
+{% block quantidaderelatoriosenviados %}
+
+        33
+
+{% endblock quantidaderelatoriosenviados %}
+
+{% comment %} CARD Relatorios Pendentes {% endcomment %}
+{% block relatoriospendentes %}
+    Relatórios Pendentes
+{% endblock relatoriospendentes %}
+
+{% block numerorelatoriospendentes %}
+    0
+{% endblock numerorelatoriospendentes %}
+
+{% comment %} Tabela alunos {% endcomment %}
+
+{% block NomeTabela %}
+    Alunos
+{% endblock NomeTabela %}
+
+{% block nomealuno %}Lucas de Lima Chaves{% endblock nomealuno %}
+{% block emailaluno %}lucas@gmail.com{% endblock emailaluno %}
+{% block statusrelatorioaluno %}Entregue{% endblock statusrelatorioaluno %}
+

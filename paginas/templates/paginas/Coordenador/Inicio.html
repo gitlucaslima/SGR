@@ -6,6 +6,11 @@
 {% endblock Titulo %}
 
 
+{% block nomeusuario %}
+    User
+{% endblock nomeusuario %}
+
+
 {% comment %} CARD Alunos  {% endcomment %}
 {% block totalalunos %}
     Alunos (Bolsistas)
@@ -13,7 +18,7 @@
 
 {% block quantidadealunos %}
             33
-{% endblock quantidadealunos %}</div>
+{% endblock quantidadealunos %}
 
 {% comment %} CARD Relatorios esperados {% endcomment %}
 {% block relatoriosesperados %}
@@ -39,6 +44,15 @@ Relatorios Entregues
 
 {% endblock quantidaderelatoriosenviados %}
 
+{% comment %} CARD Relatorios Pendentes {% endcomment %}
+{% block relatoriospendentes %}
+    Relatórios Pendentes
+{% endblock relatoriospendentes %}
+
+{% block numerorelatoriospendentes %}
+    0
+{% endblock numerorelatoriospendentes %}
+
 {% comment %} Tabela alunos {% endcomment %}
 
 {% block NomeTabela %}
@@ -49,11 +63,3 @@ Relatorios Entregues
 {% block emailaluno %}lucas@gmail.com{% endblock emailaluno %}
 {% block statusrelatorioaluno %}Entregue{% endblock statusrelatorioaluno %}
 
-
-{% block relatoriospendentes %}
-    Relatórios Pendentes
-{% endblock relatoriospendentes %}
-
-{% block numerorelatoriospendentes %}
-    0
-{% endblock numerorelatoriospendentes %}
