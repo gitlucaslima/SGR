@@ -10,5 +10,3 @@ class IndexView(TemplateView):
 
 class ModeloView(TemplateView):
     template_name = 'paginas/modelo.html' #Pagina de visitantes(usuario deslogado)
-
-
