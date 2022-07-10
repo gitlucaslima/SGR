@@ -10,7 +10,7 @@
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="">
         <div class="sidebar-brand-icon">
             <img style="width: 70%;" src="{% static 'img/ufac.png' %}" alt="">
         </div>
@@ -25,7 +25,7 @@
 
     <!-- Nav Item - Dashboard -->
     <li class="nav-item active">
-        <a class="nav-link" href="">
+        <a class="nav-link" href="{% url 'codinicio' %}">
             <i class="fas fa-home"></i>
             <span>Inicio</span></a>
     </li>
@@ -39,7 +39,7 @@
     </div>
 
     <li class="nav-item active">
-        <a class="nav-link" href="">
+        <a class="nav-link" href="{% url 'codavisos' %}">
             <i class="fa fa-paper-plane"></i>
             <span>Avisos</span></a>
     </li>
@@ -47,7 +47,7 @@
     <!-- Nav Item - Utilities Collapse Menu -->
     
     <li class="nav-item active">
-        <a class="nav-link" href="">
+        <a class="nav-link" href="{% url 'codprazos' %}">
             <i class="fas fa-calendar-alt"></i>
             <span>Editar Prazos</span></a>
     </li>
@@ -168,24 +168,15 @@
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
-                                    <tinymce-editor
-                                            height="500"
-                                            {% comment %} menubar="false" {% endcomment %}
-                                            plugins="advlist autolink lists link image charmap preview anchor
-                                                searchreplace visualblocks code fullscreen
-                                                insertdatetime media table code help wordcount"
-                                            toolbar="undo redo | blocks | bold italic backcolor |
-                                                alignleft aligncenter alignright alignjustify |
-                                                bullist numlist outdent indent | removeformat | help"
-                                            content_style="body
-                                            {
-                                                font-family:Helvetica,Arial,sans-serif;
-                                                font-size:14px
-                                            }">
-                                            
-
-                                            </tinymce-editor>
-                                    
+                                    <form action="POST">
+                                        <textarea name="avisos" id="editor"></textarea>
+                                            <button href="#" class="btn btn-success btn-icon-split">
+                                                <span class="icon text-white-50">
+                                                    <i class="fas fa-check"></i>
+                                                </span>
+                                                <span class="text">Enviar</span>
+                                            </button>
+                                    </form>                                    
                                 </div>
                             </div>
                         </div>
@@ -222,7 +213,7 @@
                                     <thead>
                                         <tr>
                                             <th colspan="0">
-                                                <input type="checkbox" onclick="marcarTodos(this.checked);"> Enviar a Todos </input>
+                                                <input type="checkbox" onclick="marcarTodos(this.checked);"> Todos </input>
                                             </th>
                                             <th>Emails</th>
                                         </tr>
