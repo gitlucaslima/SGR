@@ -1,4 +1,4 @@
-{% extends 'paginas/Aluno/ModeloCoordenador.html' %}
+{% extends 'paginas/Aluno/ModeloAluno.html' %}
 {% load static %}
 
 {% block Titulo %}
@@ -63,7 +63,7 @@
                     <form
                         class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                         <div class="input-group">
-                            <div class="form-control bg-light border-0 small">
+                            <div class="form-control bg-light border-0 small" href="{% url 'aluinicio' %}">
                                 <h1 class="h3 mb-0 text-gray-800">
                                     Inicio
                                 </h1>              
@@ -113,7 +113,7 @@
                                 <a class="dropdown-item" href="#">
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Logout
+                                    Sair
                                 </a>
                             </div>
                         </li>
@@ -124,7 +124,7 @@
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
-                <div class="container-fluid">
+                <div class="container-fluid" >
 
                     <!-- Content Row -->
                     <div class="row">
@@ -181,7 +181,7 @@
                             </div>
                         </div>
 
-                        <!-- Upload de assinatura -->
+                        {% comment %} <!-- Upload de assinatura -->
                         <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-primary shadow h-100 py-2">
                                 <div class="card-body">
@@ -205,7 +205,7 @@
                                     </button>
                                 </div>
                             </div>
-                        </div>
+                        </div> {% endcomment %}
 
 
                         
@@ -217,30 +217,48 @@
                         <!-- DataTales Example -->
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary"> Alunos </h6>
+                                <h6 class="m-0 font-weight-bold text-primary"> Relatórios </h6>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
-                                                <th>Nome</th>
-                                                <th>Email</th>
-                                                <th>Status do Relatório</th>
+                                                <th style="text-align: center">Relatório</th>
+                                                <th style="text-align: center">Data</th>
+                                                <th style="text-align: center">Status do Relatório</th>
+                                                <th style="text-align: center">Ações</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td> Lucas de Lima Chaves </td>
-                                                <td> 15lucas.lima15@gmail.com</td>
-                                                <td> Pendente </td>
+                                                <td style="text-align: center"> <a href="relatório">RelatorioMarço</a> </td>
+                                                <td style="text-align: center"> 20/03/2022</td>
+                                                <td style="text-align: center"> Pendente </td>
+
+                                                <td style="text-align: center">
+                                                    <button href="#" class="btn btn-warning btn-icon-split" >
+                                                        <span class="icon text-white-50" >
+                                                            <i class="fas fa-solid fa-pen"></i>
+                                                        </span>
+                                                        <span class="text"> Editar </span>
+                                                    </button>
+                                                    <button href="#" class="btn btn-danger btn-icon-split">
+                                                        <span class="icon text-white-50">
+                                                            <i class="fa fa-trash" aria-hidden="true"></i>
+                                                        </span>
+                                                        <span class="text"> Deletar </span>
+                                                    </button> 
+                                                    
+                                                </td>
+
                                             </tr>
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
                         </div>
-
+                    </div>
                     </div>
                     <!-- /.container-fluid -->
 
