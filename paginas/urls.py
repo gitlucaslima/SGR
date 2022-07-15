@@ -1,7 +1,7 @@
 from django.urls import path
 
 from .views import (AluInicioView, CodAvisosView, CodInicioView, CodPrazosView,
-                    ModeloView, TutorInicioView)
+                    ModeloView, TutorInicioView, TutorAvisosView, TutorPrazosView)
 
 urlpatterns = [
     # Paginas Coordenador
@@ -11,6 +11,8 @@ urlpatterns = [
 
     # Paginas Tutor
     path('tutor/inicio/', TutorInicioView.as_view(), name='tutor-inicio'),
+    path('tutor/avisos/', TutorAvisosView.as_view(), name='tutor-avisos'),
+    path('tutor/prazos/', TutorPrazosView.as_view(), name='tutor-prazos'),
 
     # Paginas Aluno
     path('aluno/inicio/', AluInicioView.as_view(), name='aluinicio'),

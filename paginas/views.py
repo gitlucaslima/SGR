@@ -30,3 +30,11 @@ class ModeloView(TemplateView):
 # Tutor
 class TutorInicioView(TemplateView):
     template_name = 'paginas/Tutor/Inicio.html'  # Pagina de tutor inicial
+
+
+class TutorAvisosView(TemplateView):
+    template_name = 'paginas/Tutor/Avisos.html'  # Pagina de tutor avisos
+
+
+class TutorPrazosView(TemplateView):
+    template_name = 'paginas/Tutor/Prazos.html'  # Pagina de tutor prazos
