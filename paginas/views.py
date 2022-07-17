@@ -27,6 +27,9 @@ class AluRelatorioView(TemplateView):
     template_name = 'paginas/Aluno/Relatorio.html'  # Pagina de aluno inicial
 
 
+class AluEnvioView(TemplateView):
+    template_name = 'paginas/Aluno/Envio.html' #Pagina de envio de relatório do aluno
+
 class ModeloView(TemplateView):
     template_name = 'paginas/modelo.html'
 
