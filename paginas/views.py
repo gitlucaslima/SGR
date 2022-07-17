@@ -23,6 +23,10 @@ class AluInicioView(TemplateView):
     template_name = 'paginas/Aluno/Inicio.html'  # Pagina de aluno inicial
 
 
+class AluRelatorioView(TemplateView):
+    template_name = 'paginas/Aluno/Relatorio.html'  # Pagina de aluno inicial
+
+
 class ModeloView(TemplateView):
     template_name = 'paginas/modelo.html'
 
