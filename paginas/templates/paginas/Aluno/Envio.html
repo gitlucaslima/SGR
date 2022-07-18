@@ -2,202 +2,201 @@
 {% load static %}
 
 {% block Titulo %}
-    <title>SGR</title>
+<title>SGR</title>
 {% endblock Titulo %}
 
 {% block sidebar %}
-        <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+<!-- Sidebar -->
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
-            <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="">
-                <div class="sidebar-brand-icon">
-                    <img style="width: 70%;" src="{% static 'img/ufac.png' %}" alt="">
-                </div>
-                <div class="sidebar-brand-text mx-1">WebAcademy</div>
-                <div class="sidebar-brand-icon">
-                    <img style="width: 70%;" src="{% static 'img/motorola.png' %}" alt="">
-                </div>
-            </a>
+    <!-- Sidebar - Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="">
+        <div class="sidebar-brand-icon">
+            <img style="width: 70%;" src="{% static 'img/ufac.png' %}" alt="">
+        </div>
+        <div class="sidebar-brand-text mx-1">WebAcademy</div>
+        <div class="sidebar-brand-icon">
+            <img style="width: 70%;" src="{% static 'img/motorola.png' %}" alt="">
+        </div>
+    </a>
 
-            <!-- Divider -->
-            <hr class="sidebar-divider my-0">
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
 
-            <!-- Nav Item - Dashboard -->
-            <li class="nav-item active">
-                <a class="nav-link" href="{% url 'aluinicio' %}">
-                    <i class="fas fa-home"></i>
-                    <span>Inicio</span></a>
-            </li>
+    <!-- Nav Item - Dashboard -->
+    <li class="nav-item active">
+        <a class="nav-link" href="{% url 'aluinicio' %}">
+            <i class="fas fa-home"></i>
+            <span>Inicio</span></a>
+    </li>
 
-            <!-- Divider -->
-            <hr class="sidebar-divider">
+    <!-- Divider -->
+    <hr class="sidebar-divider">
 
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Opções
-            </div>
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Opções
+    </div>
 
-            <li class="nav-item active">
-                <a class="nav-link" href="{% url 'codavisos' %}">
-                    <i class="fa fa-paper-plane"></i>
-                    <span>Avisos</span></a>
-            </li>
+    <li class="nav-item active">
+        <a class="nav-link" href="{% url 'aluinicio' %}">
+            <i class="fa fa-paper-plane"></i>
+            <span>Avisos</span></a>
+    </li>
 
-            <!-- Nav Item - Utilities Collapse Menu -->
+    <!-- Nav Item - Utilities Collapse Menu -->
 
-            <!-- Sidebar Toggler (Sidebar) -->
-            <div class="text-center d-none d-md-inline">
-                <button class="rounded-circle border-0" id="sidebarToggle"></button>
-            </div>
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
 
-        </ul>
-        <!-- End of Sidebar -->
+</ul>
+<!-- End of Sidebar -->
 {% endblock sidebar %}
 
 {% block conteudoInicio %}
-        <!-- Content Wrapper -->    
-        <div id="content-wrapper" class="d-flex flex-column">
+<!-- Content Wrapper -->
+<div id="content-wrapper" class="d-flex flex-column">
 
-            <!-- Main Content -->
-            <div id="content">
+    <!-- Main Content -->
+    <div id="content">
 
-                <!-- Topbar -->
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+        <!-- Topbar -->
+        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
-                    <!-- Sidebar Toggle (Topbar) -->
-                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                        <i class="fa fa-bars"></i>
-                    </button>
+            <!-- Sidebar Toggle (Topbar) -->
+            <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                <i class="fa fa-bars"></i>
+            </button>
 
-                    <!-- Topbar Search -->
-                    <form
-                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                        <div class="input-group">
-                            <div class="form-control bg-light border-0 small">
-                                <h1 class="h3 mb-0 text-gray-800">
-                                    Criando Relatório
-                                </h1>              
-                            </div>   
-                        </div>
-                    </form>
+            <!-- Topbar Search -->
+            <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                <div class="input-group">
+                    <div class="form-control bg-light border-0 small">
+                        <h1 class="h3 mb-0 text-gray-800">
+                            Criando Relatório
+                        </h1>
+                    </div>
+                </div>
+            </form>
 
-                    <!-- Topbar Navbar -->
-                    <ul class="navbar-nav ml-auto">
+            <!-- Topbar Navbar -->
+            <ul class="navbar-nav ml-auto">
 
-                        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-                        <li class="nav-item dropdown no-arrow d-sm-none">
-                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-search fa-fw"></i>
+                <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+                <li class="nav-item dropdown no-arrow d-sm-none">
+                    <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-search fa-fw"></i>
+                    </a>
+                    <!-- Dropdown - Messages -->
+                    <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+                        aria-labelledby="searchDropdown">
+                        <form class="form-inline mr-auto w-100 navbar-search">
+                            <div class="input-group">
+                                <input type="text" class="form-control bg-light border-0 small"
+                                    placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" type="button">
+                                        <i class="fas fa-search fa-sm"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </li>
+
+                <!-- Nav Item - User Information -->
+                <li class="nav-item dropdown no-arrow">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        <span class="mr-2 d-none d-lg-inline text-gray-600 small">
+                            User
+                            <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                        </span>
+                    </a>
+                    <!-- Dropdown - User Information -->
+                    <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                        aria-labelledby="userDropdown">
+                        <a class="dropdown-item" href="#">
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Sair
                             </a>
-                            <!-- Dropdown - Messages -->
-                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-                                aria-labelledby="searchDropdown">
-                                <form class="form-inline mr-auto w-100 navbar-search">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control bg-light border-0 small"
-                                            placeholder="Search for..." aria-label="Search"
-                                            aria-describedby="basic-addon2">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-primary" type="button">
-                                                <i class="fas fa-search fa-sm"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </li>
-        
-                        <!-- Nav Item - User Information -->
-                        <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">
-                                    User
-                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                </span>
-                            </a>
-                            <!-- Dropdown - User Information -->
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Sair
-                                </a>
-                            </div>
-                        </li>
+                    </div>
+                </li>
 
-                    </ul>
+            </ul>
 
-                </nav>
-                <!-- End of Topbar -->
+        </nav>
+        <!-- End of Topbar -->
 
-                <!-- Begin Page Content -->
-                <div class="container-fluid">
-                    <form action="/envio.html" method="POST">
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="disciplina">Disciplina:</label>
-                                <select class="form-control" data-size="5" data-live-search="true" data-width="100%" name="disciplinas" required>
-                                    <option selected disabled>Selecione a Disciplina...</option>
-                                    <option>Introdução ao Git</option>
-                                    <option>Introdução ao JavaScript</option>
-                                    <option>JavaScript Intermediário</option>
-                                    <option>JavaScript Avançado</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-md-6" >
-                                <label for="data">Data:</label>
-                                <input type="date" class="form-control" id="data">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="atividade">Atividades Realizadas:</label>
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+            <form action="/envio.html" method="POST">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="disciplina">Disciplina:</label>
+                        <select class="form-control" data-size="5" data-live-search="true" data-width="100%"
+                            name="disciplinas" required>
+                            <option selected disabled>Selecione a Disciplina...</option>
+                            <option>Introdução ao Git</option>
+                            <option>Introdução ao JavaScript</option>
+                            <option>JavaScript Intermediário</option>
+                            <option>JavaScript Avançado</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="data">Data:</label>
+                        <input type="date" class="form-control" id="data">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="atividade">Atividades Realizadas:</label>
 
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <!-- Pending Requests Card Example -->
-                            <div class="col-x3-6 col-md-12 mb-6">
-                                <div class="card border-left-warning shadow h-100 py-2">
-                                    <div class="card-body">
-                                        <div class="row no-gutters align-items-center">
-                                            <div class="col mr-2">
-                                                <form action="POST">
-                                                    <textarea name="avisos" id="editor"></textarea>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <!-- Pending Requests Card Example -->
+                    <div class="col-x3-6 col-md-12 mb-6">
+                        <div class="card border-left-warning shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <form action="POST">
+                                            <textarea name="avisos" id="editor"></textarea>
 
-                                                </form>
-                                            </div>
-                                        </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <br>
-                        <button type="submit" class="btn btn-primary btn-sm">Assinar e Enviar</button>
-                    </form>
-
-                </div>
-                <!-- /.container-fluid -->
-
-
-            </div>
-            <!-- End of Main Content -->
-
-
-            <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; SGR 2021</span>
                     </div>
                 </div>
-            </footer>
-            <!-- End of Footer -->
+                <br>
+                <button type="submit" class="btn btn-primary btn-sm">Assinar e Enviar</button>
+            </form>
 
         </div>
-        <!-- End of Content Wrapper -->
+        <!-- /.container-fluid -->
+
+
+    </div>
+    <!-- End of Main Content -->
+
+
+    <!-- Footer -->
+    <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+            <div class="copyright text-center my-auto">
+                <span>Copyright &copy; SGR 2021</span>
+            </div>
+        </div>
+    </footer>
+    <!-- End of Footer -->
+
+</div>
+<!-- End of Content Wrapper -->
 {% endblock conteudoInicio %}
