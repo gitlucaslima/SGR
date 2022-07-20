@@ -11,9 +11,9 @@ urlpatterns = [
     path('coordenador/prazos/', CodPrazosView.as_view(), name='codprazos'),
 
     # Paginas Tutor
-    path('tutor/inicio/', TutorInicioView.as_view(), name='tutor-inicio'),
-    path('tutor/avisos/', TutorAvisosView.as_view(), name='tutor-avisos'),
-    path('tutor/prazos/', TutorPrazosView.as_view(), name='tutor-prazos'),
+    path('tutor/inicio/', TutorInicioView.as_view(), name='tutinicio'),
+    path('tutor/avisos/', TutorAvisosView.as_view(), name='tutavisos'),
+    path('tutor/prazos/', TutorPrazosView.as_view(), name='tutprazos'),
 
     # Paginas Aluno
     path('aluno/relatorio/', AluRelatorioView.as_view(), name='alurelatorio'),
