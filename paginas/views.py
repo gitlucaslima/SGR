@@ -19,13 +19,11 @@ class CodPrazosView(TemplateView):
     template_name = 'paginas/Coordenador/Prazos.html'
 
 
+class AluAvisosView(TemplateView):
+    template_name = 'paginas/Aluno/Avisos.html'  # Pagina de aluno inicial
+
 class AluRelatorioView(TemplateView):
-    template_name = 'paginas/Aluno/Relatorio.html'  # Pagina de aluno inicial
-
-
-class AluRelatorioView(TemplateView):
-    template_name = 'paginas/Aluno/Relatorio.html'  # Pagina de aluno inicial
-
+    template_name = 'paginas/Aluno/Relatorio.html'  # Pagina de gerencia de relatorios do aluno
 
 class AluEnvioView(TemplateView):
     template_name = 'paginas/Aluno/Envio.html' #Pagina de envio de relatório do aluno
