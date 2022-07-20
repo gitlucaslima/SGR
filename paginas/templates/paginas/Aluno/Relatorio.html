@@ -5,44 +5,6 @@
 <title>SGR</title>
 {% endblock Titulo %}
 
-{% block sidebar %}
-<!-- Sidebar -->
-<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
-    <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-        <div class="sidebar-brand-icon">
-            <img style="width: 70%;" src="{% static 'img/ufac.png' %}" alt="">
-        </div>
-        <div class="sidebar-brand-text mx-1">WebAcademy</div>
-        <div class="sidebar-brand-icon">
-            <img style="width: 70%;" src="{% static 'img/motorola.png' %}" alt="">
-        </div>
-    </a>
-
-    <!-- Divider -->
-    <hr class="sidebar-divider my-0">
-
-    <!-- Nav Item - Dashboard -->
-    <li class="nav-item active">
-        <a class="nav-link" href="">
-            <i class="fas fa-home"></i>
-            <span>Inicio</span></a>
-    </li>
-
-    <!-- Divider -->
-    <hr class="sidebar-divider">
-
-
-
-    <!-- Sidebar Toggler (Sidebar) -->
-    <div class="text-center d-none d-md-inline">
-        <button class="rounded-circle border-0" id="sidebarToggle"></button>
-    </div>
-
-</ul>
-<!-- End of Sidebar -->
-{% endblock sidebar %}
 
 {% block conteudoInicio %}
 <!-- Content Wrapper -->
@@ -62,9 +24,9 @@
             <!-- Topbar Search -->
             <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                 <div class="input-group">
-                    <div class="form-control bg-light border-0 small" href="{% url 'aluinicio' %}">
+                    <div class="form-control bg-light border-0 small" href="{% url 'alurelatorio' %}">
                         <h1 class="h3 mb-0 text-gray-800">
-                            Inicio
+                            Relatórios
                         </h1>
                     </div>
                 </div>
