@@ -23,7 +23,7 @@ class AluAvisosView(TemplateView):
     template_name = 'paginas/Aluno/Avisos.html'  # Pagina de aluno inicial
 
 class AluRelatorioView(TemplateView):
-    template_name = 'paginas/Aluno/Relatorio.html'  # Pagina de gerencia de relatorios do aluno
+    template_name = 'paginas/Aluno/relatorio.html'  # Pagina de gerencia de relatorios do aluno
 
 class AluEnvioView(TemplateView):
     template_name = 'paginas/Aluno/Envio.html' #Pagina de envio de relatório do aluno
@@ -43,3 +43,7 @@ class TutorAvisosView(TemplateView):
 
 class TutorPrazosView(TemplateView):
     template_name = 'paginas/Tutor/Prazos.html'  # Pagina de tutor prazos
+
+# Configurações
+class ConfiguracoesView(TemplateView):
+    template_name = 'paginas/configuracoes/ConfiguracoesRelatorio.html'  # Pagina de configurações tutor/cord
