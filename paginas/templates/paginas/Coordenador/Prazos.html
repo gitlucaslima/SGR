@@ -5,63 +5,8 @@
 <title>SGR</title>
 {% endblock Titulo %}
 
-<!-- BarraLateral -->
-{% block sidebar %}
-<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
-    <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="">
-        <div class="sidebar-brand-icon">
-            <img style="width: 70%;" src="{% static 'img/ufac.png' %}" alt="">
-        </div>
-        <div class="sidebar-brand-text mx-1">WebAcademy</div>
-        <div class="sidebar-brand-icon">
-            <img style="width: 70%;" src="{% static 'img/motorola.png' %}" alt="">
-        </div>
-    </a>
-
-    <!-- Divider -->
-    <hr class="sidebar-divider my-0">
-
-    <!-- Nav Item - Dashboard -->
-    <li class="nav-item active">
-        <a class="nav-link" href="{% url 'codinicio' %}">
-            <i class="fas fa-home"></i>
-            <span>Inicio</span></a>
-    </li>
-
-    <!-- Divider -->
-    <hr class="sidebar-divider">
-
-    <!-- Heading -->
-    <div class="sidebar-heading">
-        Opções
-    </div>
-
-    <li class="nav-item active">
-        <a class="nav-link" href="{% url 'codavisos' %}">
-            <i class="fa fa-paper-plane"></i>
-            <span>Avisos</span></a>
-    </li>
-
-    <!-- Nav Item - Utilities Collapse Menu -->
-    
-    <li class="nav-item active">
-        <a class="nav-link" href="{% url 'codprazos' %}">
-            <i class="fas fa-calendar-alt"></i>
-            <span>Editar Prazos</span></a>
-    </li>
-
-    <!-- Sidebar Toggler (Sidebar) -->
-    <div class="text-center d-none d-md-inline">
-        <button class="rounded-circle border-0" id="sidebarToggle"></button>
-    </div>
-
-</ul>
-{% endblock sidebar %}
-<!-- Fim da BarraLateral -->
-
-<!-- Content Wrapper -->  
+<!-- Content Wrapper -->
 {% block conteudoInicio %}
 
 <div id="content-wrapper" class="d-flex flex-column">
@@ -78,16 +23,15 @@
             </button>
 
             <!-- Topbar Search -->
-            <form
-                class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+            <div class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                 <div class="input-group">
                     <div class="form-control bg-light border-0 small">
                         <h1 class="h3 mb-0 text-gray-800">
-                            Editar prazos
-                        </h1>              
-                    </div>   
+                            <!-- Colocar o nome dinamicamente -->
+                        </h1>
+                    </div>
                 </div>
-            </form>
+            </div>
 
             <!-- Topbar Navbar -->
             <ul class="navbar-nav ml-auto">
@@ -104,8 +48,7 @@
                         <form class="form-inline mr-auto w-100 navbar-search">
                             <div class="input-group">
                                 <input type="text" class="form-control bg-light border-0 small"
-                                    placeholder="Search for..." aria-label="Search"
-                                    aria-describedby="basic-addon2">
+                                    placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
                                 <div class="input-group-append">
                                     <button class="btn btn-primary" type="button">
                                         <i class="fas fa-search fa-sm"></i>
@@ -115,11 +58,11 @@
                         </form>
                     </div>
                 </li>
-          
+
                 <!-- Nav Item - User Information -->
                 <li class="nav-item dropdown no-arrow">
-                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
                         <span class="mr-2 d-none d-lg-inline text-gray-600 small">
                             User
                             <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -129,10 +72,10 @@
                     <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                         aria-labelledby="userDropdown">
                         <a class="dropdown-item" href="#">
-                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                            Sair
-                        </a>
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Sair
+                            </a>
                     </div>
                 </li>
             </ul>
@@ -143,144 +86,44 @@
         <!-- Begin Page Content -->
         <div class="container-fluid">
 
-            <!-- Begin Page Content -->
-            <div class="container-fluid">
-                
-            <form
-            class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-            <div class="input-group">
-                <div class="form-control bg-light border-0 small">
-                    <h1 class="h3 mb-0 text-gray-800">
-                        Definir prazo para envio de relatórios:
-                    </h1>              
-                </div>   
-            </div>
-        </form>
-
-            <div class="row">
-
-                <!-- Pending Requests Card Example -->
-                <div class="col-x5-10 col-md-10 mb-6">
-                    <div class="card border-left-warning shadow h-100 py-1">
-                        <div class="card-body">
-                            <div class="row no-gutters align-items-center">
-                                <div class="col mr-1">
-                                    <form>
-                                        <div>
-                                            <label for="datainicial">De:</label>
-                                                <input type="date" id="datainicial" name="datainicial" required pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}">
-                                                <span class="validity"></span>
-                                                <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                            <label for="datafinal">Até:</label>
-                                                <input type="date" id="datafinal" name="datafinal" required pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}">
-                                                <span class="validity"></span>
-                                        </div>
-                                        <div>                                               
-                                                <button href="#" class="btn btn-success btn-icon-split">
-                                                    <span class="icon text-white-50">
-                                                        <i class="fas fa-check"></i>
-                                                    </span>
-                                                    <span class="text">Salvar</span>
-                                                </button>
-                                        </div>
-                                      </form>
-                                      {% block tabelacheckaluno %}
-                    <!-- Pending Requests Card Example -->
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-4">               
-                
-                <script type="text/javascript">
-                    function marcarTodos(marcardesmarcar){
-                        $('.marcar').each(function () {
-                            this.checked = marcardesmarcar;
-                        });
-                    }
-                </script>
-
-                <!-- Begin Page Content -->
-                <div class="container-fluid">
-                    <!-- DataTales Example -->
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Notificar:</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                    <thead>
-                                        <tr>
-                                            <th colspan="0">
-                                                <input type="checkbox" onclick="marcarTodos(this.checked);"> Todos </input>
-                                            </th>
-                                            <th>Emails</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <input type="checkbox" class="marcar" value="email">
-                                                <td>flamengool@teste.com.br</td>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <input type="checkbox" class="marcar" value="email">
-                                            </td>
-                                            <td>corinthias@teste.com.br</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <input type="checkbox" class="marcar" value="email">
-                                            </td>
-                                            <td>madona@teste.com.br</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                <!-- /.container-fluid -->
-                {% endblock tabelacheckaluno %}
-                                    </div>
-                                </div>
-                                    <div style="text-align: center;">
-                                        <button href="#" class="btn btn-success btn-icon-split">
-                                            <span class="icon text-white-50">
-                                                <i class="fas fa-check"></i>
-                                            </span>
-                                            <span class="text">Enviar</span>
-                                        </button>
-                                        <span>&nbsp;&nbsp;&nbsp;</span>
-                                        <button href="#" class="btn btn-danger btn-icon-split" data-toggle="modal" data-target="#cancelarModal">
-                                            <span class="icon text-white-50">
-                                                <i class="fas fa-trash"></i>
-                                            </span>
-                                            <span class="text">Cancelar</span>
-                                        </button>
-                                    </div>                        
-                                </div>
-                
-                            </div>
-                        </div>
-                    </div>
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
+                        aria-controls="home" aria-selected="true">
+                        <i class="bi bi-file-text-fill"></i>
+                        Relatório
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#perfil" role="tab"
+                        aria-controls="profile" aria-selected="false">
+                        <i class="bi bi-person-fill"></i>
+                        Usuário
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contato" role="tab"
+                        aria-controls="contact" aria-selected="false">
+                        <i class="fa fa-envelope" aria-hidden="true"></i>
+                        Email
+                    </a>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    <!-- Begin Page Content -->
+                 
+                        {% include 'paginas/Coordenador/partius/configuracaoRelatorio.html' %}
+                    <!-- /.container-fluid -->
                 </div>
+                <div class="tab-pane fade" id="perfil" role="tabpanel" aria-labelledby="profile-tab">...</div>
+                <div class="tab-pane fade" id="contato" role="tabpanel" aria-labelledby="contact-tab">...</div>
             </div>
-        </div>
-    </div>
 
-                    
-            
-
-            </div>
-            <!-- /.container-fluid -->
-            
 
         </div>
-        <!-- /.container-fluid -->
-        
-        </div>
 
-        
+
     </div>
     <!-- End of Main Content -->
 
@@ -316,6 +159,3 @@
 
 </div>
 {% endblock conteudoInicio %}
-
-
-

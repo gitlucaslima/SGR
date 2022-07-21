@@ -9,7 +9,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
     {% block Titulo %}
     <title>SB Admin 2 - Dashboard</title>
     {% endblock Titulo %}
@@ -59,7 +60,7 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
-                <a class="nav-link" href="">
+                <a class="nav-link" href="{% url 'codinicio' %}">
                     <i class="fas fa-home"></i>
                     <span>Inicio</span></a>
             </li>
@@ -73,7 +74,7 @@
             </div>
 
             <li class="nav-item active">
-                <a class="nav-link" href="index.html">
+                <a class="nav-link" href="{% url 'codavisos' %}">
                     <i class="fa fa-paper-plane"></i>
                     <span>Avisos</span></a>
             </li>
@@ -81,9 +82,9 @@
             <!-- Nav Item - Utilities Collapse Menu -->
 
             <li class="nav-item active">
-                <a class="nav-link" href="index.html">
-                    <i class="fas fa-calendar-alt"></i>
-                    <span>Editar Prazos</span></a>
+                <a class="nav-link" href="{% url 'codprazos' %}">
+                    <i class="fa fa-gear"></i>
+                    <span>Configurações</span></a>
             </li>
 
             <!-- Sidebar Toggler (Sidebar) -->
