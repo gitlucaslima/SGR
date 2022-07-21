@@ -22,23 +22,26 @@
                                             <label for="nomeDisciplina">Nome</label>
                                             <input type="text" id="nomeDisciplina" class="form-control"
                                                 placeholder="Nome da disciplina">
+                                        
                                             <div class="row mt-2">
-                                                <div class="col-6">
+                                                <div class="col-md-6 col-sm-12">
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <label for="dataInicio">Inicio da disciplina</label>
 
-                                                    <label for="dataInicio">Inicio da disciplina</label>
-                                                </div>
-                                                <div class="col-6">
-                                                    <label for="dataTermino">Término da disciplina</label>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-6">
-
+                                                        </div>
+                                                    </div>
                                                     <input type="date" name="dataInicio" id="dataInicio"
                                                         class="form-control">
                                                 </div>
-                                                <div class="col-6">
+                                                <div class="col-md-6 col-sm-12">
+                                                    <div class="row">
+                                                        <div class="col">
 
+                                                            <label for="dataTermino">Término da disciplina</label>
+                                                        </div>
+
+                                                    </div>
                                                     <input type="date" name="dataFim" id="dataTermino"
                                                         class="form-control">
                                                 </div>
@@ -63,14 +66,14 @@
 
                                                     <div class="row">
 
-                                                        <div class="col-5">
+                                                        <div class="col-lg-5 col-md-12">
 
                                                             <div class="row">
-                                                                <div class="col-2">
+                                                                <div class="col-lg-2 col-md-12">
 
                                                                     <label for="mes">Mês</label>
                                                                 </div>
-                                                                <div class="col-10">
+                                                                <div class="col-lg-10 col-md-12">
                                                                     <select name="mesRelatorio" id="mes"
                                                                         class="form-control">
                                                                         <option value="">Janeiro</option>
@@ -82,21 +85,27 @@
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-5">
+                                                        <div class="col-lg-5 col-md-12">
 
                                                             <div class="row">
-                                                                <div class="col-4">
+                                                                <div class="col-lg-4 col-md-12">
                                                                     <label for="dataLimite">Data Limite</label>
                                                                 </div>
-                                                                <div class="col-8">
+                                                                <div class="col-lg-8 col-md-12">
                                                                     <input type="date" name="dataLimite" id="dataLimite"
                                                                         class="form-control">
                                                                 </div>
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-2 d-flex justify-content-end">
+                                                        <div class="col-lg-2 col-md-12 d-none d-lg-flex justify-content-end">
                                                             <button class="btn mr-5 btn-success btn-circle">
+                                                                <i class="fas fa-plus"></i>
+                                                            </button>
+                                                        </div>
+
+                                                        <div class="col-lg-2 col-md-12 d-flex mt-2 d-lg-none justify-content-center">
+                                                            <button class="btn btn-success btn-circle">
                                                                 <i class="fas fa-plus"></i>
                                                             </button>
                                                         </div>
