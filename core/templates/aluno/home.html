@@ -1,0 +1,17 @@
+{% extends 'modeloBase.html' %}
+{% load static %}
+
+
+{% block title %}
+<title>Home</title>
+{% endblock title %}
+
+{% block pageTitle %}
+<h4><i class="fas fa-home"></i> Home</h4>
+{% endblock pageTitle %}
+
+{% block "sidebar" %}
+        
+    {% include "partius/menusPersonalizados/menuAluno.html" %}
+    
+{% endblock "sidebar" %}
