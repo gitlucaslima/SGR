@@ -42,7 +42,10 @@
             {% include 'partius/tabsConfiguracoes/relatorio.html' %}
         <!-- /.container-fluid -->
     </div>
-    <div class="tab-pane fade" id="perfil" role="tabpanel" aria-labelledby="profile-tab">...</div>
+    <div class="tab-pane fade" id="perfil" role="tabpanel" aria-labelledby="profile-tab">
+
+        {% include 'partius/tabsConfiguracoes/usuario.html' %}
+    </div>
     <div class="tab-pane fade" id="contato" role="tabpanel" aria-labelledby="contact-tab">...</div>
 </div>
 {% endblock conteudo %}

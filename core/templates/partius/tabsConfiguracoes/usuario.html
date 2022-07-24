@@ -1,0 +1,66 @@
+<div class="row d-flex justify-content-center">
+    <div class="col-12 col-md-9 col-lg-10">
+        <div class="card mt-3">
+            <div class="card-body">
+                <p>
+                    <button class="btn btn-success btn-add-usuario" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                        <i class="bi bi-person-plus-fill"></i>
+                        <span>Novo Usuário</span>
+                    </button>
+                </p>
+                <div class="collapse" id="collapseExample">
+                    <div class="card card-body">
+                        <form action="" method="post" class="form">
+                            <div class="row">
+                                <div class="col-12">
+                                    <label for="nome">Nome</label>
+                                </div>
+                                <div class="col-12">
+                                    <input type="text" class="form-control" id="nome" name="nome"
+                                        placeholder="Nome do usuário">
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-12">
+                                    <label for="email">Email</label>
+                                </div>
+                                <div class="col-12">
+                                    <input type="email" class="form-control" id="email" name="email"
+                                        placeholder="Email do usuário">
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-12">
+                                    <label for="permissao">Permissão de Usuário</label>
+                                </div>
+                                <div class="col-12">
+                                    <select class="form-control form-select" name="permissao" id="permissao">
+                                        <option value="1">Aluno</option>
+                                        <option value="2">Tutor</option>
+                                        <option value="3">Coordenador</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-12 text-center">
+                                    <button class="btn btn-success btn-sm" type="submit">
+                                        <i class="fa fa-save"></i>
+                                        Salvar
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="collapse"
+                                        data-bs-target="#collapseExample" aria-expanded="false"
+                                        aria-controls="collapseExample">
+                                        <i class="bi bi-x-lg"></i> Cancelar
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
