@@ -16,6 +16,13 @@ urlpatterns = [
 
     path("avisos/", avisos, name="avisos"),
 
+    path("login/", login, name="login"),
+
+    path("registro/", registro, name="registro"),
+
+    path("redefinicao_senha/", redefine_senha, name="redefine_senha"),
+
+
 
 
 

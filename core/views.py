@@ -38,3 +38,24 @@ def configuracoes(request):
 def avisos(request):
 
     return render(request, "avisos/avisosAluno.html")
+
+# Controller do login
+
+def login(request):
+
+    return render(request, 'partius/gerenciarAcesso/login.html')
+
+
+# Controller do registro
+
+def registro(request):
+
+    return render(request, 'partius/gerenciarAcesso/registro.html')
+
+
+# Controller do registro
+
+def redefine_senha(request):
+
+    return render(request, 'partius/gerenciarAcesso/redefinicaoSenha.html')
+ 
