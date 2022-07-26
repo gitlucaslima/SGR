@@ -85,6 +85,7 @@ def redefine_senha(request):
 
     return render(request, 'partius/gerenciarAcesso/redefinicaoSenha.html')
  
+<<<<<<< HEAD
 # Cadastro de usuarios
 
 def cadastroUsuario(request):
@@ -122,3 +123,5 @@ def cadastroUsuario(request):
 
     return redirect("/configuracoes/usuario")
 
+=======
+>>>>>>> 23ff66405bb1ab4d97804f0d758152c7a3a03e2a
