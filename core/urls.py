@@ -12,11 +12,21 @@ urlpatterns = [
 
     path("coordenador/home/", coordenadorHome, name="coordenador_home"),
 
-    path("configuracoes/", configuracoes, name="configuracoes"),
+    path("configuracoes/<str:relatorio>", configuracoes, name="configuracoes"),
+
+    path("configuracoes/<str:usuario>", configuracoes, name="configuracoes"),
+
+    path("configuracoes/<str:aviso>", configuracoes, name="configuracoes"),
 
     path("avisos/", avisos, name="avisos"),
 
+    path("login/", login, name="login"),
 
+    path("registro/", registro, name="registro"),
+
+    path("redefinicao_senha/", redefine_senha, name="redefine_senha"),
+
+    path("cadastro_usuario/",cadastroUsuario,name="cadastro_usuario")
 
 
 ]

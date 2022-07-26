@@ -3,14 +3,16 @@
 
 
 {% block "sidebar" %}
-        
-    {% include "partius/menusPersonalizados/menuCoordenador.html" %}
-    
+
+{% include "partius/menusPersonalizados/menuCoordenador.html" %}
+
 {% endblock "sidebar" %}
 
+{% block pageTitle %}
+<h4>Dashboard</h4>
+{% endblock pageTitle %}
 
 {% block conteudo %}
-
 
 <!-- Content Row -->
 <div class="row">
@@ -85,10 +87,10 @@
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
-                                Relatorios Pendentes
+                            Relatorios Pendentes
                         </div>
                         <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                0
+                            0
                         </div>
                     </div>
                     <div class="col-auto">
