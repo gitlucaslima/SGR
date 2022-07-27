@@ -1,66 +1,95 @@
 <div class="row d-flex justify-content-center">
     <div class="col-12 col-md-9 col-lg-10">
-        <div class="card mt-3">
+        <div class="card shadow mt-3">
             <div class="card-body">
-                <p>
-                    <button class="btn btn-success btn-add-usuario" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                        <i class="bi bi-person-plus-fill"></i>
-                        <span>Novo Usuário</span>
-                    </button>
-                </p>
-                <div class="collapse" id="collapseExample">
-                    <div class="card card-body">
-                        <form action="" method="post" class="form">
-                            <div class="row">
-                                <div class="col-12">
-                                    <label for="nome">Nome</label>
-                                </div>
-                                <div class="col-12">
-                                    <input type="text" class="form-control" id="nome" name="nome"
-                                        placeholder="Nome do usuário">
-                                </div>
+                <div class="card card-body">
+                    <h5>Cadastro</h5>
+                    <hr>
+                    <form action="{% url 'cadastro_usuario' %}" method="post" class="form">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-12">
+                                <label for="nome">Nome</label>
                             </div>
-                            <div class="row mt-2">
-                                <div class="col-12">
-                                    <label for="email">Email</label>
-                                </div>
-                                <div class="col-12">
-                                    <input type="email" class="form-control" id="email" name="email"
-                                        placeholder="Email do usuário">
-                                </div>
+                            <div class="col-12">
+                                <input type="text" class="form-control" id="nome" name="nome"
+                                    placeholder="Nome do usuário">
                             </div>
-                            <div class="row mt-2">
-                                <div class="col-12">
-                                    <label for="permissao">Permissão de Usuário</label>
-                                </div>
-                                <div class="col-12">
-                                    <select class="form-control form-select" name="permissao" id="permissao">
-                                        <option value="1">Aluno</option>
-                                        <option value="2">Tutor</option>
-                                        <option value="3">Coordenador</option>
-                                    </select>
-                                </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-12">
+                                <label for="email">Email</label>
                             </div>
-                            <div class="row mt-3">
-                                <div class="col-12 text-center">
-                                    <button class="btn btn-success btn-sm" type="submit">
-                                        <i class="fa fa-save"></i>
-                                        Salvar
-                                    </button>
-                                    <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="collapse"
-                                        data-bs-target="#collapseExample" aria-expanded="false"
-                                        aria-controls="collapseExample">
-                                        <i class="bi bi-x-lg"></i> Cancelar
-                                    </button>
-                                </div>
+                            <div class="col-12">
+                                <input type="email" class="form-control" id="email" name="email"
+                                    placeholder="Email do usuário">
                             </div>
-                        </form>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-12">
+                                <label for="permissao">Permissão de Usuário</label>
+                            </div>
+                            <div class="col-12">
+                                <select class="form-control form-select" name="permissao" id="permissao">
+                                    <option value="1">Aluno</option>
+                                    <option value="2">Tutor</option>
+                                    <option value="3">Coordenador</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-12 text-center">
+                                <button class="btn btn-success btn-sm" type="submit">
+                                    <i class="fa fa-save"></i>
+                                    Salvar
+                                </button>
+                                <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseExample" aria-expanded="false"
+                                    aria-controls="collapseExample">
+                                    <i class="bi bi-x-lg"></i> Cancelar
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Email</th>
+                                    <th>Status</th>
+                                    <th>Permissão</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                {% for item in dados_usuarios %}
+                                    <tr>
+                                        <td>{{item.nome}}</td>
+                                        <td>{{item.email}}</td>
+                                        <td> {{item.status}} </td>
+                                        <td> {{item.permissao}}</td>
+                                        <td>
+                                            <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario{{item.id}}" data-bs-whatever="@mdo">Editar</button>
+                                            <a href="{% url 'deleta_usuario' item.id %}" class="btn btn-danger btn-sm">Excluir</a>
+                                        </td>
+                                    </tr>
+                                    {% include "partius/modais/editarUsuarioModal.html" %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
+                </div>
                 </div>
 
 
             </div>
         </div>
+           
+        
     </div>
 </div>

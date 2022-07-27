@@ -1,8 +1,26 @@
 
 from abc import abstractclassmethod
-from pyexpat import model
+from email.policy import default
 from xml.etree.ElementInclude import default_loader
+
 from django.db import models
+from pyexpat import model
+
+# Variaveis globais 
+
+STATUS_CHOICE = (
+
+    (1,"ativo"),
+    (2,"desativado")
+)
+
+PERMISSAO_CHOICE = (
+
+    (1,"aluno"),
+    (2,"tutor"),
+    (3,"coordenador")
+)
+
 
 
 # Model de assinatura
@@ -19,11 +37,8 @@ class AssinaturaModel(models.Model):
 # Model de usuario 
 class UsuarioModel(models.Model):
 
-    STATUS_CHOICE = (
-
-        (1,"ativo"),
-        (2,"desativado")
-    )
+    global STATUS_CHOICE
+    global PERMISSAO_CHOICE
 
     nome = models.CharField(
 
@@ -53,12 +68,16 @@ class UsuarioModel(models.Model):
         default=2 
     )
 
+    permissao = models.IntegerField(
+        choices= PERMISSAO_CHOICE
+    )
+
     class Meta:
 
-        abstract = True
+        abstract = False
 
+# Admin model
 
-# Model de admin
 class AdminModel(UsuarioModel):
 
     ...
@@ -66,11 +85,15 @@ class AdminModel(UsuarioModel):
 # Model do coordenador
 class CoordenadorModel(AdminModel):
 
+
     class Meta:
 
-        abstract = True
+        abstract = False
 
 class TutorModel(AdminModel):
+
+    global PERMISSAO_CHOICE
+
 
     assinatura = models.OneToOneField(
         AssinaturaModel,
@@ -78,8 +101,11 @@ class TutorModel(AdminModel):
         null=True,
     )
 
+
 # Model do aluno
 class AlunoModel(UsuarioModel):
+
+    global PERMISSAO_CHOICE
 
     assinatura = models.OneToOneField(
         AssinaturaModel,
