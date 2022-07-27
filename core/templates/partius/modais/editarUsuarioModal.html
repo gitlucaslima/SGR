@@ -1,11 +1,12 @@
-<div class="modal fade" id="modalEditarUsuario{{item.id}}" tabindex="-1" aria-labelledby="modalEditarUsuario{{item.id}}" aria-hidden="true">
+<div class="modal fade" id="modalEditarUsuario{{item.id}}" aria-labelledby="modalEditarUsuario{{item.id}}"
+    aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Editar Usuário</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
+            <div class="modal-header">
+                <h5 class="modal-title"><b>Editar usuário</b></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
                 <form action="{% url 'edita_usuario' item.id %}" method="post" class="form">
                     {% csrf_token %}
                     <div class="row">
@@ -13,8 +14,8 @@
                             <label for="nome">Nome</label>
                         </div>
                         <div class="col-12">
-                            <input type="text" class="form-control" id="nome" name="nome"
-                                placeholder="Nome do usuário" value="{{item.nome}}">
+                            <input type="text" class="form-control" id="nome" name="nome" placeholder="Nome do usuário"
+                                value="{{item.nome}}">
                         </div>
                     </div>
                     <div class="row mt-2">
@@ -33,23 +34,23 @@
                         <div class="col-12">
                             <select class="form-control form-select" name="permissao" id="permissao">
                                 {% if item.permissao == 1 %}
-                                    <option value="1" selected>Aluno</option>
+                                <option value="1" selected>Aluno</option>
                                 {% else %}
-                                    <option value="1">Aluno</option>
+                                <option value="1">Aluno</option>
                                 {% endif %}
 
                                 {% if item.permissao == 2 %}
-                                    <option value="2" selected>Tutor</option>
+                                <option value="2" selected>Tutor</option>
                                 {% else %}
-                                    <option value="2">Tutor</option>
+                                <option value="2">Tutor</option>
                                 {% endif %}
-                                
+
                                 {% if item.permissao == 3 %}
-                                    <option value="3" selected>Coordenador</option>
+                                <option value="3" selected>Coordenador</option>
                                 {% else %}
-                                    <option value="3">Coordenador</option>
+                                <option value="3">Coordenador</option>
                                 {% endif %}
-                            
+
                             </select>
                         </div>
                     </div>
@@ -66,6 +67,6 @@
                         </div>
                     </div>
                 </form>
+            </div>
         </div>
     </div>
-</div>

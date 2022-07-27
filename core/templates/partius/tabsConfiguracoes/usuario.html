@@ -12,7 +12,7 @@
                                 <label for="nome">Nome</label>
                             </div>
                             <div class="col-12">
-                                <input type="text" class="form-control" id="nome" name="nome"
+                                <input type="text" required class="form-control" id="nome" name="nome"
                                     placeholder="Nome do usuário">
                             </div>
                         </div>
@@ -21,7 +21,7 @@
                                 <label for="email">Email</label>
                             </div>
                             <div class="col-12">
-                                <input type="email" class="form-control" id="email" name="email"
+                                <input type="email" required class="form-control" id="email" name="email"
                                     placeholder="Email do usuário">
                             </div>
                         </div>
@@ -30,7 +30,7 @@
                                 <label for="permissao">Permissão de Usuário</label>
                             </div>
                             <div class="col-12">
-                                <select class="form-control form-select" name="permissao" id="permissao">
+                                <select class="form-control form-select" required name="permissao" id="permissao">
                                     <option value="1">Aluno</option>
                                     <option value="2">Tutor</option>
                                     <option value="3">Coordenador</option>
@@ -52,47 +52,51 @@
                         </div>
                     </form>
 
-                    
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                            <thead>
-                                <tr>
-                                    <th>Nome</th>
-                                    <th>Email</th>
-                                    <th>Status</th>
-                                    <th>Permissão</th>
-                                    <th>Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody>
 
-                                {% for item in dados_usuarios %}
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Nome</th>
+                                        <th>Email</th>
+                                        <th>Status</th>
+                                        <th>Permissão</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    {% for item in dados_usuarios %}
                                     <tr>
                                         <td>{{item.nome}}</td>
                                         <td>{{item.email}}</td>
                                         <td> {{item.status}} </td>
                                         <td> {{item.permissao}}</td>
                                         <td>
-                                            <div id="listaAcoes">
-                                                <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario{{item.id}}" data-bs-whatever="@mdo">Editar</button>
-                                                <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modalDeletaUsuario{{item.id}}" data-bs-whatever="@mdo">Excluir</button>
-                                            </div>
+                                            <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#modalEditarUsuario{{item.id}}"
+                                                data-bs-whatever="@mdo">Editar</button>
+                                            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#modalDeletaUsuario{{item.id}}"
+                                                data-bs-whatever="@mdo">Excluir</button>
                                         </td>
+                                        {% include "partius/modais/deletarUsuarioModal.html" %}
+
                                         {% include "partius/modais/editarUsuarioModal.html" %}
-                                        {% include "partius/modais/deletarUsuarioModal.html" %} 
+
                                     </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
                 </div>
 
 
             </div>
         </div>
-           
-        
+
+
     </div>
 </div>

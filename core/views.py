@@ -118,8 +118,6 @@ def cadastroUsuario(request):
 
 def editaUsuario(request, id):
 
-    print(request)
-
     if request.method == "POST":
 
         instance = UsuarioModel.objects.filter(id=id).first()
@@ -133,9 +131,12 @@ def editaUsuario(request, id):
     return redirect("/configuracoes/usuario")
 
 
-def deletaUsuario(request, id):
-    
-    instance = get_object_or_404(UsuarioModel, id=id)
-    instance.delete()   
+def deletaUsuario(request):
+
+    if request.method == 'POST':
+        
+        id = request.POST.get('id')
+        instance = get_object_or_404(UsuarioModel, id = id)
+        instance.delete()
 
     return redirect("/configuracoes/usuario")
