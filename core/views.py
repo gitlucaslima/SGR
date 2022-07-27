@@ -1,4 +1,4 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 
 from core.models import *
 
@@ -20,17 +20,27 @@ def tutorHome(request):
 
     return render(request, "tutor/home.html")
 
-# Controller do coordenador
 
+# Controller do coordenador
 
 def coordenadorHome(request):
 
-    return render(request, "coordenador/home.html")
+    dados = UsuarioModel.objects.all()
+    numeroAlunos = UsuarioModel.objects.filter(permissao=1).count()
+
+    contexto = {
+        "tab":dados,
+        "numeroAlunos": numeroAlunos,
+    }
+
+    contexto['dados_usuarios'] = dados
+
+    return render(request, "coordenador/home.html", contexto)
 
 
 # Controller do configuraçoes
 
-def configuracoes(request,relatorio):
+def configuracoes(request, relatorio):
 
     contexto = {
         "tab":relatorio
@@ -40,7 +50,6 @@ def configuracoes(request,relatorio):
         dados = UsuarioModel.objects.all()
   
         contexto['dados_usuarios'] = dados
-
 
     return render(request, "configuracoes/configuracoesCoordenador.html",contexto)
 
@@ -82,7 +91,6 @@ def cadastroUsuario(request):
         permissao = request.POST.get("permissao")
 
         
-
         if(permissao == '1'):
             
             novo_usuario = AlunoModel()
@@ -108,3 +116,26 @@ def cadastroUsuario(request):
 
     return redirect("/configuracoes/usuario")
 
+def editaUsuario(request, id):
+
+    print(request)
+
+    if request.method == "POST":
+
+        instance = UsuarioModel.objects.filter(id=id).first()
+        
+        instance.nome = request.POST.get("nome")
+        instance.email = request.POST.get("email")
+        instance.permissao = request.POST.get("permissao")
+
+        instance.save()    
+
+    return redirect("/configuracoes/usuario")
+
+
+def deletaUsuario(request, id):
+    
+    instance = get_object_or_404(UsuarioModel, id=id)
+    instance.delete()   
+
+    return redirect("/configuracoes/usuario")

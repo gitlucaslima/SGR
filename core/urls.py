@@ -6,6 +6,7 @@ from core.views import *
 urlpatterns = [
 
     path("aluno/home/", alunoHome, name="aluno_home"),
+
     path("aluno/gerar_relatorio/", alunoRelatorio, name="aluno_relatorio"),
 
     path("tutor/home/", tutorHome, name="tutor_home"),
@@ -26,7 +27,11 @@ urlpatterns = [
 
     path("redefinicao_senha/", redefine_senha, name="redefine_senha"),
 
-    path("cadastro_usuario/",cadastroUsuario,name="cadastro_usuario")
+    path("cadastro_usuario/",cadastroUsuario, name="cadastro_usuario"),
+
+    path("edita_usuario/<int:id>/", editaUsuario, name="edita_usuario"),
+
+    path("deleta_usuario/<int:id>/", deletaUsuario, name="deleta_usuario"),
 
 
 ]

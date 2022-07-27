@@ -27,7 +27,7 @@
                             Alunos (Bolsistas)
                         </div>
                         <div class="h5 mb-0 font-weight-bold text-gray-800">
-                            33
+                            {{numeroAlunos}}
                         </div>
                     </div>
                     <div class="col-auto">
@@ -106,29 +106,30 @@
 <div class="container-fluid">
 
     <!-- DataTales Example -->
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary"> Alunos </h6>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                    <thead>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>Permissão</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    {% for item in dados_usuarios %}
                         <tr>
-                            <th>Nome</th>
-                            <th>Email</th>
-                            <th>Status do Relatório</th>
+                            <td>{{item.nome}}</td>
+                            <td>{{item.email}}</td>
+                            <td> {{item.status}} </td>
+                            <td> {{item.permissao}}</td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td> Lucas de Lima Chaves </td>
-                            <td> 15lucas.lima15@gmail.com</td>
-                            <td> Pendente </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+                        {% include "partius/modais/editarUsuarioModal.html" %}
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 

@@ -7,7 +7,7 @@
         </div>
         <div class="modal-body">
          
-            <form action="" method="post" class="form">
+            <form action="{% url 'edita_usuario' item.id %}" method="post" class="form">
                 {% csrf_token %}
                 <div class="row">
                     <div class="col-12">

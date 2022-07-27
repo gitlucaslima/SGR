@@ -75,10 +75,9 @@
                                         <td> {{item.permissao}}</td>
                                         <td>
                                             <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario{{item.id}}" data-bs-whatever="@mdo">Editar</button>
-                                            <button class="btn btn-danger btn-sm">Excluir</button>
+                                            <a href="{% url 'deleta_usuario' item.id %}" class="btn btn-danger btn-sm">Excluir</a>
                                         </td>
                                     </tr>
-
                                     {% include "partius/modais/editarUsuarioModal.html" %}
                                 {% endfor %}
                             </tbody>
