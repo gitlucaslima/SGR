@@ -38,22 +38,8 @@ def configuracoes(request,relatorio):
     if relatorio == 'usuario':
 
         dados = UsuarioModel.objects.all()
-        dados_modificados = []
-        for usuario in dados:
-
-            usuario_modificado = {
-                "nome":usuario.nome,
-                "email":usuario.email,
-                "status":usuario.status
-            }
-            teste = usuario is AlunoModel
-            print(teste,type(usuario))
-            if teste :
-                print("testasdasda")
-                usuario_modificado['permissao'] = "Aluno"
-
-            dados_modificados.append(usuario_modificado) 
-        contexto['dados_usuarios'] = dados_modificados
+  
+        contexto['dados_usuarios'] = dados
 
 
     return render(request, "configuracoes/configuracoesCoordenador.html",contexto)
@@ -85,7 +71,6 @@ def redefine_senha(request):
 
     return render(request, 'partius/gerenciarAcesso/redefinicaoSenha.html')
  
-<<<<<<< HEAD
 # Cadastro de usuarios
 
 def cadastroUsuario(request):
@@ -123,5 +108,3 @@ def cadastroUsuario(request):
 
     return redirect("/configuracoes/usuario")
 
-=======
->>>>>>> 23ff66405bb1ab4d97804f0d758152c7a3a03e2a
