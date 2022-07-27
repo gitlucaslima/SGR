@@ -2,6 +2,7 @@
 const tabConfiguracao = document.querySelectorAll(".tab-configuracao");
 
 
+
 tabConfiguracao.forEach(item=>{
 
     item.addEventListener('click',()=>{

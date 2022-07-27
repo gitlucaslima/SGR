@@ -74,11 +74,14 @@
                                         <td> {{item.status}} </td>
                                         <td> {{item.permissao}}</td>
                                         <td>
-                                            <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario{{item.id}}" data-bs-whatever="@mdo">Editar</button>
-                                            <a href="{% url 'deleta_usuario' item.id %}" class="btn btn-danger btn-sm">Excluir</a>
+                                            <div id="listaAcoes">
+                                                <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario{{item.id}}" data-bs-whatever="@mdo">Editar</button>
+                                                <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modalDeletaUsuario{{item.id}}" data-bs-whatever="@mdo">Excluir</button>
+                                            </div>
                                         </td>
+                                        {% include "partius/modais/editarUsuarioModal.html" %}
+                                        {% include "partius/modais/deletarUsuarioModal.html" %} 
                                     </tr>
-                                    {% include "partius/modais/editarUsuarioModal.html" %}
                                 {% endfor %}
                             </tbody>
                         </table>
