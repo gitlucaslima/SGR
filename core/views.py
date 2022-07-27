@@ -48,7 +48,7 @@ def configuracoes(request, relatorio):
     if relatorio == 'usuario':
 
         dados = UsuarioModel.objects.all()
-  
+   
         contexto['dados_usuarios'] = dados
 
     return render(request, "configuracoes/configuracoesCoordenador.html",contexto)

@@ -65,7 +65,7 @@ class UsuarioModel(models.Model):
         null=False,
         blank=False,
         choices=STATUS_CHOICE,
-        default=2 
+        default=1 
     )
 
     permissao = models.IntegerField(
