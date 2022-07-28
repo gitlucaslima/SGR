@@ -25,12 +25,11 @@ def tutorHome(request):
 
 def coordenadorHome(request):
 
-    dados = UsuarioModel.objects.all()
-    numeroAlunos = UsuarioModel.objects.filter(permissao=1).count()
+    dados = UsuarioModel.objects.filter(permissao=1)
 
     contexto = {
         "tab":dados,
-        "numeroAlunos": numeroAlunos,
+        "numeroAlunos": dados.count(),
     }
 
     contexto['dados_usuarios'] = dados
@@ -118,8 +117,6 @@ def cadastroUsuario(request):
 
 def editaUsuario(request, id):
 
-    print(request)
-
     if request.method == "POST":
 
         instance = UsuarioModel.objects.filter(id=id).first()
@@ -127,15 +124,20 @@ def editaUsuario(request, id):
         instance.nome = request.POST.get("nome")
         instance.email = request.POST.get("email")
         instance.permissao = request.POST.get("permissao")
+        instance.status = request.POST.get("status")
+        print(request.POST.get("status"))
 
         instance.save()    
 
     return redirect("/configuracoes/usuario")
 
 
-def deletaUsuario(request, id):
-    
-    instance = get_object_or_404(UsuarioModel, id=id)
-    instance.delete()   
+def deletaUsuario(request):
+
+    if request.method == 'POST':
+        
+        id = request.POST.get('id')
+        instance = get_object_or_404(UsuarioModel, id = id)
+        instance.delete()
 
     return redirect("/configuracoes/usuario")

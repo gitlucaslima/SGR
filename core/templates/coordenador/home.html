@@ -48,7 +48,7 @@
                             Relatórios Esperados
                         </div>
                         <div class="h5 mb-0 font-weight-bold text-gray-800">
-                            33
+                            {{numeroAlunos}}
                         </div>
                     </div>
                     <div class="col-auto">
@@ -115,6 +115,8 @@
                         <th>Email</th>
                         <th>Status</th>
                         <th>Permissão</th>
+                        <th>Status do Relatório</th>
+                        
                     </tr>
                 </thead>
                 <tbody>
@@ -123,8 +125,23 @@
                         <tr>
                             <td>{{item.nome}}</td>
                             <td>{{item.email}}</td>
-                            <td> {{item.status}} </td>
-                            <td> {{item.permissao}}</td>
+                            <td> {% if item.status == 1 %}
+                                    Ativo
+                                {% else %}
+                                    Inativo
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if item.permissao == 1 %}
+                                    Aluno
+                                {% elif item.permissao == 2 %}
+                                    Tutor
+                                {% else %}
+                                    Coordenador
+                                {% endif %} 
+                            </td>
+                            <td></td>
+                            
                         </tr>
                         {% include "partius/modais/editarUsuarioModal.html" %}
                     {% endfor %}
