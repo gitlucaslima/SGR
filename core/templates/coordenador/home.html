@@ -1,0 +1,147 @@
+{% extends 'modeloBase.html' %}
+{% load static %}
+
+
+{% block "sidebar" %}
+
+{% include "partius/menusPersonalizados/menuCoordenador.html" %}
+
+{% endblock "sidebar" %}
+
+{% block pageTitle %}
+<h4>Dashboard</h4>
+{% endblock pageTitle %}
+
+{% block conteudo %}
+
+<!-- Content Row -->
+<div class="row">
+
+    <!-- Total de Alunos -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                            Alunos (Bolsistas)
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            {{numeroAlunos}}
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-graduation-cap fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Relatórios Esperados -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                            Relatórios Esperados
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            {{numeroAlunos}}
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-hourglass fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Relatorios Enviados -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                            Relatorios Enviados
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            33
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-file-upload fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Relatorios Pendentes -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-danger shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                            Relatorios Pendentes
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            0
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="far fa-file-excel fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- DataTales Example -->
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Mês</th>
+                        <th>Status</th>
+                        <th>Status do Relatório</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+
+                    {% for item in dados_usuarios %}
+                        <tr>
+                            <td>{{item.nome}}</td>
+                            <td>{{item.email}}</td>
+                            <td> {% if item.status == 1 %}
+                                    Ativo
+                                {% else %}
+                                    Inativo
+                                {% endif %}
+                            </td>
+                            <td></td>
+                            
+                        </tr>
+                        {% include "partius/modais/editarUsuarioModal.html" %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+<!-- /.container-fluid -->
+
+
+{% endblock conteudo %}

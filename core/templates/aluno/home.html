@@ -1,0 +1,264 @@
+{% extends 'modeloBase.html' %}
+{% load static %}
+
+
+{% block title %}
+<title>Home</title>
+{% endblock title %}
+
+{% block pageTitle %}
+<h4><i class="fas fa-home"></i> Home</h4>
+{% endblock pageTitle %}
+
+{% block "sidebar" %}
+
+{% include "partius/menusPersonalizados/menuAluno.html" %}
+
+{% endblock "sidebar" %}
+
+{% block conteudo %}
+
+<div class="row d-flex flex-column align-items-center">
+    <div class="col-12 mb-2 col-md-11 d-flex justify-content-center">
+        <!-- Lembrar de não deixar o usuário fazer o relatório caso não tenha submetido uma assinatura previamente -->
+        <div class="row col-md-11 d-flex justify-content-center w-100">
+            <div class="col-xl-4 col-md-6 mb-4">
+                <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    <!-- Quando a assinatura já foi fornecida mudar o titulo para Atualizar Assinatura -->
+                                    Upload de assinatura
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-solid fa-file-image fa-3x"></i>
+                            </div>
+
+                        </div>
+
+                        <button type="button" class="btn btn-success mt-1 btn-icon-split" type="button"
+                            class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                            <span class="icon text-white-50">
+                                <i class="fas fa-solid fa-arrow-up"></i>
+                            </span>
+                            <span class="text"> Upload </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            {% include "partius/modais/uploadAssinaturaModal.html" %}
+
+            <!-- Deve se verificar existe alguma entrega de relatório agendada caso não tenha o usuário deve ser informado aqui e não página de gerar relatorios-->
+            <div class="col-xl-4 col-md-6 mb-4">
+                <div class="card border-left-warning shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    Realizar Relatório
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-solid fas fa-file-word fa-3x"></i>
+                            </div>
+
+                        </div>
+
+                        <a href="{% url 'aluno_relatorio' %}" class="btn btn-warning mt-1 btn-icon-split">
+                            <span class="icon text-white-50">
+                                <i class="fas fa-solid fa-arrow-up"></i>
+                            </span>
+                            <span class="text"> Gerar Relatório </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <div class="col-12 mb-5 col-md-11">
+
+        <div class="card">
+            <di class="card-header">
+                <h3>Relatórios</h3>
+            </di>
+            <div class="card-body">
+                <div class="accordion" id="accordionPanelsStayOpenExample">
+
+                    <!-- 
+
+                        Lembrete para quem for fazer o backend dessa pagina
+                        
+                        ITEM 1
+                     -->
+                    <div class="accordion-item mb-4">
+                        <!-- 
+                        Ao listar os relatórios de um aluno lembrar de criar um valor dinâmico e unico 
+                        para o id para h2 abaixo, por exemplo: no de baixo temos o id = panelsStayOpen-headingOne,
+                        podem criar um id = acordion1, e para o proximo accordion-item da interação o id será acordion2,
+                        isso é necessário pois o id é usado para abrir ao clicar sobre esse elemento
+
+                    -->
+                        <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+
+                            <!-- 
+                                
+                                A propriedade data-bs-target deve receber #acordion1 (o id definido para o elemento anterior, a # é necessario) 
+                                A propriedade aria-controls deve receber acordion1 
+                            -->
+
+                            <button class="accordion-button collapsed p-4 text-nowrap text-truncate" type="button"
+                                data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne"
+                                aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
+                                <div class="col-11">
+                                    <div class="row">
+
+                                        <div class="col-12 col-md-5 text-truncate">
+                                            <i class="fas fa-file-signature mr-2 fs-5"></i><span>Relatório Janeiro
+                                            </span>
+                                        </div>
+
+                                        <div class="col-12 col-md-7 text-left text-truncate">
+                                            <!-- Nome da disciplina qui -->
+                                            <em class="text-muted">Framework Back-End Básico</em>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </button>
+                        </h2>
+                        <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse"
+                            aria-labelledby="panelsStayOpen-headingOne"
+                            data-bs-parent="#accordionPanelsStayOpenExample">
+                            <div class="accordion-body text-center">
+
+                                <!-- 
+
+                                    Regras de negocio:
+
+                                    Editar: deve ser possivel somente enquanto o relatório ainda estiver aberto para tal.
+                                            Deve-se verificar se o mesmo pode ser editado ou não, caso não possa mais editar,
+                                            essa opção deve ser desabilitada, se possivel mostrar uma notificação do porque essa operação
+                                            não pode ser realizada, uma vez que esse projeto será usado em IHM :( 
+                                 -->
+                                <a href="" class="btn btn-success btn-sm mb-1">
+                                    <i class="fas fa-edit"></i> Editar
+                                </a>
+
+
+                                <!-- Baixar: Opção de Baixa deve ser possivel independente do momento -->
+                                <a href="" class="btn btn-primary btn-sm mb-1">
+                                    <i class="fas fa-download"></i> Baixar
+                                </a>
+
+                                <!-- Excluir: Essa opção deve ser possivel somente enquanto o relatório mensal estiver aberto,
+                                    após o fechamento não poderá mais. Um dos motivos disso é que o aluno pode excluir o relatório após ter
+                                    passado do prazo, assim ele não poderá refazer novamente, e nem o tutor poderá acessa-lo, uma vez que
+                                    foi excluido banco. Deve ser implementado uma regra para evitar isso e notificar o aluno
+                                -->
+                                <button class="btn btn-danger btn-sm mb-1">
+                                    <i class="fas fa-trash"></i>
+                                    Excluir
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- ITEM 2 -->
+                    <div class="accordion-item mb-4">
+                        <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+                            <button class="accordion-button collapsed p-4 text-nowrap text-truncate" type="button"
+                                data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo"
+                                aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+                                <div class="col-11">
+                                    <div class="row">
+
+                                        <div class="col-12 col-md-5 text-truncate">
+                                            <i class="fas fa-file-signature mr-2 fs-5"></i><span>Relatório Fevereiro
+                                            </span>
+                                        </div>
+                                        <div class="col-12 col-md-7 text-left text-truncate">
+                                            <!-- Nome da disciplina qui -->
+                                            <em class="text-muted">Front-End Básico</em>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </button>
+                        </h2>
+                        <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse"
+                            aria-labelledby="panelsStayOpen-headingTwo"
+                            data-bs-parent="#accordionPanelsStayOpenExample">
+                            <div class="accordion-body text-center">
+                                <a href="" class="btn btn-success btn-sm mb-1">
+                                    <i class="fas fa-edit"></i> Editar
+                                </a>
+                                <a href="" class="btn btn-primary btn-sm mb-1">
+                                    <i class="fas fa-download"></i> Baixar
+                                </a>
+                                <button class="btn btn-danger btn-sm mb-1">
+                                    <i class="fas fa-trash"></i>
+                                    Excluir
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ITEM 3 -->
+                    <div class="accordion-item mb-4">
+                        <h2 class="accordion-header" id="panelsStayOpen-headingThree">
+                            <button class="accordion-button collapsed p-4 text-nowrap" type="button"
+                                data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree"
+                                aria-expanded="false" aria-controls="panelsStayOspen-collapseThree">
+                                <div class="col-11">
+                                    <div class="row">
+
+                                        <div class="col-12 col-md-5 text-truncate">
+                                            <i class="fas fa-file-signature mr-2 fs-5"></i><span>Relatório
+                                                Janeiro</span>
+
+                                        </div>
+
+
+                                        <div class="col-12 col-md-7 text-left text-truncate">
+                                            <!-- Nome da disciplina qui -->
+                                            <em class="text-muted">Framework Front End Básico</em>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </button>
+                        </h2>
+
+                        <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse"
+                            aria-labelledby="panelsStayOpen-headingThree"
+                            data-bs-parent="#accordionPanelsStayOpenExample">
+                            <div class="accordion-body text-center">
+                                <a href="" class="btn btn-success btn-sm mb-1">
+                                    <i class="fas fa-edit"></i> Editar
+                                </a>
+                                <a href="" class="btn btn-primary btn-sm mb-1">
+                                    <i class="fas fa-download"></i> Baixar
+                                </a>
+                                <button class="btn btn-danger btn-sm mb-1">
+                                    <i class="fas fa-trash"></i>
+                                    Excluir
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock conteudo %}
