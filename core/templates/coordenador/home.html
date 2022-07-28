@@ -14,9 +14,37 @@
 
 {% block conteudo %}
 
+{% block meusStyles %}
+
+<link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+
+{% endblock meusStyles %}
+
 <!-- Content Row -->
 <div class="row">
 
+    <!-- Mês corrente -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                            Relatórios do mês
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            Janeiro
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="bi bi-calendar-date fa-2x text-gray-300"></i>
+
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Total de Alunos -->
     <div class="col-xl-3 col-md-6 mb-4">
         <div class="card border-left-primary shadow h-100 py-2">
@@ -32,27 +60,6 @@
                     </div>
                     <div class="col-auto">
                         <i class="fas fa-graduation-cap fa-2x text-gray-300"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Relatórios Esperados -->
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-warning shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                            Relatórios Esperados
-                        </div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">
-                            {{numeroAlunos}}
-                        </div>
-                    </div>
-                    <div class="col-auto">
-                        <i class="fas fa-hourglass fa-2x text-gray-300"></i>
                     </div>
                 </div>
             </div>
@@ -106,37 +113,358 @@
 <div class="container-fluid">
 
     <!-- DataTales Example -->
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                <thead>
-                    <tr>
-                        <th>Nome</th>
-                        <th>Mês</th>
-                        <th>Status</th>
-                        <th>Status do Relatório</th>
-                        
-                    </tr>
-                </thead>
-                <tbody>
+    <div class="card-body d-flex justify-content-center">
+        <div class="col-12 mb-5 col-md-11">
 
-                    {% for item in dados_usuarios %}
-                        <tr>
-                            <td>{{item.nome}}</td>
-                            <td>{{item.email}}</td>
-                            <td> {% if item.status == 1 %}
-                                    Ativo
-                                {% else %}
-                                    Inativo
-                                {% endif %}
-                            </td>
-                            <td></td>
+            <div class="card">
+                <di class="card-header text-center bg-primary">
+                    <h3 class="text-white">Relatórios</h3>
+                </di>
+                <div class="card-body">
+                    <div class="accordion" id="accordionPanelsStayOpenExample">
+
+                        <!-- 
+    
+                            Lembrete para quem for fazer o backend dessa pagina
                             
-                        </tr>
-                        {% include "partius/modais/editarUsuarioModal.html" %}
-                    {% endfor %}
-                </tbody>
-            </table>
+                            ITEM 1
+                         -->
+                        <div class="accordion-item mb-4">
+
+                            <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+
+
+                                <button class="accordion-button collapsed p-4 text-nowrap text-truncate" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne"
+                                    aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
+                                    <div class="col-11">
+                                        <div class="row">
+
+                                            <div class="col-12 col-md-5 text-truncate">
+                                                <i class="fas fa-file-signature mr-2 fs-5"></i><span>Relatório Janeiro
+                                                </span>
+                                            </div>
+
+                                            <div class="col-12 col-md-7 text-left text-truncate">
+                                        
+                                                <em class="text-muted">Framework Back-End Básico</em>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </button>
+                            </h2>
+                            <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse"
+                                aria-labelledby="panelsStayOpen-headingOne"
+                                data-bs-parent="#accordionPanelsStayOpenExample">
+                                <div class="accordion-body">
+
+                                  
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Nome</th>
+                                                    <th>Status</th>
+                                                    <th>Office</th>
+                                                    <th>Age</th>
+                                                    <th>Start date</th>
+                                                    <th>Operações</th>
+                                                </tr>
+                                            </thead>
+                                            <tfoot>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th>Position</th>
+                                                    <th>Office</th>
+                                                    <th>Age</th>
+                                                    <th>Start date</th>
+                                                    <th>Salary</th>
+                                                </tr>
+                                            </tfoot>
+                                            <tbody>
+                                            
+                                                <tr>
+                                                    <td>Bradley Greer</td>
+                                                    <td>Software Engineer</td>
+                                                    <td>London</td>
+                                                    <td>41</td>
+                                                    <td>2012/10/13</td>
+                                                    <td>$132,000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Dai Rios</td>
+                                                    <td>Personnel Lead</td>
+                                                    <td>Edinburgh</td>
+                                                    <td>35</td>
+                                                    <td>2012/09/26</td>
+                                                    <td>$217,500</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Jenette Caldwell</td>
+                                                    <td>Development Lead</td>
+                                                    <td>New York</td>
+                                                    <td>30</td>
+                                                    <td>2011/09/03</td>
+                                                    <td>$345,000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Yuri Berry</td>
+                                                    <td>Chief Marketing Officer (CMO)</td>
+                                                    <td>New York</td>
+                                                    <td>40</td>
+                                                    <td>2009/06/25</td>
+                                                    <td>$675,000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Caesar Vance</td>
+                                                    <td>Pre-Sales Support</td>
+                                                    <td>New York</td>
+                                                    <td>21</td>
+                                                    <td>2011/12/12</td>
+                                                    <td>$106,450</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Doris Wilder</td>
+                                                    <td>Sales Assistant</td>
+                                                    <td>Sidney</td>
+                                                    <td>23</td>
+                                                    <td>2010/09/20</td>
+                                                    <td>$85,600</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Angelica Ramos</td>
+                                                    <td>Chief Executive Officer (CEO)</td>
+                                                    <td>London</td>
+                                                    <td>47</td>
+                                                    <td>2009/10/09</td>
+                                                    <td>$1,200,000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Gavin Joyce</td>
+                                                    <td>Developer</td>
+                                                    <td>Edinburgh</td>
+                                                    <td>42</td>
+                                                    <td>2010/12/22</td>
+                                                    <td>$92,575</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Jennifer Chang</td>
+                                                    <td>Regional Director</td>
+                                                    <td>Singapore</td>
+                                                    <td>28</td>
+                                                    <td>2010/11/14</td>
+                                                    <td>$357,650</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Brenden Wagner</td>
+                                                    <td>Software Engineer</td>
+                                                    <td>San Francisco</td>
+                                                    <td>28</td>
+                                                    <td>2011/06/07</td>
+                                                    <td>$206,850</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Fiona Green</td>
+                                                    <td>Chief Operating Officer (COO)</td>
+                                                    <td>San Francisco</td>
+                                                    <td>48</td>
+                                                    <td>2010/03/11</td>
+                                                    <td>$850,000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Shou Itou</td>
+                                                    <td>Regional Marketing</td>
+                                                    <td>Tokyo</td>
+                                                    <td>20</td>
+                                                    <td>2011/08/14</td>
+                                                    <td>$163,000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Michelle House</td>
+                                                    <td>Integration Specialist</td>
+                                                    <td>Sidney</td>
+                                                    <td>37</td>
+                                                    <td>2011/06/02</td>
+                                                    <td>$95,400</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Suki Burks</td>
+                                                    <td>Developer</td>
+                                                    <td>London</td>
+                                                    <td>53</td>
+                                                    <td>2009/10/22</td>
+                                                    <td>$114,500</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Prescott Bartlett</td>
+                                                    <td>Technical Author</td>
+                                                    <td>London</td>
+                                                    <td>27</td>
+                                                    <td>2011/05/07</td>
+                                                    <td>$145,000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Gavin Cortez</td>
+                                                    <td>Team Leader</td>
+                                                    <td>San Francisco</td>
+                                                    <td>22</td>
+                                                    <td>2008/10/26</td>
+                                                    <td>$235,500</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Martena Mccray</td>
+                                                    <td>Post-Sales support</td>
+                                                    <td>Edinburgh</td>
+                                                    <td>46</td>
+                                                    <td>2011/03/09</td>
+                                                    <td>$324,050</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Unity Butler</td>
+                                                    <td>Marketing Designer</td>
+                                                    <td>San Francisco</td>
+                                                    <td>47</td>
+                                                    <td>2009/12/09</td>
+                                                    <td>$85,675</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Howard Hatfield</td>
+                                                    <td>Office Manager</td>
+                                                    <td>San Francisco</td>
+                                                    <td>51</td>
+                                                    <td>2008/12/16</td>
+                                                    <td>$164,500</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Hope Fuentes</td>
+                                                    <td>Secretary</td>
+                                                    <td>San Francisco</td>
+                                                    <td>41</td>
+                                                    <td>2010/02/12</td>
+                                                    <td>$109,850</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Vivian Harrell</td>
+                                                    <td>Financial Controller</td>
+                                                    <td>San Francisco</td>
+                                                    <td>62</td>
+                                                    <td>2009/02/14</td>
+                                                    <td>$452,500</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Timothy Mooney</td>
+                                                    <td>Office Manager</td>
+                                                    <td>London</td>
+                                                    <td>37</td>
+                                                    <td>2008/12/11</td>
+                                                    <td>$136,200</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Jackson Bradshaw</td>
+                                                    <td>Director</td>
+                                                    <td>New York</td>
+                                                    <td>65</td>
+                                                    <td>2008/09/26</td>
+                                                    <td>$645,750</td>
+                                                </tr>
+                                        
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- ITEM 2 -->
+                        <div class="accordion-item mb-4">
+                            <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+                                <button class="accordion-button collapsed p-4 text-nowrap text-truncate" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo"
+                                    aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+                                    <div class="col-11">
+                                        <div class="row">
+
+                                            <div class="col-12 col-md-5 text-truncate">
+                                                <i class="fas fa-file-signature mr-2 fs-5"></i><span>Relatório Fevereiro
+                                                </span>
+                                            </div>
+                                            <div class="col-12 col-md-7 text-left text-truncate">
+                                                <!-- Nome da disciplina qui -->
+                                                <em class="text-muted">Front-End Básico</em>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </button>
+                            </h2>
+                            <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse"
+                                aria-labelledby="panelsStayOpen-headingTwo"
+                                data-bs-parent="#accordionPanelsStayOpenExample">
+                                <div class="accordion-body text-center">
+                                    <a href="" class="btn btn-success btn-sm mb-1">
+                                        <i class="fas fa-edit"></i> Editar
+                                    </a>
+                                    <a href="" class="btn btn-primary btn-sm mb-1">
+                                        <i class="fas fa-download"></i> Baixar
+                                    </a>
+                                    <button class="btn btn-danger btn-sm mb-1">
+                                        <i class="fas fa-trash"></i>
+                                        Excluir
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ITEM 3 -->
+                        <div class="accordion-item mb-4">
+                            <h2 class="accordion-header" id="panelsStayOpen-headingThree">
+                                <button class="accordion-button collapsed p-4 text-nowrap" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree"
+                                    aria-expanded="false" aria-controls="panelsStayOspen-collapseThree">
+                                    <div class="col-11">
+                                        <div class="row">
+
+                                            <div class="col-12 col-md-5 text-truncate">
+                                                <i class="fas fa-file-signature mr-2 fs-5"></i><span>Relatório
+                                                    Janeiro</span>
+
+                                            </div>
+
+
+                                            <div class="col-12 col-md-7 text-left text-truncate">
+                                                <!-- Nome da disciplina qui -->
+                                                <em class="text-muted">Framework Front End Básico</em>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </button>
+                            </h2>
+
+                            <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse"
+                                aria-labelledby="panelsStayOpen-headingThree"
+                                data-bs-parent="#accordionPanelsStayOpenExample">
+                                <div class="accordion-body text-center">
+                                    <a href="" class="btn btn-success btn-sm mb-1">
+                                        <i class="fas fa-edit"></i> Editar
+                                    </a>
+                                    <a href="" class="btn btn-primary btn-sm mb-1">
+                                        <i class="fas fa-download"></i> Baixar
+                                    </a>
+                                    <button class="btn btn-danger btn-sm mb-1">
+                                        <i class="fas fa-trash"></i>
+                                        Excluir
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -145,3 +473,13 @@
 
 
 {% endblock conteudo %}
+
+{% block meusScripts %}
+
+<script src="{% static 'vendor/datatables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
+
+<!-- Page level custom scripts -->
+<script src="{% static 'js/demo/datatables-demo.js' %}"></script>
+
+{% endblock meusScripts %}
