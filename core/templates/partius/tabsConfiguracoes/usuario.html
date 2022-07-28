@@ -71,8 +71,21 @@
                                     <tr>
                                         <td>{{item.nome}}</td>
                                         <td>{{item.email}}</td>
-                                        <td> {{item.status}} </td>
-                                        <td> {{item.permissao}}</td>
+                                        <td> {% if item.status == 1 %}
+                                                Ativo
+                                            {% else %}
+                                                Inativo
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if item.permissao == 1 %}
+                                                Aluno
+                                            {% elif item.permissao == 2 %}
+                                                Tutor
+                                            {% else %}
+                                                Coordenador
+                                            {% endif %} 
+                                        </td>
                                         <td>
                                             <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal"
                                                 data-bs-target="#modalEditarUsuario{{item.id}}"

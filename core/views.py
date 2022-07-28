@@ -25,12 +25,11 @@ def tutorHome(request):
 
 def coordenadorHome(request):
 
-    dados = UsuarioModel.objects.all()
-    numeroAlunos = UsuarioModel.objects.filter(permissao=1).count()
+    dados = UsuarioModel.objects.filter(permissao=1)
 
     contexto = {
         "tab":dados,
-        "numeroAlunos": numeroAlunos,
+        "numeroAlunos": dados.count(),
     }
 
     contexto['dados_usuarios'] = dados
@@ -125,6 +124,8 @@ def editaUsuario(request, id):
         instance.nome = request.POST.get("nome")
         instance.email = request.POST.get("email")
         instance.permissao = request.POST.get("permissao")
+        instance.status = request.POST.get("status")
+        print(request.POST.get("status"))
 
         instance.save()    
 

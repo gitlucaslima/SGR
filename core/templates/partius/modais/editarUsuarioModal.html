@@ -53,6 +53,25 @@
 
                             </select>
                         </div>
+                        <div class="row mt-2">
+                            <div class="col-12">
+                                <label for="status">Status do Usuário</label>
+                            </div>
+                            <div class="col-4">
+                                <select class="form-control form-select" name="status" id="status">
+                                    {% if item.status == 1 %}
+                                    <option value="1" selected>Ativo</option>
+                                    {% else %}
+                                    <option value="1">Ativar</option>
+                                    {% endif %}
+    
+                                    {% if item.status == 2 %}
+                                    <option value="2" selected>Inativo</option>
+                                    {% else %}
+                                    <option value="2">Desativar</option>
+                                    {% endif %}
+                                </select>
+                            </div>
                     </div>
                     <div class="row mt-3">
                         <div class="col-12 text-center">
