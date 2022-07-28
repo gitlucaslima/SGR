@@ -1,6 +1,7 @@
 
 from abc import abstractclassmethod
 from email.policy import default
+from random import choices
 from xml.etree.ElementInclude import default_loader
 
 from django.db import models
@@ -172,6 +173,11 @@ class RelatorioModel(models.Model):
 
 class DisciplinaModel(models.Model):
 
+    STATUS_DISCIPLINA_CHOISE = (
+
+        (1,"Ativa"),
+        (2,"Inativa")
+    )
     nome = models.CharField(
 
         max_length=200,
@@ -202,6 +208,13 @@ class DisciplinaModel(models.Model):
     data_termino = models.DateField(
         null=False,
         blank=False
+    )
+
+    status = models.IntegerField(
+
+        choices = STATUS_DISCIPLINA_CHOISE,
+        default = 1,
+        null = False
     )
 
 # Model Documento

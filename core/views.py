@@ -26,10 +26,12 @@ def tutorHome(request):
 def coordenadorHome(request):
 
     dados = UsuarioModel.objects.filter(permissao=1)
+    
 
     contexto = {
         "tab":dados,
-        "numeroAlunos": dados.count(),
+        "numeroAlunos": dados.count()
+        
     }
 
     contexto['dados_usuarios'] = dados
@@ -41,8 +43,11 @@ def coordenadorHome(request):
 
 def configuracoes(request, relatorio):
 
+    disciplinas = DisciplinaModel.objects.filter(status = 1)
+
     contexto = {
-        "tab":relatorio
+        "tab":relatorio,
+        "disciplinas":disciplinas
     }
     if relatorio == 'usuario':
 
@@ -141,3 +146,26 @@ def deletaUsuario(request):
         instance.delete()
 
     return redirect("/configuracoes/usuario")
+
+
+def cadastrarDisciplina(request):
+
+    if(request.method == "POST"):
+
+        nome = request.POST.get("nome")
+        dataInicio = request.POST.get("dataInicio")
+        dataFim = request.POST.get("dataFim")
+        descricao = request.POST.get("descricao")
+
+        novaDisciplina = DisciplinaModel()
+        novaDisciplina.nome = nome
+        novaDisciplina.data_inicio = dataInicio
+        novaDisciplina.data_termino = dataFim
+        novaDisciplina.descricao = descricao
+
+        novaDisciplina.save()
+
+        return redirect("/configuracoes/relatorio")
+
+
+

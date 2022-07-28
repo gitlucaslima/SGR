@@ -112,9 +112,8 @@
                 <thead>
                     <tr>
                         <th>Nome</th>
-                        <th>Email</th>
+                        <th>Mês</th>
                         <th>Status</th>
-                        <th>Permissão</th>
                         <th>Status do Relatório</th>
                         
                     </tr>
@@ -130,15 +129,6 @@
                                 {% else %}
                                     Inativo
                                 {% endif %}
-                            </td>
-                            <td>
-                                {% if item.permissao == 1 %}
-                                    Aluno
-                                {% elif item.permissao == 2 %}
-                                    Tutor
-                                {% else %}
-                                    Coordenador
-                                {% endif %} 
                             </td>
                             <td></td>
                             
