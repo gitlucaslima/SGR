@@ -1,6 +1,11 @@
+from datetime import datetime
+from msilib.schema import Error
+
+from django.contrib import messages
 from django.db import IntegrityError
 from django.shortcuts import get_object_or_404, redirect, render
 
+from core.funcoes_auxiliares.data import isDateMaior
 from core.models import *
 
 # Controllers do aluno
@@ -158,9 +163,14 @@ def cadastrarDisciplina(request):
         dataFim = request.POST.get("dataFim")
         descricao = request.POST.get("descricao")
 
-        if dataInicio > dataFim:
 
-            print("Data já passou")
+
+        if isDateMaior(dataInicio,dataFim):
+
+            messages.add_message(request,messages.ERROR,"A data fornecida é inválida!")
+            return redirect("/configuracoes/relatorio")
+
+            
 
         novaDisciplina = DisciplinaModel()
         novaDisciplina.nome = nome
@@ -171,24 +181,75 @@ def cadastrarDisciplina(request):
         try:
 
             novaDisciplina.save()
+            messages.add_message(request, messages.SUCCESS, 'Disciplina cadastrada com sucesso')
+
 
         except IntegrityError:
 
-            ...
+            messages.add_message(request, messages.ERROR, 'Já existe uma disciplina cadastrada com este nome')
+            
+        except Error:
 
+            messages.add_message(request, messages.ERROR, 'Ocorreu algum erro')
             
 
         return redirect("/configuracoes/relatorio")
+
+def editarDisciplina(request):
+
+    id = request.POST.get("id")
+    nome = request.POST.get("nome")
+    dataInicio = request.POST.get("dataInicio")
+    dataFim = request.POST.get("dataFim")
+    descricao = request.POST.get("descricao")
+    
+    if isDateMaior(dataInicio,dataFim):
+
+        messages.add_message(request,messages.ERROR,"A data fornecida é inválida!")
+        return redirect("/configuracoes/relatorio")
+
+
+    disciplina = get_object_or_404(DisciplinaModel,id=id)
+
+
+
+    disciplina.nome = nome
+    disciplina.data_inicio = dataInicio
+    disciplina.data_termino = dataFim
+    disciplina.descricao = descricao
+
+    try:
+
+        disciplina.save()
+
+    except IntegrityError:
+
+        messages.add_message(request, messages.ERROR, 'Já existe uma disciplina cadastrada com este nome')
+        
+    except Error:
+
+        messages.add_message(request, messages.ERROR, 'Ocorreu algum erro')
+
+    return redirect("/configuracoes/relatorio")
+ 
+
 
 def deletarDisciplina(request):
 
     if(request.method == "POST"):
 
-
         id = request.POST.get("id")
-        disciplina = DisciplinaModel.objects.get(id = id)
+        disciplina = get_object_or_404(DisciplinaModel,id=id)
 
-        disciplina.delete()
+        nome = disciplina.nome
+
+        try:
+            disciplina.delete()
+            messages.add_message(request,messages.SUCCESS,f"A disciplina {nome} foi excluida com sucesso!")
+
+        except ValueError:
+
+            messages.add_message(request,messages.ERROR,"Não foi possivel deletar a disciplina")
 
     return redirect("/configuracoes/relatorio")
 
