@@ -183,6 +183,7 @@ class DisciplinaModel(models.Model):
         max_length=200,
         null= False,
         blank=False,
+        unique=True
     )
 
     descricao = models.TextField(

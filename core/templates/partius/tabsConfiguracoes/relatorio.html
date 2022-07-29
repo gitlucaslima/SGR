@@ -86,14 +86,57 @@
                                                                     Opções
                                                                 </button>
                                                                 <ul class="dropdown-menu">
-                                                                    <li class="text-center">Editar</li>
-                                                                    <li class="text-center">Excluir</li>
+                                                                    <li class="text-center">
+                                                                        <i href="" class="btn btn-block">
+
+                                                                            <div class="row">
+                                                                                <div class="col-2">
+                                                                                    <span class="icon text-secondary">
+                                                                                        <i
+                                                                                            class="bi bi-pencil-square"></i>
+                                                                                    </span>
+
+                                                                                </div>
+                                                                                <div class="col-10 text-left">
+
+                                                                                    <span class="text">Editar</span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </i>
+
+                                                                    </li>
+                                                                    <li class="text-center">
+
+                                                                        <button type="button" class="btn btn-block"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#modalDeletaDisciplina{{item.id}}"
+                                                                            data-bs-whatever="@mdo">
+                                                                            <div class="row">
+                                                                                <div class="col-2">
+                                                                                    <span class="icon text-secondary">
+                                                                                        <i class="bi bi-trash"></i>
+                                                                                    </span>
+
+                                                                                </div>
+                                                                                <div class="col-10 text-left">
+
+                                                                                    <span class="text">
+                                                                                        Excluir</span>
+                                                                                </div>
+                                                                            </div>
+
+                                                                        </button>
+
+                                                                    </li>
                                                                 </ul>
                                                             </div>
 
                                                         </td>
+
+
                                                     </tr>
 
+                                                    {% include 'partius/modais/deletarDisciplinaModal.html' %}
                                                     {% endfor %}
 
                                                 </tbody>

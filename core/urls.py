@@ -33,7 +33,9 @@ urlpatterns = [
 
     path("deleta_usuario/", deletaUsuario, name="deleta_usuario"),
 
-    path("cadastrar_disciplina",cadastrarDisciplina,name="cadastrar_disciplina")
+    path("cadastrar_disciplina",cadastrarDisciplina,name="cadastrar_disciplina"),
+    path("deletar_disciplina",deletarDisciplina,name="deletar_disciplina")
+
 
 
 ]

@@ -1,3 +1,4 @@
+from django.db import IntegrityError
 from django.shortcuts import get_object_or_404, redirect, render
 
 from core.models import *
@@ -157,15 +158,37 @@ def cadastrarDisciplina(request):
         dataFim = request.POST.get("dataFim")
         descricao = request.POST.get("descricao")
 
+        if dataInicio > dataFim:
+
+            print("Data já passou")
+
         novaDisciplina = DisciplinaModel()
         novaDisciplina.nome = nome
         novaDisciplina.data_inicio = dataInicio
         novaDisciplina.data_termino = dataFim
         novaDisciplina.descricao = descricao
 
-        novaDisciplina.save()
+        try:
+
+            novaDisciplina.save()
+
+        except IntegrityError:
+
+            ...
+
+            
 
         return redirect("/configuracoes/relatorio")
 
+def deletarDisciplina(request):
 
+    if(request.method == "POST"):
+
+
+        id = request.POST.get("id")
+        disciplina = DisciplinaModel.objects.get(id = id)
+
+        disciplina.delete()
+
+    return redirect("/configuracoes/relatorio")
 
