@@ -8,7 +8,6 @@ from django.db import models
 from pyexpat import model
 
 # Variaveis globais 
-
 STATUS_CHOICE = (
 
     (1,"ativo"),
@@ -27,13 +26,9 @@ PERMISSAO_CHOICE = (
 # Model de assinatura
 class AssinaturaModel(models.Model):
 
-    url_assinatura = models.CharField(
+    url_assinatura = models.ImageField(upload_to="uploads/assinatura/")
 
-        max_length=200,
-        null= False,
-        blank=False
-    ) 
-
+ 
 
 # Model de usuario 
 class UsuarioModel(models.Model):

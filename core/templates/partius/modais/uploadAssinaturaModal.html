@@ -1,3 +1,4 @@
+{% load static %}
 <!-- Modal -->
 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
   aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -9,7 +10,9 @@
       </div>
       <div class="modal-body">
 
-        <form action="" class="form mt-5">
+        <form action="{% url 'apload_assinatura' %}" method="POST" class="form form-assinatura mt-5"
+          enctype="multipart/form-data">
+          {% csrf_token %}
           <div class="row">
             <div class="col-12">
               <label for="">Assinatura</label>
@@ -17,9 +20,25 @@
 
             <div class="col-12">
               <div class="input-group">
-                <input type="file" class="form-control" accept=".png" id="inputGroupFile04"
-                  aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+                <input type="file"  class="form-control img-input" accept=".png" id="inputGroupFile04"
+                  aria-describedby="inputGroupFileAddon04" required name="img-assinatura" aria-label="Upload">
+                <input type="hidden" name="imagem_base64" id="campo_imagem_base64">
+
               </div>
+            </div>
+
+            <div class="col-12 text-center mt-3 scroll" >
+              <div class="row mb-2">
+                <div class="col">
+                  <button class="btn border" id="btn-zoom-mais" type="button"><i class="bi bi-plus-circle"></i></button>
+                  <button class="btn border" id="btn-zoom-menos" type="button"><i class="bi bi-dash-circle"></i></button>
+
+                </div>
+              </div>
+              <canvas id="UgCanvas" style="border:1px solid #c6c6c6;">
+                <h3>Seu Navegador não suporta este recurso</h3>
+              </canvas>
+              
             </div>
           </div>
           <div class="col-12 mt-3 text-center">
@@ -40,8 +59,13 @@
         </form>
       </div>
       <div class="modal-footer">
-
+        
       </div>
     </div>
   </div>
 </div>
+
+{% block meusScripts %}
+
+<script src="{% static 'js/script-visualizar.js' %}"></script>
+{% endblock meusScripts %}

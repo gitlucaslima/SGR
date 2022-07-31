@@ -37,6 +37,7 @@ urlpatterns = [
     path("editar_disciplina/",editarDisciplina,name="editar_disciplina"),
     path("deletar_disciplina/",deletarDisciplina,name="deletar_disciplina"),
 
-
-
+    path("apload_assinatura/",uploadAssinatura,name="apload_assinatura"),
+    
+    path("api/",api,name="api")
 ]

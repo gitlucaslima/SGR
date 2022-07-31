@@ -1,12 +1,19 @@
 from datetime import datetime
+import io
 from msilib.schema import Error
+import sys
+from tkinter import OUTSIDE
 
 from django.contrib import messages
 from django.db import IntegrityError
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-
+from django.core.files.uploadedfile import InMemoryUploadedFile,UploadedFile
 from core.funcoes_auxiliares.data import isDateMaior
 from core.models import *
+from PIL import Image
+from io import BytesIO
+import base64
 
 # Controllers do aluno
 
@@ -253,3 +260,35 @@ def deletarDisciplina(request):
 
     return redirect("/configuracoes/relatorio")
 
+
+def uploadAssinatura(request):
+
+    if(request.method == "POST"):
+
+        arquivo = request.FILES.get("img-assinatura")
+        imagem_base64 = request.POST.get("imagem_base64")
+
+        imagem = Image.open(io.BytesIO(base64.b64decode(imagem_base64)))
+        output = io.BytesIO()
+        imagem.save(output, format='png', quality=85)
+        output.seek(0)
+        arquivo = InMemoryUploadedFile(output, 'ImageField',
+                                    "assinatura.png",
+                                    'image/png',
+                                    sys.getsizeof(output), None)
+    
+        if(not arquivo):
+
+            messages.add_message(request,messages.WARNING,"É necessário um arquivo")
+
+        assinatura = AssinaturaModel(url_assinatura = arquivo)
+
+
+        assinatura.save()
+
+    return JsonResponse({"teste":"Deu certo"})
+
+
+def api(request):
+
+    return JsonResponse({"message":"Ola mundo"})
