@@ -12,8 +12,7 @@ canvas_height = canvas.height = 200;
 let zoom = 1
 let larguraImg;
 let alturaImg;
-let xCentro = 0;
-let yCentro = 0;
+
 let posicaoInicialX = 0;
 let posicaoInicialY = 0;
 
@@ -101,16 +100,13 @@ function readImage(data) {
                 
                     draw(ctx, img, posicaoInicialX, posicaoInicialY, larguraImg, alturaImg)
 
-                    // ctx.fillRect(xi,yi,canvas_width,canvas_height)
                 }
             })
 
 
             formAssinatura.addEventListener("submit",(event)=>{
 
-                // alert("passou aqui")
-                // event.preventDefault()
-            
+               
                 
                 let imagem_base64 = canvas.toDataURL();
                 imagem_base64 = imagem_base64.replace("data:image/png;base64,",'')

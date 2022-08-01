@@ -8,7 +8,7 @@ from django.contrib import messages
 from django.db import IntegrityError
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.core.files.uploadedfile import InMemoryUploadedFile,UploadedFile
+from django.core.files.uploadedfile import InMemoryUploadedFile, UploadedFile
 from core.funcoes_auxiliares.data import isDateMaior
 from core.models import *
 from PIL import Image
@@ -20,7 +20,12 @@ import base64
 
 def alunoHome(request):
 
-    return render(request, "aluno/home.html")
+    context = {
+
+        "url": "aluno_home"
+
+    }
+    return render(request, "aluno/home.html",context)
 
 
 def alunoRelatorio(request):
@@ -31,7 +36,12 @@ def alunoRelatorio(request):
 # Controller do tutor
 def tutorHome(request):
 
-    return render(request, "tutor/home.html")
+    context = {
+
+        "url": "tutor_home"
+
+    }
+    return render(request, "tutor/home.html",context)
 
 
 # Controller do coordenador
@@ -262,12 +272,12 @@ def deletarDisciplina(request):
 
 
 def uploadAssinatura(request):
-
+ 
     if(request.method == "POST"):
 
-        arquivo = request.FILES.get("img-assinatura")
+    
         imagem_base64 = request.POST.get("imagem_base64")
-
+        url = request.POST.get("urlOrigem")
         imagem = Image.open(io.BytesIO(base64.b64decode(imagem_base64)))
         output = io.BytesIO()
         imagem.save(output, format='png', quality=85)
@@ -283,10 +293,18 @@ def uploadAssinatura(request):
 
         assinatura = AssinaturaModel(url_assinatura = arquivo)
 
+        try:
 
-        assinatura.save()
+            assinatura.save()
+            messages.add_message(request,messages.SUCCESS,"Assinatura salva com sucesso")
 
-    return JsonResponse({"teste":"Deu certo"})
+
+        except Exception:
+
+            messages.add_message(request,messages.ERROR,"Ocorreu um error ao salva o arquivo")
+
+
+    return redirect(url)
 
 
 def api(request):
