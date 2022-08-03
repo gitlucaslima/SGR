@@ -106,8 +106,6 @@ function readImage(data) {
 
             formAssinatura.addEventListener("submit",(event)=>{
 
-               
-                
                 let imagem_base64 = canvas.toDataURL();
                 imagem_base64 = imagem_base64.replace("data:image/png;base64,",'')
                 
