@@ -7,20 +7,19 @@ from xml.etree.ElementInclude import default_loader
 from django.db import models
 from pyexpat import model
 
-# Variaveis globais 
+# Variaveis globais
 STATUS_CHOICE = (
 
-    (1,"ativo"),
-    (2,"desativado")
+    (1, "ativo"),
+    (2, "desativado")
 )
 
 PERMISSAO_CHOICE = (
 
-    (1,"aluno"),
-    (2,"tutor"),
-    (3,"coordenador")
+    (1, "aluno"),
+    (2, "tutor"),
+    (3, "coordenador")
 )
-
 
 
 # Model de assinatura
@@ -28,9 +27,8 @@ class AssinaturaModel(models.Model):
 
     url_assinatura = models.ImageField(upload_to="uploads/assinatura/")
 
- 
 
-# Model de usuario 
+# Model de usuario
 class UsuarioModel(models.Model):
 
     global STATUS_CHOICE
@@ -39,15 +37,15 @@ class UsuarioModel(models.Model):
     nome = models.CharField(
 
         max_length=200,
-        null= False,
-        blank= False
+        null=False,
+        blank=False
     )
 
     email = models.EmailField(
 
-        null= False,
-        blank= False,
-        unique= True
+        null=False,
+        blank=False,
+        unique=True
     )
 
     senha = models.CharField(
@@ -61,11 +59,11 @@ class UsuarioModel(models.Model):
         null=False,
         blank=False,
         choices=STATUS_CHOICE,
-        default=1 
+        default=1
     )
 
     permissao = models.IntegerField(
-        choices= PERMISSAO_CHOICE
+        choices=PERMISSAO_CHOICE
     )
 
     class Meta:
@@ -74,26 +72,28 @@ class UsuarioModel(models.Model):
 
 # Admin model
 
+
 class AdminModel(UsuarioModel):
 
     ...
 
 # Model do coordenador
-class CoordenadorModel(AdminModel):
 
+
+class CoordenadorModel(AdminModel):
 
     class Meta:
 
         abstract = False
 
+
 class TutorModel(AdminModel):
 
     global PERMISSAO_CHOICE
 
-
     assinatura = models.OneToOneField(
         AssinaturaModel,
-        on_delete= models.SET_NULL,
+        on_delete=models.SET_NULL,
         null=True,
     )
 
@@ -105,47 +105,91 @@ class AlunoModel(UsuarioModel):
 
     assinatura = models.OneToOneField(
         AssinaturaModel,
-        on_delete= models.SET_NULL,
+        on_delete=models.SET_NULL,
         null=True,
     )
 
 
+# Model disciplina
+
+class DisciplinaModel(models.Model):
+
+    STATUS_DISCIPLINA_CHOISE = (
+
+        (1, "Ativa"),
+        (2, "Inativa")
+    )
+    nome = models.CharField(
+
+        max_length=200,
+        null=False,
+        blank=False,
+        unique=True
+    )
+
+    descricao = models.TextField(
+
+        max_length=400,
+        null=True,
+        blank=True
+    )
+
+    data_inicio = models.DateField(
+
+        null=False,
+        blank=False
+    )
+
+    data_termino = models.DateField(
+        null=False,
+        blank=False
+    )
+
+    status = models.IntegerField(
+
+        choices=STATUS_DISCIPLINA_CHOISE,
+        default=1,
+        null=False
+    )
+
 # Model Relatório
+
+
 class RelatorioModel(models.Model):
 
     MESES_CHOICE = (
 
-        (1,"Janeiro"),
-        (2,"Fevereiro"),
-        (3,"Março"),
-        (4,"Abril"),
-        (5,"Maio"),
-        (6,"Junho"),
-        (7,"Julho"),
-        (8,"Agosto"),
-        (9,"Setembro"),
-        (10,"Outubro"),
-        (11,"Novembro"),
-        (12,"Dezembro"),
+        (1, "Janeiro"),
+        (2, "Fevereiro"),
+        (3, "Março"),
+        (4, "Abril"),
+        (5, "Maio"),
+        (6, "Junho"),
+        (7, "Julho"),
+        (8, "Agosto"),
+        (9, "Setembro"),
+        (10, "Outubro"),
+        (11, "Novembro"),
+        (12, "Dezembro"),
     )
 
     STATUS_CHOICE = (
 
-        (1,"aberto"),
-        (2,"fechado")
+        (1, "aberto"),
+        (2, "fechado")
     )
 
     mes = models.IntegerField(
 
-        choices= MESES_CHOICE,
-        null= False,
-        blank= False,
-    
+        choices=MESES_CHOICE,
+        null=False,
+        blank=False,
+
     )
 
     data_limite = models.DateField(
 
-        null= False,
+        null=False,
         blank=False
     )
 
@@ -163,64 +207,22 @@ class RelatorioModel(models.Model):
         on_delete=models.SET_NULL
     )
 
+    disciplina = models.ManyToManyField(
 
-# Model disciplina
+        DisciplinaModel,
 
-class DisciplinaModel(models.Model):
-
-    STATUS_DISCIPLINA_CHOISE = (
-
-        (1,"Ativa"),
-        (2,"Inativa")
-    )
-    nome = models.CharField(
-
-        max_length=200,
-        null= False,
-        blank=False,
-        unique=True
     )
 
-    descricao = models.TextField(
-
-        max_length=400,
-        null=True,
-        blank=True
-    )
-
-    relatorio = models.OneToOneField(
-
-        RelatorioModel,
-        on_delete=models.SET_NULL,
-        null=True,
-    )
-
-    data_inicio = models.DateField(
-
-        null=False,
-        blank=False
-    )
-
-    data_termino = models.DateField(
-        null=False,
-        blank=False
-    )
-
-    status = models.IntegerField(
-
-        choices = STATUS_DISCIPLINA_CHOISE,
-        default = 1,
-        null = False
-    )
 
 # Model Documento
+
 
 class DocumentModel(models.Model):
 
     relatorio = models.OneToOneField(
 
         RelatorioModel,
-        on_delete= models.CASCADE,
+        on_delete=models.CASCADE,
         null=False
     )
 
@@ -230,7 +232,7 @@ class DocumentModel(models.Model):
         on_delete=models.CASCADE,
         null=False
     )
-    
+
     tutor = models.ForeignKey(
 
         TutorModel,
@@ -245,43 +247,27 @@ class DocumentModel(models.Model):
         blank=False
     )
 
+    conteudo = models.TextField(
 
-# Model Relato
-class RelatoModel(models.Model):
-
-    documento = models.ForeignKey(
-
-        DocumentModel,
-        on_delete=models.SET_NULL,
-        null=True
-    )
-
-    aluno = models.ForeignKey(
-
-        AlunoModel,
+        unique=True,
         null=False,
-        on_delete=models.CASCADE
+        blank=False
     )
 
-    disciplina = models.OneToOneField(
+    disciplina = models.ManyToManyField(
 
         DisciplinaModel,
-        on_delete=models.CASCADE,
-        null=False
+        related_name='relatar_disciplina'
     )
-
-    conteudo = models.TextField(
-        null=False,
-        blank=True
-    )
-
 
 # Model email administrativo da plataforma
+
+
 class EmailAdministrativo(models.Model):
 
     STATUS_CHOISE = (
 
-        (1,"Email_Administrativo"),
+        (1, "Email_Administrativo"),
     )
 
     email = models.EmailField(
@@ -294,7 +280,7 @@ class EmailAdministrativo(models.Model):
 
         choices=STATUS_CHOISE,
         unique=True,
-        default= 1
+        default=1
     )
 
 

@@ -221,9 +221,27 @@
 
                                             </div>
 
+                                            
+                                            <label for="Disciplinas" class="mt-3">Disciplinas</label>
+                                            <div class="w-50" data-bs-spy="scroll">
+                                                {% if disciplinas %}
+                                                <ul class="list-group">
 
-                                            <div class="w-100 pt-5 pb-5 rounded border mt-3" data-bs-spy="scroll">
+                                                    {% for item in disciplinas %}
+                                                        <li class="list-group-item rounded-10">
+                                                            <div class="custom-control custom-checkbox">
+                                                                <input class="custom-control-input" id="customCheck{{item}}" type="checkbox">
+                                                                <label class="cursor-pointer font-italic d-block custom-control-label" for="customCheck{{item}}">{{item.nome}}</label>
+                                                            </div>
+                                                        </li>
+                                                    {% endfor %} 
+                                                  
+                                                </ul>
+                                                {% else %}
+                                                    <label for="Disciplinas" class="ml-3 mt-3">Sem disicplinas cadastradas</label>
+                                                {% endif %}
                                                 
+                                                    
                                             </div>
 
                                         </div>
