@@ -5,9 +5,9 @@ let btnZoomMenos = document.getElementById("btn-zoom-menos");
 let formAssinatura = document.querySelector(".form-assinatura")
 let imgInput = document.querySelector(".img-input");
 let campo_imagem_base64 = document.querySelector("#campo_imagem_base64");
-
-canvas_width = canvas.width = 450;
-canvas_height = canvas.height = 200;
+let btnCancelar = document.querySelector("#btn-cancelar");
+canvas_width = canvas.width = 460;
+canvas_height = canvas.height = 100;
 
 let zoom = 1
 let larguraImg;
@@ -25,7 +25,7 @@ function draw(ctx, imagem, xi, yi, l, h) {
     ctx.drawImage(imagem, xi, yi, l, h);
 }
 
-function readImage(data) {
+function readImage() {
     if (this.files && this.files[0]) {
         var file = new FileReader();
 
@@ -38,7 +38,6 @@ function readImage(data) {
                 larguraImg = img.width;
                 alturaImg = img.height;
                 
-               
                 draw(ctx, img, posicaoInicialX, posicaoInicialY, larguraImg, alturaImg)
                 
             });
@@ -123,4 +122,17 @@ function readImage(data) {
 }
 
 document.querySelector(".img-input").addEventListener("change", readImage, false)
+btnCancelar.addEventListener("click",()=>{
 
+    ctx.clearRect(0, 0, canvas_width, canvas_height);
+    mostrarMensagem();
+})
+
+function mostrarMensagem(){
+
+    ctx.font = '20px arial';
+    ctx.fillText("Sua assinatura aparecerar aqui",90,40)
+
+}
+
+mostrarMensagem()
