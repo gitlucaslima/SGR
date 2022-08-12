@@ -84,7 +84,7 @@ def configuracoes(request, relatorio):
     disciplinas = DisciplinaModel.objects.filter(status=1)
     # Preparando os dados do relatorio para fornecer os nomes dos meses
     relatorios = [(item, MESES_CHOICE[item.mes-1][1])
-                  for item in RelatorioModel.objects.all()]
+                  for item in RelatorioModel.objects.all().order_by("mes")]
 
     contexto = {
         "tab": relatorio,
@@ -354,7 +354,19 @@ def cadastrarRelatorio(request):
         relatorio = RelatorioModel()
         relatorio.mes = mes
         relatorio.data_limite = dataLimite
-        relatorio.save()
+
+        try:
+
+            relatorio.save()
+            messages.add_message(request, messages.SUCCESS,
+                                 "Relatórios criado com sucesso")
+
+        except IntegrityError:
+
+            messages.add_message(request, messages.ERROR,
+                                 "Já existe relatório para esse mês")
+
+            return redirect('/configuracoes/relatorio')
 
         for disciplina_id in disciplinas:
 

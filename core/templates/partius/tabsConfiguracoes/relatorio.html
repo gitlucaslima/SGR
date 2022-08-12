@@ -63,94 +63,94 @@
                                         <div class="table-responsive mt-3">
 
                                             {% if disciplinas %}
-                                                <table class="table table-bordered" id="dataTable" width="100%"
-                                                    cellspacing="0">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Nome</th>
-                                                            <th>Início</th>
-                                                            <th>Término</th>
-                                                            <th>Operações</th>
+                                            <table class="table table-bordered" id="dataTable" width="100%"
+                                                cellspacing="0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Nome</th>
+                                                        <th>Início</th>
+                                                        <th>Término</th>
+                                                        <th>Operações</th>
 
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
 
-                                                        {% for item in disciplinas %}
-                                                        <tr>
+                                                    {% for item in disciplinas %}
+                                                    <tr>
 
-                                                            <td>{{item.nome}}</td>
-                                                            <td>{{item.data_inicio|date:"d/m/Y"}}</td>
-                                                            <td>{{item.data_termino|date:"d/m/Y"}}</td>
-                                                            <td class="text-center">
-                                                                <!-- Default dropstart button -->
-                                                                <div class="btn-group dropstart">
-                                                                    <button type="button"
-                                                                        class="btn btn-warning btn-sm dropdown-toggle"
-                                                                        data-bs-toggle="dropdown" aria-expanded="false">
-                                                                        Opções
-                                                                    </button>
-                                                                    <ul class="dropdown-menu">
-                                                                        <li class="text-center">
-                                                                            <a class="btn btn-block" data-bs-toggle="modal"
-                                                                                data-bs-target="#modalEditarDisciplina{{item.id}}"
-                                                                                data-bs-whatever="@mdo">
+                                                        <td>{{item.nome}}</td>
+                                                        <td>{{item.data_inicio|date:"d/m/Y"}}</td>
+                                                        <td>{{item.data_termino|date:"d/m/Y"}}</td>
+                                                        <td class="text-center">
+                                                            <!-- Default dropstart button -->
+                                                            <div class="btn-group dropstart">
+                                                                <button type="button"
+                                                                    class="btn btn-warning btn-sm dropdown-toggle"
+                                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                                    Opções
+                                                                </button>
+                                                                <ul class="dropdown-menu">
+                                                                    <li class="text-center">
+                                                                        <a class="btn btn-block" data-bs-toggle="modal"
+                                                                            data-bs-target="#modalEditarDisciplina{{item.id}}"
+                                                                            data-bs-whatever="@mdo">
 
 
-                                                                                <div class="row">
-                                                                                    <div class="col-2">
-                                                                                        <span class="icon text-secondary">
-                                                                                            <i
-                                                                                                class="bi bi-pencil-square"></i>
-                                                                                        </span>
+                                                                            <div class="row">
+                                                                                <div class="col-2">
+                                                                                    <span class="icon text-secondary">
+                                                                                        <i
+                                                                                            class="bi bi-pencil-square"></i>
+                                                                                    </span>
 
-                                                                                    </div>
-                                                                                    <div class="col-10 text-left">
-
-                                                                                        <span class="text">Editar</span>
-                                                                                    </div>
                                                                                 </div>
-                                                                            </a>
+                                                                                <div class="col-10 text-left">
 
-                                                                        </li>
-                                                                        <li class="text-center">
-
-                                                                            <button type="button" class="btn btn-block"
-                                                                                data-bs-toggle="modal"
-                                                                                data-bs-target="#modalDeletaDisciplina{{item.id}}"
-                                                                                data-bs-whatever="@mdo">
-                                                                                <div class="row">
-                                                                                    <div class="col-2">
-                                                                                        <span class="icon text-secondary">
-                                                                                            <i class="bi bi-trash"></i>
-                                                                                        </span>
-
-                                                                                    </div>
-                                                                                    <div class="col-10 text-left">
-
-                                                                                        <span class="text">
-                                                                                            Excluir</span>
-                                                                                    </div>
+                                                                                    <span class="text">Editar</span>
                                                                                 </div>
+                                                                            </div>
+                                                                        </a>
 
-                                                                            </button>
+                                                                    </li>
+                                                                    <li class="text-center">
 
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
+                                                                        <button type="button" class="btn btn-block"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#modalDeletaDisciplina{{item.id}}"
+                                                                            data-bs-whatever="@mdo">
+                                                                            <div class="row">
+                                                                                <div class="col-2">
+                                                                                    <span class="icon text-secondary">
+                                                                                        <i class="bi bi-trash"></i>
+                                                                                    </span>
 
-                                                            </td>
+                                                                                </div>
+                                                                                <div class="col-10 text-left">
+
+                                                                                    <span class="text">
+                                                                                        Excluir</span>
+                                                                                </div>
+                                                                            </div>
+
+                                                                        </button>
+
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+
+                                                        </td>
 
 
-                                                        </tr>
+                                                    </tr>
 
-                                                        {% include 'partius/modais/deletarDisciplinaModal.html' %}
-                                                        {% include 'partius/modais/editarDisciplinaModal.html' %}
+                                                    {% include 'partius/modais/deletarDisciplinaModal.html' %}
+                                                    {% include 'partius/modais/editarDisciplinaModal.html' %}
 
-                                                        {% endfor %}
+                                                    {% endfor %}
 
-                                                    </tbody>
-                                                </table>
+                                                </tbody>
+                                            </table>
 
                                             {% endif %}
                                         </div>
@@ -194,13 +194,13 @@
                                                                 </div>
 
                                                                 <div class="col-12">
-                                                                    
+
                                                                     <select name="mesRelatorio" id="mes"
                                                                         class="form-control">
                                                                         {% for mes in meses %}
-                                                                            <option value="{{mes.0}}">{{mes.1}}</option>
+                                                                        <option value="{{mes.0}}">{{mes.1}}</option>
                                                                         {% endfor %}
- 
+
                                                                     </select>
                                                                 </div>
                                                             </div>
@@ -236,8 +236,9 @@
                                                         {% for item in disciplinas %}
                                                         <li class="list-group-item">
                                                             <div class="custom-control custom-checkbox">
-                                                                <input class="form-check-input mr-1" type="checkbox" 
-                                                                    id="customCheck{{item.id}}" name="disciplina" value="{{item.id}}">
+                                                                <input class="form-check-input mr-1" type="checkbox"
+                                                                    id="customCheck{{item.id}}" name="disciplina"
+                                                                    value="{{item.id}}">
                                                                 <label
                                                                     class="cursor-pointer font-italic d-block custom-control-label text-truncate"
                                                                     for="customCheck{{item.id}}">{{item.nome}}</label>
@@ -256,7 +257,7 @@
 
                                             </div>
                                             <div class="col text-center">
-                                                <button type="submit" class="btn btn-success mt-4 btn-icon-split">
+                                                <button type="submit" class="btn btn-success btn-icon-split">
                                                     <span class="icon text-white-50">
                                                         <i class="fas fa-check"></i>
                                                     </span>
@@ -277,33 +278,41 @@
                                     <div class="card-body">
 
                                         {% for item in relatorios %}
-                                        
-                                        <div class="card shadow mb-1 ">
-                                            <!-- Card Header - Accordion -->
-                                            <a href="#collapseCardExample{{item.0.id}}" class="d-block  card-header py-3"
-                                                data-toggle="collapse" role="button" aria-expanded="true"
-                                                aria-controls="collapseCardExample">
-                                                <h6 class="m-0 font-weight-bold text-primary">{{item.1}}
-                                                </h6>
-                                            </a>
-                                            <!-- Card Content - Collapse -->
-                                            <div class="collapse" id="collapseCardExample{{item.0.id}}">
-                                                <div class="card-body">
-                                                    This is a collapsable card example using Bootstrap's built
-                                                    in
-                                                    collapse
-                                                    functionality. <strong>Click on the card header</strong> to
-                                                    see
-                                                    the card body
-                                                    collapse and exp
-                                                </div>
 
+                                        <div class="card shadow mb-1 " id="collapse">
+
+                                            <div class="accordion accordion-flush" id="collapse">
+
+                                                <div class="accordion-item">
+                                                    <!-- Card Header - Accordion -->
+                                                    <a href="#collapseCardExample{{item.0.id}}"
+                                                        class="d-block  card-header py-3" data-toggle="collapse"
+                                                        role="button" aria-expanded="true"
+                                                        aria-controls="collapseCardExample">
+                                                        <h6 class="m-0 font-weight-bold text-primary">{{item.1}}
+                                                        </h6>
+                                                    </a>
+                                                    <!-- Card Content - Collapse -->
+                                                    <div class="collapse" id="collapseCardExample{{item.0.id}}"
+                                                        data-bs-parent="#collapse">
+                                                        <div class="card-body">
+                                                            This is a collapsable card example using Bootstrap's built
+                                                            in
+                                                            collapse
+                                                            functionality. <strong>Click on the card header</strong> to
+                                                            see
+                                                            the card body
+                                                            collapse and exp
+                                                        </div>
+
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
 
-                                        
+
                                         {% endfor %}
-                                      
+
                                     </div>
                                 </div>
                             </div>
