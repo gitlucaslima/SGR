@@ -212,8 +212,7 @@
                                                         </div>
                                                         <div class="col-12">
                                                             <input type="date" name="dataLimite" id="dataLimite"
-                                                                class="form-control" min="2022-07-01"
-                                                                max="2022-07-02">
+                                                                class="form-control" min="2022-07-01" max="2022-07-02">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -221,27 +220,34 @@
 
                                             </div>
 
-                                            
-                                            <label for="Disciplinas" class="mt-3">Disciplinas</label>
-                                            <div class="w-50" data-bs-spy="scroll">
-                                                {% if disciplinas %}
-                                                <ul class="list-group">
 
-                                                    {% for item in disciplinas %}
-                                                        <li class="list-group-item rounded-10">
+                                            <label for="Disciplinas" class="mt-3">Disciplinas</label>
+                                            <div class="w-100 ">
+                                                {% if disciplinas %}
+                                                <div class="overflow-auto" style="height: 150px;">
+                                                    <ul class="list-group">
+
+                                                        {% for item in disciplinas %}
+                                                        <li class="list-group-item">
                                                             <div class="custom-control custom-checkbox">
-                                                                <input class="custom-control-input" id="customCheck{{item}}" type="checkbox">
-                                                                <label class="cursor-pointer font-italic d-block custom-control-label" for="customCheck{{item}}">{{item.nome}}</label>
+                                                                <input class="form-check-input mr-1" type="checkbox" 
+                                                                    id="customCheck{{item.id}}" name="disciplina" value="{{item.id}}">
+                                                                <label
+                                                                    class="cursor-pointer font-italic d-block custom-control-label text-truncate"
+                                                                    for="customCheck{{item.id}}">{{item.nome}}</label>
                                                             </div>
                                                         </li>
-                                                    {% endfor %} 
-                                                  
-                                                </ul>
+                                                        {% endfor %}
+
+                                                    </ul>
+                                                </div>
+
                                                 {% else %}
-                                                    <label for="Disciplinas" class="ml-3 mt-3">Sem disicplinas cadastradas</label>
+                                                <label for="Disciplinas" class="ml-3 mt-3">Sem disicplinas
+                                                    cadastradas</label>
                                                 {% endif %}
-                                                
-                                                    
+
+
                                             </div>
 
                                         </div>
