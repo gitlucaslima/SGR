@@ -184,6 +184,7 @@ class RelatorioModel(models.Model):
         choices=MESES_CHOICE,
         null=False,
         blank=False,
+        unique=True
 
     )
 
@@ -210,6 +211,7 @@ class RelatorioModel(models.Model):
     disciplina = models.ManyToManyField(
 
         DisciplinaModel,
+
 
     )
 

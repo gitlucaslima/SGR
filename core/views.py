@@ -1,19 +1,20 @@
-from datetime import datetime
+import base64
 import io
-from msilib.schema import Error
 import sys
+from datetime import datetime
+from io import BytesIO
+from msilib.schema import Error
 from tkinter import OUTSIDE
 
 from django.contrib import messages
+from django.core.files.uploadedfile import InMemoryUploadedFile, UploadedFile
 from django.db import IntegrityError
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.core.files.uploadedfile import InMemoryUploadedFile, UploadedFile
+from PIL import Image
+
 from core.funcoes_auxiliares.data import isDateMaior
 from core.models import *
-from PIL import Image
-from io import BytesIO
-import base64
 
 # Controllers do aluno
 
@@ -25,7 +26,7 @@ def alunoHome(request):
         "url": "aluno_home"
 
     }
-    return render(request, "aluno/home.html",context)
+    return render(request, "aluno/home.html", context)
 
 
 def alunoRelatorio(request):
@@ -41,7 +42,7 @@ def tutorHome(request):
         "url": "tutor_home"
 
     }
-    return render(request, "tutor/home.html",context)
+    return render(request, "tutor/home.html", context)
 
 
 # Controller do coordenador
@@ -49,12 +50,11 @@ def tutorHome(request):
 def coordenadorHome(request):
 
     dados = UsuarioModel.objects.filter(permissao=1)
-    
 
     contexto = {
-        "tab":dados,
+        "tab": dados,
         "numeroAlunos": dados.count()
-        
+
     }
 
     contexto['dados_usuarios'] = dados
@@ -66,19 +66,40 @@ def coordenadorHome(request):
 
 def configuracoes(request, relatorio):
 
-    disciplinas = DisciplinaModel.objects.filter(status = 1)
+    MESES_CHOICE = [
+
+        [1, "Janeiro"],
+        [2, "Fevereiro"],
+        [3, "Março"],
+        [4, "Abril"],
+        [5, "Maio"],
+        [6, "Junho"],
+        [7, "Julho"],
+        [8, "Agosto"],
+        [9, "Setembro"],
+        [10, "Outubro"],
+        [11, "Novembro"],
+        [12, "Dezembro"]
+    ]
+    disciplinas = DisciplinaModel.objects.filter(status=1)
+    # Preparando os dados do relatorio para fornecer os nomes dos meses
+    relatorios = [(item, MESES_CHOICE[item.mes-1][1])
+                  for item in RelatorioModel.objects.all()]
 
     contexto = {
-        "tab":relatorio,
-        "disciplinas":disciplinas
+        "tab": relatorio,
+        "disciplinas": disciplinas,
+        "meses": MESES_CHOICE,
+        "relatorios": relatorios
     }
+
     if relatorio == 'usuario':
 
         dados = UsuarioModel.objects.all()
-   
+
         contexto['dados_usuarios'] = dados
 
-    return render(request, "configuracoes/configuracoesCoordenador.html",contexto)
+    return render(request, "configuracoes/configuracoesCoordenador.html", contexto)
 
 
 # Controller do avisos
@@ -88,6 +109,7 @@ def avisos(request):
     return render(request, "avisos/avisosAluno.html")
 
 # Controller do login
+
 
 def login(request):
 
@@ -106,8 +128,9 @@ def registro(request):
 def redefine_senha(request):
 
     return render(request, 'partius/gerenciarAcesso/redefinicaoSenha.html')
- 
+
 # Cadastro de usuarios
+
 
 def cadastroUsuario(request):
 
@@ -117,9 +140,8 @@ def cadastroUsuario(request):
         email = request.POST.get("email")
         permissao = request.POST.get("permissao")
 
-        
         if(permissao == '1'):
-            
+
             novo_usuario = AlunoModel()
             novo_usuario.nome = nome
             novo_usuario.email = email
@@ -137,25 +159,24 @@ def cadastroUsuario(request):
             novo_usuario.email = email
             novo_usuario.permissao = 3
 
-
         novo_usuario.save()
-      
 
     return redirect("/configuracoes/usuario")
+
 
 def editaUsuario(request, id):
 
     if request.method == "POST":
 
         instance = UsuarioModel.objects.filter(id=id).first()
-        
+
         instance.nome = request.POST.get("nome")
         instance.email = request.POST.get("email")
         instance.permissao = request.POST.get("permissao")
         instance.status = request.POST.get("status")
         print(request.POST.get("status"))
 
-        instance.save()    
+        instance.save()
 
     return redirect("/configuracoes/usuario")
 
@@ -163,9 +184,9 @@ def editaUsuario(request, id):
 def deletaUsuario(request):
 
     if request.method == 'POST':
-        
+
         id = request.POST.get('id')
-        instance = get_object_or_404(UsuarioModel, id = id)
+        instance = get_object_or_404(UsuarioModel, id=id)
         instance.delete()
 
     return redirect("/configuracoes/usuario")
@@ -180,14 +201,11 @@ def cadastrarDisciplina(request):
         dataFim = request.POST.get("dataFim")
         descricao = request.POST.get("descricao")
 
+        if isDateMaior(dataInicio, dataFim):
 
-
-        if isDateMaior(dataInicio,dataFim):
-
-            messages.add_message(request,messages.ERROR,"A data fornecida é inválida!")
+            messages.add_message(request, messages.ERROR,
+                                 "A data fornecida é inválida!")
             return redirect("/configuracoes/relatorio")
-
-            
 
         novaDisciplina = DisciplinaModel()
         novaDisciplina.nome = nome
@@ -198,19 +216,20 @@ def cadastrarDisciplina(request):
         try:
 
             novaDisciplina.save()
-            messages.add_message(request, messages.SUCCESS, 'Disciplina cadastrada com sucesso')
-
+            messages.add_message(request, messages.SUCCESS,
+                                 'Disciplina cadastrada com sucesso')
 
         except IntegrityError:
 
-            messages.add_message(request, messages.ERROR, 'Já existe uma disciplina cadastrada com este nome')
-            
+            messages.add_message(
+                request, messages.ERROR, 'Já existe uma disciplina cadastrada com este nome')
+
         except Error:
 
             messages.add_message(request, messages.ERROR, 'Ocorreu algum erro')
-            
 
         return redirect("/configuracoes/relatorio")
+
 
 def editarDisciplina(request):
 
@@ -219,16 +238,14 @@ def editarDisciplina(request):
     dataInicio = request.POST.get("dataInicio")
     dataFim = request.POST.get("dataFim")
     descricao = request.POST.get("descricao")
-    
-    if isDateMaior(dataInicio,dataFim):
 
-        messages.add_message(request,messages.ERROR,"A data fornecida é inválida!")
+    if isDateMaior(dataInicio, dataFim):
+
+        messages.add_message(request, messages.ERROR,
+                             "A data fornecida é inválida!")
         return redirect("/configuracoes/relatorio")
 
-
-    disciplina = get_object_or_404(DisciplinaModel,id=id)
-
-
+    disciplina = get_object_or_404(DisciplinaModel, id=id)
 
     disciplina.nome = nome
     disciplina.data_inicio = dataInicio
@@ -241,14 +258,14 @@ def editarDisciplina(request):
 
     except IntegrityError:
 
-        messages.add_message(request, messages.ERROR, 'Já existe uma disciplina cadastrada com este nome')
-        
+        messages.add_message(request, messages.ERROR,
+                             'Já existe uma disciplina cadastrada com este nome')
+
     except Error:
 
         messages.add_message(request, messages.ERROR, 'Ocorreu algum erro')
 
     return redirect("/configuracoes/relatorio")
- 
 
 
 def deletarDisciplina(request):
@@ -256,26 +273,27 @@ def deletarDisciplina(request):
     if(request.method == "POST"):
 
         id = request.POST.get("id")
-        disciplina = get_object_or_404(DisciplinaModel,id=id)
+        disciplina = get_object_or_404(DisciplinaModel, id=id)
 
         nome = disciplina.nome
 
         try:
             disciplina.delete()
-            messages.add_message(request,messages.SUCCESS,f"A disciplina {nome} foi excluida com sucesso!")
+            messages.add_message(request, messages.SUCCESS,
+                                 f"A disciplina {nome} foi excluida com sucesso!")
 
         except ValueError:
 
-            messages.add_message(request,messages.ERROR,"Não foi possivel deletar a disciplina")
+            messages.add_message(request, messages.ERROR,
+                                 "Não foi possivel deletar a disciplina")
 
     return redirect("/configuracoes/relatorio")
 
 
 def uploadAssinatura(request):
- 
+
     if(request.method == "POST"):
 
-    
         imagem_base64 = request.POST.get("imagem_base64")
         url = request.POST.get("urlOrigem")
         imagem = Image.open(io.BytesIO(base64.b64decode(imagem_base64)))
@@ -283,30 +301,66 @@ def uploadAssinatura(request):
         imagem.save(output, format='png', quality=85)
         output.seek(0)
         arquivo = InMemoryUploadedFile(output, 'ImageField',
-                                    "assinatura.png",
-                                    'image/png',
-                                    sys.getsizeof(output), None)
-    
+                                       "assinatura.png",
+                                       'image/png',
+                                       sys.getsizeof(output), None)
+
         if(not arquivo):
 
-            messages.add_message(request,messages.WARNING,"É necessário um arquivo")
+            messages.add_message(request, messages.WARNING,
+                                 "É necessário um arquivo")
 
-        assinatura = AssinaturaModel(url_assinatura = arquivo)
+        assinatura = AssinaturaModel(url_assinatura=arquivo)
 
         try:
 
             assinatura.save()
-            messages.add_message(request,messages.SUCCESS,"Assinatura salva com sucesso")
-
+            messages.add_message(request, messages.SUCCESS,
+                                 "Assinatura salva com sucesso")
 
         except Exception:
 
-            messages.add_message(request,messages.ERROR,"Ocorreu um error ao salva o arquivo")
-
+            messages.add_message(request, messages.ERROR,
+                                 "Ocorreu um error ao salva o arquivo")
 
     return redirect(url)
 
 
-def api(request):
+def cadastrarRelatorio(request):
 
-    return JsonResponse({"message":"Ola mundo"})
+    if request.method == "POST":
+
+        mes = request.POST.get('mesRelatorio')
+        dataLimite = request.POST.get('dataLimite')
+        disciplinas = request.POST.getlist('disciplina')
+
+        # Pegando o mês da data limite
+        mes_dataLimite = int(dataLimite.split('-')[1])
+
+        if(mes_dataLimite < int(mes)):
+
+            messages.add_message(request, messages.ERROR,
+                                 "Data limite é anterior ao mês do relatório")
+
+            return redirect('/configuracoes/relatorio')
+
+        if(not disciplinas):
+
+            messages.add_message(request, messages.ERROR,
+                                 "É necessário fornecer uma disciplina ou mais")
+
+            return redirect('/configuracoes/relatorio')
+
+        relatorio = RelatorioModel()
+        relatorio.mes = mes
+        relatorio.data_limite = dataLimite
+        relatorio.save()
+
+        for disciplina_id in disciplinas:
+
+            registro = DisciplinaModel.objects.get(id=int(disciplina_id))
+            print(registro)
+            relatorio.disciplina.add(registro)
+            relatorio.save()
+
+    return redirect('/configuracoes/relatorio')

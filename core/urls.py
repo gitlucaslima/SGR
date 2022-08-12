@@ -27,17 +27,19 @@ urlpatterns = [
 
     path("redefinicao_senha/", redefine_senha, name="redefine_senha"),
 
-    path("cadastro_usuario/",cadastroUsuario, name="cadastro_usuario"),
+    path("cadastro_usuario/", cadastroUsuario, name="cadastro_usuario"),
 
     path("edita_usuario/<int:id>/", editaUsuario, name="edita_usuario"),
 
     path("deleta_usuario/", deletaUsuario, name="deleta_usuario"),
 
-    path("cadastrar_disciplina/",cadastrarDisciplina,name="cadastrar_disciplina"),
-    path("editar_disciplina/",editarDisciplina,name="editar_disciplina"),
-    path("deletar_disciplina/",deletarDisciplina,name="deletar_disciplina"),
+    path("cadastrar_disciplina/", cadastrarDisciplina,
+         name="cadastrar_disciplina"),
+    path("editar_disciplina/", editarDisciplina, name="editar_disciplina"),
+    path("deletar_disciplina/", deletarDisciplina, name="deletar_disciplina"),
 
-    path("apload_assinatura/",uploadAssinatura,name="apload_assinatura"),
-    
-    path("api/",api,name="api")
+    path("apload_assinatura/", uploadAssinatura, name="apload_assinatura"),
+
+    path("abrir_relatorio/", cadastrarRelatorio, name='abrir_relatorio')
+
 ]
