@@ -228,7 +228,7 @@ def cadastrarDisciplina(request):
 
             messages.add_message(request, messages.ERROR, 'Ocorreu algum erro')
 
-        return redirect("/configuracoes/relatorio")
+        return redirect("/configuracoes/disciplinas")
 
 
 def editarDisciplina(request):
@@ -265,7 +265,7 @@ def editarDisciplina(request):
 
         messages.add_message(request, messages.ERROR, 'Ocorreu algum erro')
 
-    return redirect("/configuracoes/relatorio")
+    return redirect("/configuracoes/disciplinas")
 
 
 def deletarDisciplina(request):
@@ -287,7 +287,7 @@ def deletarDisciplina(request):
             messages.add_message(request, messages.ERROR,
                                  "Não foi possivel deletar a disciplina")
 
-    return redirect("/configuracoes/relatorio")
+    return redirect("/configuracoes/disciplinas")
 
 
 def uploadAssinatura(request):
@@ -369,9 +369,8 @@ def cadastrarRelatorio(request):
             return redirect('/configuracoes/relatorio')
 
         for disciplina_id in disciplinas:
-
+            print(disciplinas)
             registro = DisciplinaModel.objects.get(id=int(disciplina_id))
-            print(registro)
             relatorio.disciplina.add(registro)
             relatorio.save()
 

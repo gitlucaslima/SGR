@@ -123,7 +123,7 @@
                                         {% for item in relatorios %}
 
                                         <div class="card shadow mb-1 " id="collapse">
-
+                                                
                                             <div class="accordion accordion-flush" id="collapse">
 
                                                 <div class="accordion-item">
@@ -139,10 +139,16 @@
                                                     <div class="collapse" id="collapseCardExample{{item.0.id}}"
                                                         data-bs-parent="#collapse">
                                                         <div class="card-body">
-                                                            Data limite: {{item.data_limite}}<br>
-                                                            Disciplinas: {{item.data_limite}}
-                                                        </div>
-                                                        
+                                                            Data Limite: {{item.0.data_limite}}<br>
+                                                            Disciplinas: {{data}}<br>
+
+                                                            {% for x in disciplinas_relatorio %} 
+                                                                Disciplina: {{x}}
+                                                            {% endfor %}
+                                                            Status: {{item.0.status}}<br>
+
+
+                                                        </div>                                                     
 
                                                     </div>
                                                 </div>
