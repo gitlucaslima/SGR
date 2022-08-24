@@ -208,12 +208,7 @@ class RelatorioModel(models.Model):
         on_delete=models.SET_NULL
     )
 
-    disciplina = models.ManyToManyField(
-
-        DisciplinaModel,
-
-
-    )
+    disciplina = models.ManyToManyField(DisciplinaModel)
 
 
 # Model Documento
