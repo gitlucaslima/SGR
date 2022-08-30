@@ -1,5 +1,6 @@
 import base64
 import io
+from sqlite3 import Date
 import sys
 from datetime import datetime
 from io import BytesIO
@@ -86,11 +87,18 @@ def configuracoes(request, relatorio):
     relatorios = [(item, MESES_CHOICE[item.mes-1][1])
                   for item in RelatorioModel.objects.all().order_by("mes")]
 
+    ultimoRelatorio = RelatorioModel.objects.all().order_by("-mes")[0].mes
+    anoAtual = datetime.now().year
+    mesAtual = datetime.now().month
+
     contexto = {
         "tab": relatorio,
         "disciplinas": disciplinas,
         "meses": MESES_CHOICE,
-        "relatorios": relatorios
+        "relatorios": relatorios,
+        "ultimoRelatorio": ultimoRelatorio,
+        "anoAtual": anoAtual,
+        "mesAtual":mesAtual
     }
 
     if relatorio == 'usuario':

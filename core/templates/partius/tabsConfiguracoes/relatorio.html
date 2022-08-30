@@ -1,11 +1,10 @@
+{% load static %}
 <div class="container-fluid mt-3">
 
     <div class="row d-flex justify-content-center">
 
         <!-- Pending Requests Card Example -->
         <div class="col-x5-10 col-md-10 col-sm-12 mb-6">
-
-
 
             <div class="card shadow py-1 mt-3 mb-5">
                 <div class="card-body">
@@ -39,12 +38,18 @@
                                                                 <div class="col-12">
 
                                                                     <select name="mesRelatorio" id="mes"
-                                                                        class="form-control">
+                                                                        class="form-control select-mes-relatorio">
                                                                         {% for mes in meses %}
+                                                                        {% if mes.0 >= mesAtual %}
                                                                         <option value="{{mes.0}}">{{mes.1}}</option>
+
+                                                                        {% endif %}
                                                                         {% endfor %}
 
                                                                     </select>
+                                                                    {{ultimoRelatorio}}
+                                                                    {{ mesAtual}}
+                                                                    {{anoAtual}}
                                                                 </div>
                                                             </div>
 
@@ -61,7 +66,7 @@
                                                         </div>
                                                         <div class="col-12">
                                                             <input type="date" name="dataLimite" id="dataLimite"
-                                                                class="form-control">
+                                                                class="form-control input-date-limite" min="{{anoAtual}}-mes-01">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -168,12 +173,12 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                         
+
                                             <div class="col-12 col-md-1 p-0 d-flex justify-content-center">
-                                                
+
                                                 <button class="btn p-1" type="button" data-bs-toggle="modal"
-                                                data-bs-target="#modalEditarRelatorio{{item.0.id}}"
-                                                data-bs-whatever="@mdo">
+                                                    data-bs-target="#modalEditarRelatorio{{item.0.id}}"
+                                                    data-bs-whatever="@mdo">
 
                                                     <i class="bi bi-pencil-square"></i>
                                                 </button>
@@ -182,7 +187,7 @@
                                                 </button>
                                             </div>
                                         </div>
-       
+
                                         {% include "partius/modais/editarRelatorioModal.html" %}
                                         {% endfor %}
 
@@ -198,3 +203,5 @@
     </div>
     <!-- /.container-fluid -->
 </div>
+
+<script src="{% static 'js/validaCampoData.js' %}"></script>
