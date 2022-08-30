@@ -40,16 +40,14 @@
                                                                     <select name="mesRelatorio" id="mes"
                                                                         class="form-control select-mes-relatorio">
                                                                         {% for mes in meses %}
-                                                                        {% if mes.0 >= mesAtual %}
+                                                                        {% if mes.0 > ultimoRelatorio %}
                                                                         <option value="{{mes.0}}">{{mes.1}}</option>
 
                                                                         {% endif %}
                                                                         {% endfor %}
 
                                                                     </select>
-                                                                    {{ultimoRelatorio}}
-                                                                    {{ mesAtual}}
-                                                                    {{anoAtual}}
+                                                                   
                                                                 </div>
                                                             </div>
 
@@ -67,7 +65,7 @@
                                                         <div class="col-12">
                                                             <input type="date" name="dataLimite" id="dataLimite"
                                                                 class="form-control input-date-limite"
-                                                                min="{{anoAtual}}-mes-01">
+                                                                min="{{anoAtual}}-{{ultimoRelatorio}}-01" disabled>
                                                         </div>
                                                     </div>
                                                 </div>
