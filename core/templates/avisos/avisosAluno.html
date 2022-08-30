@@ -1,0 +1,21 @@
+{% extends 'modeloBase.html' %}
+{% load filter %}
+{% load static %}
+
+{% block title %}
+<title>Avisos</title>
+{% endblock title %}
+
+{% block pageTitle %}
+<h4><i class="fa fa-paper-plane"></i> Avisos </h4>
+{% endblock pageTitle %}
+
+{% comment %} Personalizar menu, Coord/Tutor {% endcomment %}
+{% block "sidebar" %}
+    {% include "partius/menusPersonalizados/menuAluno.html" %}
+{% endblock "sidebar" %}
+
+{% block conteudo %}
+<h1>Criar pagina avisos de aluno</h1>
+{{'Lucas'|teste}}
+{% endblock conteudo %}
