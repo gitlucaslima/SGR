@@ -1,0 +1,130 @@
+<div class="modal fade" id="modalEditarRelatorio{{item.0.id}}" aria-labelledby="modalEditarRelatorio{{item.0.id}}"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><b>Editar relatório</b></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+
+                <form action="{% url 'abrir_relatorio' %}" method="POST">
+
+                    {% csrf_token %}
+                    <div class="card border">
+                        <div class="card-body">
+
+                            <div class="row">
+
+                                <div class="col-lg-6 col-md-12">
+
+                                    <div class="row">
+                                        <div class="col-12">
+
+                                            <div class="row">
+                                                <div class="col-12">
+
+                                                    <label for="mes">Mês</label>
+                                                </div>
+
+                                                <div class="col-12">
+
+                                                    <select name="mesRelatorio" id="mes" class="form-control">
+                                                        {% for mes in meses %}
+                                                        {% if mes.0 == item.0.mes %}
+
+                                                        <option value="{{mes.0}}" selected>{{mes.1}}</option>
+
+                                                        {% else %}
+
+                                                        <option value="{{mes.0}}">{{mes.1}}</option>
+                                                        {% endif %}
+                                                        {% endfor %}
+
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 col-md-12">
+
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <label for="dataLimite">Data Limite</label>
+                                        </div>
+                                        <div class="col-12">
+                                            <input type="date" name="dataLimite" id="dataLimite" class="form-control"
+                                                value="{{item.0.data_limite|date:'Y-m-d'}}">
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+
+                            <label for="Disciplinas" class="mt-3">Disciplinas</label>
+                            <div class="w-100 ">
+                                {% if disciplinas %}
+                                <div class="overflow-auto" style="height: 150px;">
+                                    <ul class="list-group">
+
+                                        {% for item_displina in disciplinas %}
+
+                                        {% if item_displina in item.0.displina.all %}
+                                        <li class="list-group-item">
+                                            <div class="custom-control custom-checkbox">
+                                                <input class="form-check-input mr-1" type="checkbox"
+                                                    id="customCheck{{item_displina.id}}" name="disciplina"
+                                                    value="{{item_displina.id}}" checked>
+                                                <label
+                                                    class="cursor-pointer font-italic d-block custom-control-label text-truncate"
+                                                    for="customCheck{{item_displina.id}}">{{item_displina.nome}}</label>
+                                            </div>
+                                        </li>
+                                        {% else %}
+                                        <li class="list-group-item">
+                                            <div class="custom-control custom-checkbox">
+                                                <input class="form-check-input mr-1" type="checkbox"
+                                                    id="customCheck{{item_displina.id}}" name="disciplina"
+                                                    value="{{item_displina.id}}">
+                                                <label
+                                                    class="cursor-pointer font-italic d-block custom-control-label text-truncate"
+                                                    for="customCheck{{item_displina.id}}">{{item_displina.nome}}</label>
+                                            </div>
+                                        </li>
+                                        {% endif %}
+
+                                        {% endfor %}
+
+                                    </ul>
+                                </div>
+
+                                {% else %}
+                                <label for="Disciplinas" class="ml-3 mt-3">Sem disicplinas
+                                    cadastradas</label>
+                                {% endif %}
+
+
+                            </div>
+                            <div class="col text-center">
+                                <button type="submit" class="btn btn-success btn-icon-split">
+                                    <span class="icon text-white-50">
+                                        <i class="fas fa-check"></i>
+                                    </span>
+                                    <span class="text">Salvar</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

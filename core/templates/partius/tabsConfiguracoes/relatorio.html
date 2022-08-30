@@ -4,164 +4,7 @@
 
         <!-- Pending Requests Card Example -->
         <div class="col-x5-10 col-md-10 col-sm-12 mb-6">
-            <div class="card shadow  py-1">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-1">
 
-
-                            <!-- Pending Requests Card Example -->
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-4">
-
-                                        <form action="{% url 'cadastrar_disciplina' %}" method="POST">
-                                            {% csrf_token %}
-                                            <h5>Cadastrar Disciplinas</h5>
-                                            <hr>
-                                            <label for="nomeDisciplina">Nome</label>
-                                            <input type="text" id="nomeDisciplina" name="nome" class="form-control"
-                                                placeholder="Nome da disciplina" value="{{disciplina.nome}}" required>
-
-                                            <div class="row mt-2">
-                                                <div class="col-md-6 col-sm-12">
-                                                    <div class="row">
-                                                        <div class="col">
-                                                            <label for="dataInicio">Inicio da disciplina</label>
-
-                                                        </div>
-                                                    </div>
-                                                    <input type="date" name="dataInicio" id="dataInicio"
-                                                        class="form-control"
-                                                        value="{{disciplina.data_inicio|date:'Y-m-d'}}" required>
-                                                </div>
-                                                <div class="col-md-6 col-sm-12">
-                                                    <div class="row">
-                                                        <div class="col">
-
-                                                            <label for="dataTermino">Término da disciplina</label>
-                                                        </div>
-
-                                                    </div>
-                                                    <input type="date" name="dataFim" id="dataTermino"
-                                                        class="form-control"
-                                                        value="{{disciplina.data_termino|date:'Y-m-d'}}" required>
-                                                </div>
-                                            </div>
-                                            <label for="descricao" class="mt-2">Descriçao (Opcional)</label>
-                                            <textarea name="descricao" id="descricao" cols="30" rows="3"
-                                                class="form-control" placeholder="Ementa da disciplina"
-                                                value="{{disciplina.descricao}}"></textarea>
-                                            <button type="submit" class="btn btn-success mt-4 btn-icon-split">
-                                                <span class="icon text-white-50">
-                                                    <i class="fas fa-check"></i>
-                                                </span>
-                                                <span class="text">Salvar disciplina</span>
-                                            </button>
-                                        </form>
-
-                                        <div class="table-responsive mt-3">
-
-                                            {% if disciplinas %}
-                                            <table class="table table-bordered" id="dataTable" width="100%"
-                                                cellspacing="0">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Nome</th>
-                                                        <th>Início</th>
-                                                        <th>Término</th>
-                                                        <th>Operações</th>
-
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-
-                                                    {% for item in disciplinas %}
-                                                    <tr>
-
-                                                        <td>{{item.nome}}</td>
-                                                        <td>{{item.data_inicio|date:"d/m/Y"}}</td>
-                                                        <td>{{item.data_termino|date:"d/m/Y"}}</td>
-                                                        <td class="text-center">
-                                                            <!-- Default dropstart button -->
-                                                            <div class="btn-group dropstart">
-                                                                <button type="button"
-                                                                    class="btn btn-warning btn-sm dropdown-toggle"
-                                                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                                                    Opções
-                                                                </button>
-                                                                <ul class="dropdown-menu">
-                                                                    <li class="text-center">
-                                                                        <a class="btn btn-block" data-bs-toggle="modal"
-                                                                            data-bs-target="#modalEditarDisciplina{{item.id}}"
-                                                                            data-bs-whatever="@mdo">
-
-
-                                                                            <div class="row">
-                                                                                <div class="col-2">
-                                                                                    <span class="icon text-secondary">
-                                                                                        <i
-                                                                                            class="bi bi-pencil-square"></i>
-                                                                                    </span>
-
-                                                                                </div>
-                                                                                <div class="col-10 text-left">
-
-                                                                                    <span class="text">Editar</span>
-                                                                                </div>
-                                                                            </div>
-                                                                        </a>
-
-                                                                    </li>
-                                                                    <li class="text-center">
-
-                                                                        <button type="button" class="btn btn-block"
-                                                                            data-bs-toggle="modal"
-                                                                            data-bs-target="#modalDeletaDisciplina{{item.id}}"
-                                                                            data-bs-whatever="@mdo">
-                                                                            <div class="row">
-                                                                                <div class="col-2">
-                                                                                    <span class="icon text-secondary">
-                                                                                        <i class="bi bi-trash"></i>
-                                                                                    </span>
-
-                                                                                </div>
-                                                                                <div class="col-10 text-left">
-
-                                                                                    <span class="text">
-                                                                                        Excluir</span>
-                                                                                </div>
-                                                                            </div>
-
-                                                                        </button>
-
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-
-                                                        </td>
-
-
-                                                    </tr>
-
-                                                    {% include 'partius/modais/deletarDisciplinaModal.html' %}
-                                                    {% include 'partius/modais/editarDisciplinaModal.html' %}
-
-                                                    {% endfor %}
-
-                                                </tbody>
-                                            </table>
-
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
 
 
             <div class="card shadow py-1 mt-3 mb-5">
@@ -279,38 +122,68 @@
 
                                         {% for item in relatorios %}
 
-                                        <div class="card shadow mb-1 " id="collapse">
+                                        <div class="row">
+                                            <div class=" col-12 col-md-11">
+                                                <div class="card shadow mb-1 " id="collapse">
 
-                                            <div class="accordion accordion-flush" id="collapse">
+                                                    <div class="accordion accordion-flush" id="collapse">
 
-                                                <div class="accordion-item">
-                                                    <!-- Card Header - Accordion -->
-                                                    <a href="#collapseCardExample{{item.0.id}}"
-                                                        class="d-block  card-header py-3" data-toggle="collapse"
-                                                        role="button" aria-expanded="true"
-                                                        aria-controls="collapseCardExample">
-                                                        <h6 class="m-0 font-weight-bold text-primary">{{item.1}}
-                                                        </h6>
-                                                    </a>
-                                                    <!-- Card Content - Collapse -->
-                                                    <div class="collapse" id="collapseCardExample{{item.0.id}}"
-                                                        data-bs-parent="#collapse">
-                                                        <div class="card-body">
-                                                            This is a collapsable card example using Bootstrap's built
-                                                            in
-                                                            collapse
-                                                            functionality. <strong>Click on the card header</strong> to
-                                                            see
-                                                            the card body
-                                                            collapse and exp
+                                                        <div class="accordion-item">
+                                                            <!-- Card Header - Accordion -->
+                                                            <a href="#collapseCardExample{{item.0.id}}"
+                                                                class="d-block  card-header py-3" data-toggle="collapse"
+                                                                role="button" aria-expanded="true"
+                                                                aria-controls="collapseCardExample">
+
+                                                                <h6 class="m-0 font-weight-bold text-primary">{{item.1}}
+                                                                </h6>
+
+
+                                                            </a>
+                                                            <!-- Card Content - Collapse -->
+                                                            <div class="collapse" id="collapseCardExample{{item.0.id}}"
+                                                                data-bs-parent="#collapse">
+                                                                <div class="card-body">
+                                                                    Data Limite: {{item.0.data_limite}}<br>
+                                                                    Disciplinas:
+
+                                                                    {% for disciplina in item.0.disciplina.all %}
+                                                                    <strong> {{disciplina.nome}}</strong>
+                                                                    {% endfor %}
+                                                                    <br>
+                                                                    Status:
+                                                                    {% if item.0.status == 1 %}
+                                                                    fechado
+                                                                    {% else %}
+                                                                    aberto
+                                                                    {% endif %}
+                                                                    <br>
+
+
+                                                                </div>
+
+                                                            </div>
                                                         </div>
 
                                                     </div>
                                                 </div>
                                             </div>
+                                         
+                                            <div class="col-12 col-md-1 p-0 d-flex justify-content-center">
+                                                
+                                                <button class="btn p-1" type="button" data-bs-toggle="modal"
+                                                data-bs-target="#modalEditarRelatorio{{item.0.id}}"
+                                                data-bs-whatever="@mdo">
+
+                                                    <i class="bi bi-pencil-square"></i>
+                                                </button>
+                                                <button class="btn p-1">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </div>
                                         </div>
-
-
+       
+                                        {% include "partius/modais/editarRelatorioModal.html" %}
                                         {% endfor %}
 
                                     </div>
