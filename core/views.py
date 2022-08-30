@@ -99,14 +99,14 @@ def configuracoes(request, relatorio):
 
         contexto['dados_usuarios'] = dados
 
-    return render(request, "configuracoes/configuracoesCoordenador.html", contexto)
+    return render(request, "coordenador/configuracoesCoordenador.html", contexto)
 
 
 # Controller do avisos
 
 def avisos(request):
 
-    return render(request, "avisos/avisosAluno.html")
+    return render(request, "aluno/avisosAluno.html")
 
 # Controller do login
 

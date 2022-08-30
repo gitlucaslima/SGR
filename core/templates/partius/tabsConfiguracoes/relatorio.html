@@ -122,10 +122,11 @@
 
                                         {% for item in relatorios %}
 
-                                        <div class="card shadow mb-1 " id="collapse">
-                                                
-                                            <div class="accordion accordion-flush" id="collapse">
+                                        <div class="row">
+                                            <div class=" col-12 col-md-11">
+                                                <div class="card shadow mb-1 " id="collapse">
 
+<<<<<<< HEAD
                                                 <div class="accordion-item">
                                                     <!-- Card Header - Accordion -->
                                                     <a href="#collapseCardExample{{item.0.id}}"
@@ -141,21 +142,66 @@
                                                         <div class="card-body">
                                                             Data Limite: {{item.0.data_limite}}<br>
                                                             Disciplinas: {{item.0.disciplina.all}}<br>
+=======
+                                                    <div class="accordion accordion-flush" id="collapse">
+>>>>>>> 3146d2f802cb7201c249ce02f4b567f2384f49ab
 
-                                                            {% for x in disciplinas_relatorio %} 
-                                                                Disciplina: {{x}}
-                                                            {% endfor %}
-                                                            Status: {{item.0.status}}<br>
+                                                        <div class="accordion-item">
+                                                            <!-- Card Header - Accordion -->
+                                                            <a href="#collapseCardExample{{item.0.id}}"
+                                                                class="d-block  card-header py-3" data-toggle="collapse"
+                                                                role="button" aria-expanded="true"
+                                                                aria-controls="collapseCardExample">
+
+                                                                <h6 class="m-0 font-weight-bold text-primary">{{item.1}}
+                                                                </h6>
 
 
-                                                        </div>                                                     
+                                                            </a>
+                                                            <!-- Card Content - Collapse -->
+                                                            <div class="collapse" id="collapseCardExample{{item.0.id}}"
+                                                                data-bs-parent="#collapse">
+                                                                <div class="card-body">
+                                                                    Data Limite: {{item.0.data_limite}}<br>
+                                                                    Disciplinas:
+
+                                                                    {% for disciplina in item.0.disciplina.all %}
+                                                                    <strong> {{disciplina.nome}}</strong>
+                                                                    {% endfor %}
+                                                                    <br>
+                                                                    Status:
+                                                                    {% if item.0.status == 1 %}
+                                                                    fechado
+                                                                    {% else %}
+                                                                    aberto
+                                                                    {% endif %}
+                                                                    <br>
+
+
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
 
                                                     </div>
                                                 </div>
                                             </div>
+                                         
+                                            <div class="col-12 col-md-1 p-0 d-flex justify-content-center">
+                                                
+                                                <button class="btn p-1" type="button" data-bs-toggle="modal"
+                                                data-bs-target="#modalEditarRelatorio{{item.0.id}}"
+                                                data-bs-whatever="@mdo">
+
+                                                    <i class="bi bi-pencil-square"></i>
+                                                </button>
+                                                <button class="btn p-1">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </div>
                                         </div>
-
-
+       
+                                        {% include "partius/modais/editarRelatorioModal.html" %}
                                         {% endfor %}
 
                                     </div>
