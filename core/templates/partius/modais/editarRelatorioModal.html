@@ -31,15 +31,18 @@
 
                                                 <div class="col-12">
 
-                                                    <select name="mesRelatorio" id="mes" class="form-control">
+                                                    <select name="mesRelatorio" id="mes" class="form-control select-edit">
                                                         {% for mes in meses %}
-                                                        {% if mes.0 == item.0.mes %}
 
-                                                        <option value="{{mes.0}}" selected>{{mes.1}}</option>
+                                                        {% if mes.0 >= item.0.mes%}
+                                                            {% if mes.0 == item.0.mes %}
 
-                                                        {% else %}
+                                                            <option value="{{mes.0}}" selected>{{mes.1}}</option>
 
-                                                        <option value="{{mes.0}}">{{mes.1}}</option>
+                                                            {% else %}
+
+                                                            <option value="{{mes.0}}">{{mes.1}}</option>
+                                                            {% endif %}
                                                         {% endif %}
                                                         {% endfor %}
 
@@ -59,8 +62,8 @@
                                             <label for="dataLimite">Data Limite</label>
                                         </div>
                                         <div class="col-12">
-                                            <input type="date" name="dataLimite" id="dataLimite" class="form-control"
-                                                value="{{item.0.data_limite|date:'Y-m-d'}}">
+                                            <input type="date" name="dataLimite" id="dataLimite" class="form-control input-edit"
+                                                value="{{item.0.data_limite|date:'Y-m-d'}}"  min="{{anoAtual}}-0{{ultimoRelatorio}}-01" >
                                         </div>
                                     </div>
                                 </div>
