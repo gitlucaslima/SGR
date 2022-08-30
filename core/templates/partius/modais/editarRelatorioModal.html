@@ -9,7 +9,7 @@
             <div class="modal-body">
 
 
-                <form action="{% url 'abrir_relatorio' %}" method="POST">
+                <form action="{% url 'editar_relatorio' %}" method="POST">
 
                     {% csrf_token %}
                     <div class="card border">
@@ -27,6 +27,7 @@
 
                                                     <label for="mes">Mês</label>
                                                 </div>
+                                                <input type="hidden" name="id" value= {{item.0.id}} />
 
                                                 <div class="col-12">
 
@@ -74,28 +75,28 @@
                                 <div class="overflow-auto" style="height: 150px;">
                                     <ul class="list-group">
 
-                                        {% for item_displina in disciplinas %}
+                                        {% for item_disciplina in listDisciplinas %}
 
-                                        {% if item_displina in item.0.displina.all %}
+                                        {% if item_disciplina in item.0.disciplina.all %}
                                         <li class="list-group-item">
                                             <div class="custom-control custom-checkbox">
                                                 <input class="form-check-input mr-1" type="checkbox"
-                                                    id="customCheck{{item_displina.id}}" name="disciplina"
-                                                    value="{{item_displina.id}}" checked>
+                                                    id="customCheck{{item_disciplina.id}}" name="disciplina"
+                                                    value="{{item_disciplina.id}}" checked>
                                                 <label
                                                     class="cursor-pointer font-italic d-block custom-control-label text-truncate"
-                                                    for="customCheck{{item_displina.id}}">{{item_displina.nome}}</label>
+                                                    for="customCheck{{item_disciplina.id}}">{{item_disciplina.nome}}</label>
                                             </div>
                                         </li>
                                         {% else %}
                                         <li class="list-group-item">
                                             <div class="custom-control custom-checkbox">
                                                 <input class="form-check-input mr-1" type="checkbox"
-                                                    id="customCheck{{item_displina.id}}" name="disciplina"
-                                                    value="{{item_displina.id}}">
+                                                    id="customCheck{{item_disciplina.id}}" name="disciplina"
+                                                    value="{{item_disciplina.id}}">
                                                 <label
                                                     class="cursor-pointer font-italic d-block custom-control-label text-truncate"
-                                                    for="customCheck{{item_displina.id}}">{{item_displina.nome}}</label>
+                                                    for="customCheck{{item_disciplina.id}}">{{item_disciplina.nome}}</label>
                                             </div>
                                         </li>
                                         {% endif %}

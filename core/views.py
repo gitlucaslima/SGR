@@ -1,10 +1,10 @@
 import base64
 import io
-from sqlite3 import Date
 import sys
 from datetime import datetime
 from io import BytesIO
 from msilib.schema import Error
+from sqlite3 import Date
 from tkinter import OUTSIDE
 
 from django.contrib import messages
@@ -83,6 +83,7 @@ def configuracoes(request, relatorio):
         [12, "Dezembro"]
     ]
     disciplinas = DisciplinaModel.objects.filter(status=1)
+    listDisciplinas = DisciplinaModel.objects.all()
     # Preparando os dados do relatorio para fornecer os nomes dos meses
     relatorios = [(item, MESES_CHOICE[item.mes-1][1])
                   for item in RelatorioModel.objects.all().order_by("mes")]
@@ -94,11 +95,12 @@ def configuracoes(request, relatorio):
     contexto = {
         "tab": relatorio,
         "disciplinas": disciplinas,
+        "listDisciplinas": listDisciplinas,
         "meses": MESES_CHOICE,
         "relatorios": relatorios,
         "ultimoRelatorio": ultimoRelatorio,
         "anoAtual": anoAtual,
-        "mesAtual":mesAtual
+        "mesAtual": mesAtual
     }
 
     if relatorio == 'usuario':
@@ -383,3 +385,26 @@ def cadastrarRelatorio(request):
             relatorio.save()
 
     return redirect('/configuracoes/relatorio')
+
+
+def editaRelatorio(request):
+
+    if request.method == "POST":
+        id = request.POST.get("id")
+        mesRelatorio = request.POST.get("mesRelatorio")
+        dataLimite = request.POST.get("dataLimite")
+        disciplinas = request.POST.getlist("disciplina")
+        print("Disciplinas do post", disciplinas)
+
+        relatorio = get_object_or_404(RelatorioModel, id=id)
+
+        relatorio.mes = mesRelatorio
+        relatorio.data_limite = dataLimite
+
+        for item in disciplinas:
+            print(item)
+            registro = DisciplinaModel.objects.get(id=int(item))
+            relatorio.disciplina.add(registro)
+            relatorio.save()
+
+    return redirect("/configuracoes/relatorio")

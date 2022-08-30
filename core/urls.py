@@ -35,11 +35,16 @@ urlpatterns = [
 
     path("cadastrar_disciplina/", cadastrarDisciplina,
          name="cadastrar_disciplina"),
+
     path("editar_disciplina/", editarDisciplina, name="editar_disciplina"),
+
     path("deletar_disciplina/", deletarDisciplina, name="deletar_disciplina"),
 
     path("apload_assinatura/", uploadAssinatura, name="apload_assinatura"),
 
-    path("abrir_relatorio/", cadastrarRelatorio, name='abrir_relatorio')
+    path("abrir_relatorio/", cadastrarRelatorio, name='abrir_relatorio'),
+
+    path("editar_relatorio/", editaRelatorio, name='editar_relatorio'),
+
 
 ]
