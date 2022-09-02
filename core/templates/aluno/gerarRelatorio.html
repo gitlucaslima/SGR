@@ -13,54 +13,63 @@
 
 {% block conteudo %}
 <div>
-    <div class="row w-100 d-flex">
-       
-    </div>
-    <div class="card border-left-warning">
-        <div class="card-body">
-            <div class="row mb-2">
-                <div class="col-md-6">
-                    <div class="col-12">Data inicio</div>
-                    <div class="col-12 border pt-2 pb-2 bg-white rounded shadow">
-                        <div>Data aqui</div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="col-12">Data final:</div>
-                    <div class="col-12 border pt-2 pb-2 bg-white rounded shadow">
-                        <div>Data aqui</div>
-                    </div>
-                </div>
-            </div>
-            <div class="form-row">
-                <!-- Pending Requests Card Example -->
-                <div class="col-x3-6 col-md-12 mb-6">
-                    <div class="card shadow h-100 py-2">
-                        <div class="card-header bg-white">
-                            <h3 class="h5">Backend Intermediario</h3>
+
+    <form action="{% url 'salvar_atividade' %}" method="post">
+
+        {% csrf_token %}
+
+        {% for disciplina in relatorio_corrente.disciplina.all %}
+
+            <div class="card border-left-warning mb-3">
+                <div class="card-body">
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                            <div class="col-12">Data inicio</div>
+                            <div class="col-12 border pt-2 pb-2 bg-white rounded shadow">
+                                <div>{{disciplina.data_inicio|date:"d/m/Y"}}</div>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <div class="row no-gutters align-items-center">
-                                <div class="col mr-2">
-
-                                    <textarea name="avisos" class="form-control" rows="7"
-                                        placeholder="Descreva suas atividades"></textarea>
-
+                        <div class="col-md-6">
+                            <div class="col-12">Data final:</div>
+                            <div class="col-12 border pt-2 pb-2 bg-white rounded shadow">
+                                <div>{{disciplina.data_termino|date:"d/m/Y" }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <!-- Pending Requests Card Example -->
+                        <div class="col-x3-6 col-md-12 mb-6">
+                            <div class="card shadow h-100 py-2">
+                                <div class="card-header bg-white">
+                                    <h3 class="h5">{{disciplina.nome}}</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+        
+                                            <textarea  name="atividades" class="form-control" rows="7"
+                                                placeholder="Descreva suas atividades"></textarea>
+        
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <hr>
-    <button type="submit" class="btn btn-primary btn-icon-split">
-        <span class="icon text-white">
-            <i class="fa fa-pencil-square-o"></i>
-        </span>
-        <span class="text"> Assinar</span>
-    </button>
+        
+        {% endfor %}
+        <hr>
+        <button type="submit" class="btn btn-primary btn-icon-split">
+            <span class="icon text-white">
+                <i class="fa fa-pencil-square-o"></i>
+            </span>
+            <span class="text"> Assinar</span>
+        </button>
+
     </form>
+  
+
 </div>
 {% endblock conteudo %}

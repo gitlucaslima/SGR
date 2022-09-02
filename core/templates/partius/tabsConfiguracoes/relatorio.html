@@ -11,7 +11,6 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-1">
 
-
                             <!-- Pending Requests Card Example -->
                             <div class="card-body">
                                 <h5>Período de abertura de relatório</h5>
@@ -72,7 +71,25 @@
 
 
                                             </div>
-
+                                            <label for="" class="mt-3">Situação</label>
+                                            <div class="row">
+                                               <div class="col ml-2">
+                                                    <div class="form-check ">
+                                                        <input class="form-check-input" type="radio" value="1" name="status" id="flexRadioDefault1" checked>
+                                                        <label class="form-check-label" for="flexRadioDefault1">
+                                                        Aberto
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="status" value="2" id="flexRadioDefault2">
+                                                        <label class="form-check-label" for="flexRadioDefault2">
+                                                        Fechado
+                                                        </label>
+                                                    </div>
+                                                </div>    
+                                               
+                                             
+                                            </div>
 
                                             <label for="Disciplinas" class="mt-3">Disciplinas</label>
                                             <div class="w-100 ">
@@ -124,6 +141,9 @@
                                     </div>
                                     <div class="card-body">
 
+                                        {% if not relatorios %}
+                                            <strong>Nenhum relatório cadastrado</strong>
+                                        {% endif %}
                                         {% for item in relatorios %}
 
                                         <div class="row">
@@ -153,8 +173,15 @@
                                                                     Data Limite: {{item.0.data_limite}}<br>
                                                                     Disciplinas:
 
+                                                                    {% if not item.0.disciplina.all %}
+                                                                    <strong>
+                                                                        Nenhuma disciplina cadastrada.
+                                                                    </strong>
+                                                                    {% endif %}
                                                                     {% for disciplina in item.0.disciplina.all %}
-                                                                    <strong> {{disciplina.nome}}</strong>
+                                                                    <strong> 
+                                                                            {{disciplina.nome}}
+                                                                    </strong>
                                                                     {% endfor %}
                                                                     <br>
                                                                     Status:
@@ -183,13 +210,19 @@
 
                                                     <i class="bi bi-pencil-square"></i>
                                                 </button>
-                                                <button class="btn p-1">
+                                                <button class="btn p-1" type="button" data-bs-toggle="modal"
+                                                    data-bs-target="#modalDeletaRelatorio{{item.0.id}}"
+                                                    data-bs-whatever="@mdo">
+
                                                     <i class="bi bi-trash"></i>
                                                 </button>
+
+  
                                             </div>
                                         </div>
 
                                         {% include "partius/modais/editarRelatorioModal.html" %}
+                                        {% include "partius/modais/deletarRelatorioModal.html" %}
                                         {% endfor %}
 
                                     </div>

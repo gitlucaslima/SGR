@@ -1,6 +1,7 @@
 import base64
 import io
 import sys
+from asyncio.windows_events import NULL
 from datetime import datetime
 from io import BytesIO
 from msilib.schema import Error
@@ -32,7 +33,16 @@ def alunoHome(request):
 
 def alunoRelatorio(request):
 
-    return render(request, "aluno/gerarRelatorio.html")
+    relatorio_abertos = RelatorioModel.objects.filter(
+        status=1).order_by("-mes")
+
+    ultimo_relatorio = relatorio_abertos[0] if relatorio_abertos else NULL
+
+    contexto = {
+
+        "relatorio_corrente": ultimo_relatorio
+    }
+    return render(request, "aluno/gerarRelatorio.html", contexto)
 
 
 # Controller do tutor
@@ -88,7 +98,8 @@ def configuracoes(request, relatorio):
     relatorios = [(item, MESES_CHOICE[item.mes-1][1])
                   for item in RelatorioModel.objects.all().order_by("mes")]
 
-    ultimoRelatorio = RelatorioModel.objects.all().order_by("-mes")[0].mes
+    ultimoRelatorio = RelatorioModel.objects.all().order_by(
+        "-mes")[0].mes if RelatorioModel.objects.all().order_by("-mes") else NULL
     anoAtual = datetime.now().year
     mesAtual = datetime.now().month
 
@@ -215,7 +226,7 @@ def cadastrarDisciplina(request):
 
             messages.add_message(request, messages.ERROR,
                                  "A data fornecida é inválida!")
-            return redirect("/configuracoes/relatorio")
+            return redirect("/configuracoes/disciplinas")
 
         novaDisciplina = DisciplinaModel()
         novaDisciplina.nome = nome
@@ -253,7 +264,7 @@ def editarDisciplina(request):
 
         messages.add_message(request, messages.ERROR,
                              "A data fornecida é inválida!")
-        return redirect("/configuracoes/relatorio")
+        return redirect("/configuracoes/disciplinas")
 
     disciplina = get_object_or_404(DisciplinaModel, id=id)
 
@@ -343,6 +354,7 @@ def cadastrarRelatorio(request):
         mes = request.POST.get('mesRelatorio')
         dataLimite = request.POST.get('dataLimite')
         disciplinas = request.POST.getlist('disciplina')
+        status = request.POST.get("status")
 
         # Pegando o mês da data limite
         mes_dataLimite = int(dataLimite.split('-')[1])
@@ -363,6 +375,7 @@ def cadastrarRelatorio(request):
 
         relatorio = RelatorioModel()
         relatorio.mes = mes
+        relatorio.status = status
         relatorio.data_limite = dataLimite
 
         try:
@@ -394,12 +407,14 @@ def editaRelatorio(request):
         mesRelatorio = request.POST.get("mesRelatorio")
         dataLimite = request.POST.get("dataLimite")
         disciplinas = request.POST.getlist("disciplina")
-        print("Disciplinas do post", disciplinas)
+        status = request.POST.get("status")
 
         relatorio = get_object_or_404(RelatorioModel, id=id)
 
         relatorio.mes = mesRelatorio
         relatorio.data_limite = dataLimite
+        relatorio.status = status
+        relatorio.disciplina.clear()
 
         for item in disciplinas:
             print(item)
@@ -408,3 +423,35 @@ def editaRelatorio(request):
             relatorio.save()
 
     return redirect("/configuracoes/relatorio")
+
+
+def deletarRelatorio(request):
+    if (request.method == "POST"):
+        id = request.POST.get("id")
+        nome = request.POST.get("nome")
+
+        relatorio = get_object_or_404(RelatorioModel, id=id)
+        print(nome)
+
+        try:
+            relatorio.delete()
+            messages.add_message(request, messages.SUCCESS,
+                                 f"O relatorio {nome} foi excluido com sucesso!")
+
+        except ValueError:
+
+            messages.add_message(request, messages.ERROR,
+                                 "Não foi possivel deletar o relatorio")
+
+    return redirect("/configuracoes/relatorio")
+
+
+def salvarAtividades(request):
+
+    if(request.method == "POST"):
+
+        atividades = request.POST.getlist("atividades")
+
+        print(atividades)
+
+        return redirect("/aluno/gerar_relatorio")

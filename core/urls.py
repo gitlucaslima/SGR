@@ -46,5 +46,10 @@ urlpatterns = [
 
     path("editar_relatorio/", editaRelatorio, name='editar_relatorio'),
 
+    path("deletar_relatorio/", deletarRelatorio, name='deletar_relatorio'),
+
+    path("salvar_atividade/", salvarAtividades, name="salvar_atividade")
+
+
 
 ]
