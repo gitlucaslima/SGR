@@ -1,4 +1,4 @@
-
+{% load static %}
 <div class="container-fluid mt-3">
 
     <div class="row d-flex justify-content-center">
@@ -47,7 +47,7 @@
                                                     </div>
                                                     <input type="date" name="dataFim" id="dataTermino"
                                                         class="form-control"
-                                                        value="{{disciplina.data_termino|date:'Y-m-d'}}" required>
+                                                        value="{{disciplina.data_termino|date:'Y-m-d'}}" disabled required>
                                                 </div>
                                             </div>
                                             <label for="descricao" class="mt-2">Descriçao (Opcional)</label>
@@ -167,3 +167,4 @@
     </div>
 </div>
 
+<script src="{% static 'js/validaCampoDataDisciplina.js' %}"></script>

@@ -1,4 +1,4 @@
-<div class="modal fade" id="modalEditarRelatorio{{item.0.id}}" aria-labelledby="modalEditarRelatorio{{item.0.id}}"
+<div class="modal fade" id="modalEditarRelatorio{{item.id}}" aria-labelledby="modalEditarRelatorio{{item.id}}"
     aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -26,23 +26,24 @@
 
                                                     <label for="mes">Mês</label>
                                                 </div>
-                                                <input type="hidden" name="id" value={{item.0.id}} />
+                                                <input type="hidden" name="id" value={{item.id}} />
 
                                                 <div class="col-12">
 
+                                                   
                                                     <select name="mesRelatorio" id="mes"
                                                         class="form-control select-edit">
                                                         {% for mes in meses %}
 
-                                                        {% if mes.0 >= item.0.mes%}
-                                                        {% if mes.0 == item.0.mes %}
+                                                       
+                                                        {% if mes.1 == item.data_relatorio|date:'F' %}
 
                                                         <option value="{{mes.0}}" selected>{{mes.1}}</option>
 
                                                         {% else %}
 
                                                         <option value="{{mes.0}}">{{mes.1}}</option>
-                                                        {% endif %}
+                                                       
                                                         {% endif %}
                                                         {% endfor %}
 
@@ -63,7 +64,7 @@
                                         </div>
                                         <div class="col-12">
                                             <input type="date" name="dataLimite" id="dataLimite" class="form-control input-edit"
-                                                value="{{item.0.data_limite|date:'Y-m-d'}}"  min="{{anoAtual}}-{{ultimoRelatorioFormat}}-01" >
+                                                value="{{item.data_limite|date:'Y-m-d'}}"  min="{{item.data_limite|date:'Y-m-d'}}" >
                                         </div>
                                     </div>
                                 </div>
@@ -74,7 +75,7 @@
                             <div class="row">
                                 <div class="col ml-2">
 
-                                    {% if item.0.status == 1%}
+                                    {% if item.status == 1%}
                                     <div class="form-check ">
                                         <input class="form-check-input" type="radio" value="1" name="status"
                                             id="flexRadioDefault1" checked>
@@ -112,13 +113,14 @@
 
                             <label for="Disciplinas" class="mt-3">Disciplinas</label>
                             <div class="w-100 ">
+                                <strong>No minimo uma disciplina deve ser selecionada</strong>
                                 {% if disciplinas %}
                                 <div class="overflow-auto" style="height: 150px;">
                                     <ul class="list-group">
 
                                         {% for item_disciplina in listDisciplinas %}
 
-                                        {% if item_disciplina in item.0.disciplina.all %}
+                                        {% if item_disciplina in item.disciplina.all %}
                                         <li class="list-group-item">
                                             <div class="custom-control custom-checkbox">
                                                 <input class="form-check-input mr-1" type="checkbox"

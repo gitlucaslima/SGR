@@ -39,7 +39,8 @@
                                                                     <select name="mesRelatorio" id="mes"
                                                                         class="form-control select-mes-relatorio">
                                                                         {% for mes in meses %}
-                                                                        {% if mes.0 > ultimoRelatorio %}
+
+                                                                        {% if mes.0 >= ultimoRelatorio %}
                                                                         <option value="{{mes.0}}">{{mes.1}}</option>
 
                                                                         {% endif %}
@@ -64,35 +65,40 @@
                                                         <div class="col-12">
                                                             <input type="date" name="dataLimite" id="dataLimite"
                                                                 class="form-control input-date-limite"
-                                                                min="{{anoAtual}}-{{ultimoRelatorioFormat}}-01" disabled>
+                                                                min="{{anoAtual}}-{{ultimoRelatorioFormat}}-01" required disabled title="Selecione o mês do relatório">
                                                         </div>
+                                                    </div>
+                                                </div>   
+
+                                            </div>
+
+                                            <input type="hidden" id="ano-cadastro" name="ano">
+
+                                            <label for="" class="mt-3">Situação</label>
+                                            <div class="row">
+                                                <div class="col ml-2">
+                                                    <div class="form-check ">
+                                                        <input class="form-check-input" type="radio" value="1"
+                                                            name="status" id="flexRadioDefault1" checked>
+                                                        <label class="form-check-label" for="flexRadioDefault1">
+                                                            Aberto
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="status"
+                                                            value="2" id="flexRadioDefault2">
+                                                        <label class="form-check-label" for="flexRadioDefault2">
+                                                            Fechado
+                                                        </label>
                                                     </div>
                                                 </div>
 
 
                                             </div>
-                                            <label for="" class="mt-3">Situação</label>
-                                            <div class="row">
-                                               <div class="col ml-2">
-                                                    <div class="form-check ">
-                                                        <input class="form-check-input" type="radio" value="1" name="status" id="flexRadioDefault1" checked>
-                                                        <label class="form-check-label" for="flexRadioDefault1">
-                                                        Aberto
-                                                        </label>
-                                                    </div>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="status" value="2" id="flexRadioDefault2">
-                                                        <label class="form-check-label" for="flexRadioDefault2">
-                                                        Fechado
-                                                        </label>
-                                                    </div>
-                                                </div>    
-                                               
-                                             
-                                            </div>
 
                                             <label for="Disciplinas" class="mt-3">Disciplinas</label>
                                             <div class="w-100 ">
+                                                <strong>No minimo uma disciplina deve ser selecionada</strong>
                                                 {% if disciplinas %}
                                                 <div class="overflow-auto" style="height: 150px;">
                                                     <ul class="list-group">
@@ -142,7 +148,7 @@
                                     <div class="card-body">
 
                                         {% if not relatorios %}
-                                            <strong>Nenhum relatório cadastrado</strong>
+                                        <strong>Nenhum relatório cadastrado</strong>
                                         {% endif %}
                                         {% for item in relatorios %}
 
@@ -156,39 +162,40 @@
 
                                                         <div class="accordion-item">
                                                             <!-- Card Header - Accordion -->
-                                                            <a href="#collapseCardExample{{item.0.id}}"
+                                                            <a href="#collapseCardExample{{item.id}}"
                                                                 class="d-block  card-header py-3" data-toggle="collapse"
                                                                 role="button" aria-expanded="true"
                                                                 aria-controls="collapseCardExample">
 
-                                                                <h6 class="m-0 font-weight-bold text-primary">{{item.1}}
+                                                                <h6 class="m-0 font-weight-bold text-primary">
+                                                                    {{item.data_relatorio|date:'F | Y'}}
                                                                 </h6>
 
 
                                                             </a>
                                                             <!-- Card Content - Collapse -->
-                                                            <div class="collapse" id="collapseCardExample{{item.0.id}}"
+                                                            <div class="collapse" id="collapseCardExample{{item.id}}"
                                                                 data-bs-parent="#collapse">
                                                                 <div class="card-body">
-                                                                    Data Limite: {{item.0.data_limite}}<br>
+                                                                    Data Limite: {{item.data_limite}}<br>
                                                                     Disciplinas:
 
-                                                                    {% if not item.0.disciplina.all %}
+                                                                    {% if not item.disciplina.all %}
                                                                     <strong>
                                                                         Nenhuma disciplina cadastrada.
                                                                     </strong>
                                                                     {% endif %}
-                                                                    {% for disciplina in item.0.disciplina.all %}
-                                                                    <strong> 
-                                                                            {{disciplina.nome}}
+                                                                    {% for disciplina in item.disciplina.all %}
+                                                                    <strong>
+                                                                        {{disciplina.nome}}
                                                                     </strong>
                                                                     {% endfor %}
                                                                     <br>
                                                                     Status:
-                                                                    {% if item.0.status == 1 %}
-                                                                    fechado
+                                                                    {% if item.status == 1 %}
+                                                                    Aberto
                                                                     {% else %}
-                                                                    aberto
+                                                                    Fechado
                                                                     {% endif %}
                                                                     <br>
 
@@ -205,19 +212,19 @@
                                             <div class="col-12 col-md-1 p-0 d-flex justify-content-center">
 
                                                 <button class="btn p-1" type="button" data-bs-toggle="modal"
-                                                    data-bs-target="#modalEditarRelatorio{{item.0.id}}"
+                                                    data-bs-target="#modalEditarRelatorio{{item.id}}"
                                                     data-bs-whatever="@mdo">
 
                                                     <i class="bi bi-pencil-square"></i>
                                                 </button>
                                                 <button class="btn p-1" type="button" data-bs-toggle="modal"
-                                                    data-bs-target="#modalDeletaRelatorio{{item.0.id}}"
+                                                    data-bs-target="#modalDeletaRelatorio{{item.id}}"
                                                     data-bs-whatever="@mdo">
 
                                                     <i class="bi bi-trash"></i>
                                                 </button>
 
-  
+
                                             </div>
                                         </div>
 

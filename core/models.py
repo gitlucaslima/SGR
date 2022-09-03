@@ -179,13 +179,11 @@ class RelatorioModel(models.Model):
         (2, "fechado")
     )
 
-    mes = models.IntegerField(
+    data_relatorio = models.DateField(
 
-        choices=MESES_CHOICE,
+        unique=True,
         null=False,
-        blank=False,
-        unique=True
-
+        blank=False
     )
 
     data_limite = models.DateField(

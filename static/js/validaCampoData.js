@@ -3,17 +3,19 @@
 const selectMesRelatorio = document.querySelector(".select-mes-relatorio");
 const inputDateLimite = document.querySelector(".input-date-limite");
 
-const selectMesRelatorioEdit = document.querySelector(".select-edit");
-const inputDateLimiteEdit = document.querySelector(".input-edit");
-
+const selectMesRelatorioEdit = document.querySelectorAll(".select-edit");
+const inputDateLimiteEdit = document.querySelectorAll(".input-edit");
+const anoCadastro = document.querySelector("#ano-cadastro");
 
 function redefinirMinDate(itemInputDate, selectMes) {
 
+    itemInputDate.disabled = false
     let ano = itemInputDate.min.split("-")[0]
     let mes = selectMes.value.length == 2 ? selectMes.value : "0" + selectMes.value
     let dia = itemInputDate.min.split("-")[2]
 
     data = `${ano}-${mes}-${dia}`
+    console.log(data)
     itemInputDate.min = data
 
 }
@@ -21,7 +23,7 @@ function redefinirMinDate(itemInputDate, selectMes) {
 
 selectMesRelatorio.addEventListener("click", () => {
 
-    inputDateLimite.disabled = false;
+
 
     redefinirMinDate(inputDateLimite, selectMesRelatorio)
 
@@ -30,47 +32,24 @@ selectMesRelatorio.addEventListener("click", () => {
 
 })
 
-selectMesRelatorioEdit.addEventListener("click", () => {
+selectMesRelatorioEdit.forEach(itemSelecte=>{
 
+    itemSelecte.addEventListener("click", () => {
 
-    inputDateLimiteEdit.disabled = false;
+        inputDateLimiteEdit.forEach(itemInput=>{
 
-    redefinirMinDate(inputDateLimiteEdit, selectMesRelatorioEdit)
-
-    inputDateLimiteEdit.value = inputDateLimiteEdit.min;
+            redefinirMinDate(itemInput, itemSelecte)
     
-    let [ano, mes, dia] = inputDateLimiteEdit.value.split("-");
-    mes = selectMesRelatorioEdit.value.length == 2 ? selectMesRelatorioEdit.value : '0' + selectMesRelatorioEdit.value;
-
-    inputDateLimiteEdit.value = `${ano}-${mes}-${dia}`;
-
-})
-
-function reajustarSelect(input, select) {
-
-    let [ano, mes, dia] = input.value.split("-")
-
-    console.log(parseInt(mes))
-    console.log(parseInt(select.value))
-    if(parseInt(mes) < parseInt(select.value)){
-
+            itemInput.value = itemInput.min;
+            
+            let [ano, mes, dia] = itemInput.value.split("-");
+            mes = itemSelecte.value.length == 2 ? itemSelecte.value : '0' + itemSelecte.value;
+        
+            itemInput.value = `${ano}-${mes}-${dia}`;
     
-        select.value = parseInt(mes)
-    }
+        })
 
-}
-
-inputDateLimite.addEventListener("input", () => {
-
-
-    reajustarSelect(inputDateLimite,selectMesRelatorio)
-
-})
-
-inputDateLimiteEdit.addEventListener("input", () => {
-
-
-    reajustarSelect(inputDateLimiteEdit,selectMesRelatorioEdit)
+    })
 
 })
 
