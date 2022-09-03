@@ -88,7 +88,9 @@ def configuracoes(request, relatorio):
     relatorios = [(item, MESES_CHOICE[item.mes-1][1])
                   for item in RelatorioModel.objects.all().order_by("mes")]
 
-    ultimoRelatorio = RelatorioModel.objects.all().order_by("-mes")[0].mes
+    ultimoRelatorio = RelatorioModel.objects.all().order_by("-mes")[0].mes 
+
+    ultimoRelatorioFormat = str(ultimoRelatorio) if ultimoRelatorio >= 10 else '0'+str(ultimoRelatorio)
     anoAtual = datetime.now().year
     mesAtual = datetime.now().month
 
@@ -99,6 +101,7 @@ def configuracoes(request, relatorio):
         "meses": MESES_CHOICE,
         "relatorios": relatorios,
         "ultimoRelatorio": ultimoRelatorio,
+        "ultimoRelatorioFormat":ultimoRelatorioFormat,
         "anoAtual": anoAtual,
         "mesAtual": mesAtual
     }
