@@ -83,26 +83,7 @@
     {% endif %}
 
 
-    {% if tab == 'aviso' %}
-
-    <li class="nav-item">
-        <a class="nav-link active tab-configuracao" data-opcao-tab="aviso" id="contact-tab" data-toggle="tab"
-            href="#contato" role="tab" aria-controls="contact" aria-selected="false">
-            <i class="fa fa-envelope" aria-hidden="true"></i>
-            Aviso
-        </a>
-    </li>
-
-    {% else %}
-
-    <li class="nav-item">
-        <a class="nav-link tab-configuracao" data-opcao-tab="aviso" id="contact-tab" data-toggle="tab" href="#contato"
-            role="tab" aria-controls="contact" aria-selected="false">
-            <i class="fa fa-envelope" aria-hidden="true"></i>
-            Aviso
-        </a>
-    </li>
-    {% endif %}
+  
 
     {% block meusScripts %}
     <script src="{% static 'js/scripts.js' %}"></script>

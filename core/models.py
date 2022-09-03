@@ -198,7 +198,7 @@ class RelatorioModel(models.Model):
 
         choices=STATUS_CHOICE,
         null=False,
-        default=2
+        default=1
     )
 
     usuario = models.ForeignKey(

@@ -1,30 +1,29 @@
-<div class="modal fade" id="modalDeletaDisciplina{{item.id}}" aria-labelledby="modalDeletaDisciplina{{item.id}}"
+<div class="modal fade" id="modalDeletaRelatorio{{item.0.id}}" aria-labelledby="modalDeletaRelatorio{{item.0.id}}"
     aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"><b>Excluir Disciplina</b></h5>
+                <h5 class="modal-title"><b>Excluir Relatório</b></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
 
-                <span>Deseja deletar a disciplina <strong>{{item.nome}}</strong>?</span>
+                <span>Deseja deletar o relatório do mês <strong>{{item.1}}</strong>?</span>
             
-
             </div>
             <div class="modal-footer">
 
-                <form action="{% url 'deletar_disciplina' %}" method="post">
+                <form action="{% url 'deletar_relatorio' %}" method="post">
                     {% csrf_token %}
-                    <input type="hidden" name="id" value="{{ item.id }}">
+                    <input type="hidden" name="id" value="{{ item.0.id }}">
+                    <input type="hidden" name="nome" value="{{ item.1 }}">
+
                     <button type="submit" class="btn btn-success">Apagar</button>
                 </form>
                 <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                    data-bs-target="#modalDeletaDisciplina{{item.id}}" data-bs-whatever="@mdo">Cancelar
-                </button>
+                    data-bs-target="#modalDeletaRelatorio{{item.0.id}}" data-bs-whatever="@mdo">Cancelar</button>
             </div>
         </div>
 
     </div>
 </div>
-

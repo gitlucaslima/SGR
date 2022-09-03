@@ -8,7 +8,6 @@
             </div>
             <div class="modal-body">
 
-
                 <form action="{% url 'editar_relatorio' %}" method="POST">
 
                     {% csrf_token %}
@@ -27,22 +26,23 @@
 
                                                     <label for="mes">Mês</label>
                                                 </div>
-                                                <input type="hidden" name="id" value= {{item.0.id}} />
+                                                <input type="hidden" name="id" value={{item.0.id}} />
 
                                                 <div class="col-12">
 
-                                                    <select name="mesRelatorio" id="mes" class="form-control select-edit">
+                                                    <select name="mesRelatorio" id="mes"
+                                                        class="form-control select-edit">
                                                         {% for mes in meses %}
 
                                                         {% if mes.0 >= item.0.mes%}
-                                                            {% if mes.0 == item.0.mes %}
+                                                        {% if mes.0 == item.0.mes %}
 
-                                                            <option value="{{mes.0}}" selected>{{mes.1}}</option>
+                                                        <option value="{{mes.0}}" selected>{{mes.1}}</option>
 
-                                                            {% else %}
+                                                        {% else %}
 
-                                                            <option value="{{mes.0}}">{{mes.1}}</option>
-                                                            {% endif %}
+                                                        <option value="{{mes.0}}">{{mes.1}}</option>
+                                                        {% endif %}
                                                         {% endif %}
                                                         {% endfor %}
 
@@ -70,7 +70,45 @@
 
 
                             </div>
+                            <label for="" class="mt-3">Situação</label>
+                            <div class="row">
+                                <div class="col ml-2">
 
+                                    {% if item.0.status == 1%}
+                                    <div class="form-check ">
+                                        <input class="form-check-input" type="radio" value="1" name="status"
+                                            id="flexRadioDefault1" checked>
+                                        <label class="form-check-label" for="flexRadioDefault1">
+                                            Aberto
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="status" value="2"
+                                            id="flexRadioDefault2">
+                                        <label class="form-check-label" for="flexRadioDefault2">
+                                            Fechado
+                                        </label>
+                                    </div>
+                                    {% else %}
+                                    <div class="form-check ">
+                                        <input class="form-check-input" type="radio" value="1" name="status"
+                                            id="flexRadioDefault1">
+                                        <label class="form-check-label" for="flexRadioDefault1">
+                                            Aberto
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="status" value="2"
+                                            id="flexRadioDefault2" checked>
+                                        <label class="form-check-label" for="flexRadioDefault2">
+                                            Fechado
+                                        </label>
+                                    </div>
+                                    {% endif %}
+                                </div>
+
+
+                            </div>
 
                             <label for="Disciplinas" class="mt-3">Disciplinas</label>
                             <div class="w-100 ">
@@ -114,14 +152,13 @@
                                     cadastradas</label>
                                 {% endif %}
 
-
                             </div>
                             <div class="col text-center">
                                 <button type="submit" class="btn btn-success btn-icon-split">
                                     <span class="icon text-white-50">
                                         <i class="fas fa-check"></i>
                                     </span>
-                                    <span class="text">Salvar</span>
+                                    <span class="text">Salvar alterações</span>
                                 </button>
                             </div>
                         </div>
