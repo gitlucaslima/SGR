@@ -1,6 +1,7 @@
 import base64
 
 import io
+from operator import length_hint
 
 import sys
 from asyncio.windows_events import NULL
@@ -17,6 +18,8 @@ from PIL import Image
 
 from core.funcoes_auxiliares.data import isDateMaior
 from core.models import *
+
+from docxtpl import DocxTemplate, InlineImage
 
 # Controllers do aluno
 
@@ -67,8 +70,8 @@ def coordenadorHome(request):
     contexto = {
         "tab": dados,
         "numeroAlunos": dados.count(),
-        "relatorios":relatorios,
-        "ultimoRelatorio":ultimoRelatorio
+        "relatorios": relatorios,
+        "ultimoRelatorio": ultimoRelatorio
     }
 
     contexto['dados_usuarios'] = dados
@@ -98,9 +101,8 @@ def configuracoes(request, relatorio):
     disciplinas = DisciplinaModel.objects.filter(status=1)
     listDisciplinas = DisciplinaModel.objects.all()
     # Preparando os dados do relatorio para fornecer os nomes dos meses
-    
-    relatorios = RelatorioModel.objects.all().order_by("data_relatorio")
 
+    relatorios = RelatorioModel.objects.all().order_by("data_relatorio")
 
     anoAtual = datetime.now().year
     mesAtual = datetime.now().month
@@ -108,26 +110,28 @@ def configuracoes(request, relatorio):
     ultimoRelatorio = RelatorioModel.objects.all().order_by("-data_relatorio")
 
     # Obtem o mês do ultimo relatório realizado no ano virgente, caso não exista nenhum relatório relizado nessas circuntâcias retorna o mês atual do ano virgente
-    ultimoRelatorio =  int(ultimoRelatorio[0].data_relatorio.month) if ultimoRelatorio and int(ultimoRelatorio[0].data_relatorio.year)==anoAtual  else mesAtual-1
+    ultimoRelatorio = int(ultimoRelatorio[0].data_relatorio.month) if ultimoRelatorio and int(
+        ultimoRelatorio[0].data_relatorio.year) == anoAtual else mesAtual-1
     ultimoRelatorioRealizado = ultimoRelatorio
-    
+
     # Obtem o proximo ano do relatorio de acordo com o ultimo relatorio
     anoAtual = int(anoAtual)+1 if ultimoRelatorio == 12 else anoAtual
     # Obtem o proximo mes do relatorio
     ultimoRelatorio = 1 if ultimoRelatorio == 12 else ultimoRelatorio+1
- 
-    ultimoRelatorioFormat = ultimoRelatorio if ultimoRelatorio >= 10 else '0'+str(ultimoRelatorio)
+
+    ultimoRelatorioFormat = ultimoRelatorio if ultimoRelatorio >= 10 else '0' + \
+        str(ultimoRelatorio)
     contexto = {
         "tab": relatorio,
         "disciplinas": disciplinas,
         "listDisciplinas": listDisciplinas,
         "relatorios": relatorios,
         "ultimoRelatorio": ultimoRelatorio,
-        "ultimoRelatorioFormat":ultimoRelatorioFormat,
+        "ultimoRelatorioFormat": ultimoRelatorioFormat,
         "anoAtual": anoAtual,
         "mesAtual": mesAtual,
-        "meses":MESES_CHOICE,
-        "ultimoRelatorioRealizado":ultimoRelatorioRealizado
+        "meses": MESES_CHOICE,
+        "ultimoRelatorioRealizado": ultimoRelatorioRealizado
     }
 
     if relatorio == 'usuario':
@@ -291,7 +295,8 @@ def editarDisciplina(request):
 
     try:
 
-        messages.add_message(request,messages.SUCCESS,"Alterações realizadas com sucesso!")
+        messages.add_message(request, messages.SUCCESS,
+                             "Alterações realizadas com sucesso!")
         disciplina.save()
 
     except IntegrityError:
@@ -387,22 +392,22 @@ def cadastrarRelatorio(request):
         dataLimite = request.POST.get('dataLimite')
         disciplinas = request.POST.getlist('disciplina')
         status = request.POST.get("status")
-       
+
         relatorios_abertos = RelatorioModel.objects.filter(status=1)
-   
+
         if(relatorios_abertos and status == '1'):
 
             messages.add_message(request, messages.WARNING,
                                  "Já existe um relatório aberto. Relatório mês - {0}".format(MESES_CHOICE[int(relatorios_abertos[0].data_relatorio.month-1)][1]))
 
             return redirect('/configuracoes/relatorio')
-        ano_atual =  anoAtual = datetime.now().year
+        ano_atual = anoAtual = datetime.now().year
 
         # Pegando o mês da data limite
 
         if(dataLimite):
             mes_dataLimite = int(dataLimite.split('-')[1])
-        
+
         else:
             messages.add_message(request, messages.ERROR,
                                  "É necessário fornecer uma data limite para entrega do relatório")
@@ -427,10 +432,9 @@ def cadastrarRelatorio(request):
         mes = mes if int(mes) >= 10 else '0'+str(mes)
 
         relatorio = RelatorioModel()
-        relatorio.data_relatorio = "{0}-{1}-01".format(ano_atual,mes)
+        relatorio.data_relatorio = "{0}-{1}-01".format(ano_atual, mes)
         relatorio.status = status
         relatorio.data_limite = dataLimite
-    
 
         try:
 
@@ -446,7 +450,7 @@ def cadastrarRelatorio(request):
             return redirect('/configuracoes/relatorio')
 
         for disciplina_id in disciplinas:
-        
+
             registro = DisciplinaModel.objects.get(id=int(disciplina_id))
             relatorio.disciplina.add(registro)
             relatorio.save()
@@ -483,23 +487,26 @@ def editaRelatorio(request):
 
         anoAtual = datetime.now().year
 
-        mesRelatorio = mesRelatorio if int(mesRelatorio)>=10 else '0'+mesRelatorio
+        mesRelatorio = mesRelatorio if int(
+            mesRelatorio) >= 10 else '0'+mesRelatorio
 
-        nova_data_relatorio = "{0}-{1}-01".format(anoAtual,mesRelatorio)
+        nova_data_relatorio = "{0}-{1}-01".format(anoAtual, mesRelatorio)
 
         # Busca todos os relatórios com a nova data
-        relatorio_data = RelatorioModel.objects.filter(data_relatorio=nova_data_relatorio)
-        
+        relatorio_data = RelatorioModel.objects.filter(
+            data_relatorio=nova_data_relatorio)
+
         # Verifica se existe algum relatório nessa data e se é do relatorio editado
         if relatorio_data and relatorio_data[0].id != int(id):
 
-            messages.add_message(request,messages.ERROR, "Já existe um relatório nessa data!")
+            messages.add_message(request, messages.ERROR,
+                                 "Já existe um relatório nessa data!")
 
             return redirect("/configuracoes/relatorio")
 
         relatorios_abertos = RelatorioModel.objects.filter(status=1)
-   
-        if(relatorios_abertos  and relatorios_abertos[0].id != int(id) and status == '1'):
+
+        if(relatorios_abertos and relatorios_abertos[0].id != int(id) and status == '1'):
 
             messages.add_message(request, messages.WARNING,
                                  "Já existe um relatório aberto. Relatório mês - {0}".format(MESES_CHOICE[int(relatorios_abertos[0].data_relatorio.month-1)][1]))
@@ -508,25 +515,24 @@ def editaRelatorio(request):
 
         if not disciplinas:
 
-            messages.add_message(request,messages.WARNING,"No minimo uma disciplina deve ser selecionada")
+            messages.add_message(request, messages.WARNING,
+                                 "No minimo uma disciplina deve ser selecionada")
             return redirect("/configuracoes/relatorio")
 
-            
         relatorio.data_relatorio = nova_data_relatorio
         relatorio.data_limite = dataLimite
         relatorio.status = status
 
         relatorio.disciplina.clear()
 
-       
-
         for item in disciplinas:
-            
+
             registro = DisciplinaModel.objects.get(id=int(item))
             relatorio.disciplina.add(registro)
             relatorio.save()
 
-            messages.add_message(request,messages.SUCCESS, "alterações realizadas com sucesso!")
+            messages.add_message(request, messages.SUCCESS,
+                                 "alterações realizadas com sucesso!")
 
     return redirect("/configuracoes/relatorio")
 
@@ -537,7 +543,6 @@ def deletarRelatorio(request):
         nome = request.POST.get("nome")
 
         relatorio = get_object_or_404(RelatorioModel, id=id)
-
 
         try:
             relatorio.delete()
@@ -556,8 +561,36 @@ def salvarAtividades(request):
 
     if(request.method == "POST"):
 
+        mesReferencia = request.POST.get("mesReferencia")
+        nomeDisciplina = request.POST.getlist("nomeDisciplina")
+        dataInicio = request.POST.getlist("dataInicio")
+        dataFim = request.POST.getlist("dataFim")
         atividades = request.POST.getlist("atividades")
 
-        print(atividades)
+        # Importação do doc que será usado como template
+        doc = DocxTemplate("media/modelo/modeloRelatorio.docx")
+
+        conteudo = []
+
+        for indice in range(len(nomeDisciplina)):
+            conteudo.append(
+                [nomeDisciplina[indice], dataInicio[indice], dataFim[indice], atividades[indice]])
+
+        # Trocar informações pelas do modelo
+        context = {
+            "nomeAluno": 'Lucas de Lima Chaves',
+            "mesReferencia": mesReferencia,
+            "conteudo": conteudo
+        }
+
+        # Trocar assinatura do aluno e tutor, pelas do modelo
+        doc.replace_pic('Imagem 10', 'media/uploads/assinatura/assinatura.png')
+        doc.replace_pic('Imagem 12', 'media/uploads/assinatura/assinatura.png')
+
+        # Aplicar a troca de informações
+        doc.render(context)
+
+        # Gerar documento
+        doc.save("media/relatorios/teste.docx")
 
         return redirect("/aluno/gerar_relatorio")

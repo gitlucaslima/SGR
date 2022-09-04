@@ -17,8 +17,16 @@
     <form action="{% url 'salvar_atividade' %}" method="post">
 
         {% csrf_token %}
+        
+        <input type="hidden" name="mesReferencia" value="{{relatorio_corrente.data_relatorio|date:'F'}}">
 
         {% for disciplina in relatorio_corrente.disciplina.all %}
+
+            {% comment %} <input type="hidden" name="nomeAluno"> {% endcomment %}
+
+            <input type="hidden" name="nomeDisciplina" value="{{disciplina.nome}}">
+            <input type="hidden" name="dataInicio" value="{{disciplina.data_inicio|date:"d/m/Y"}}">
+            <input type="hidden" name="dataFim" value="{{disciplina.data_termino|date:"d/m/Y"}}">
 
             <div class="card border-left-warning mb-3">
                 <div class="card-body">
@@ -32,7 +40,7 @@
                         <div class="col-md-6">
                             <div class="col-12">Data final:</div>
                             <div class="col-12 border pt-2 pb-2 bg-white rounded shadow">
-                                <div>{{disciplina.data_termino|date:"d/m/Y" }}</div>
+                                <div>{{disciplina.data_termino|date:"d/m/Y"}}</div>
                             </div>
                         </div>
                     </div>
