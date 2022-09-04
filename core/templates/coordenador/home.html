@@ -30,16 +30,22 @@
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                            Relatórios do mês
+                            Relatórios do mês atual
                         </div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">
-                            Janeiro
+                        <div class="h6 mb-0 font-weight-bold text-gray-600">
+
+                            {% if ultimoRelatorio %}
+                                {{ultimoRelatorio.data_relatorio|date:'F' }}
+
+                            {% else %}
+                                Nenhum relatório
+                            {% endif %}
                         </div>
                     </div>
                     <div class="col-auto">
                         <i class="bi bi-calendar-date fa-2x text-gray-300"></i>
 
-                        
+
                     </div>
                 </div>
             </div>
@@ -54,7 +60,7 @@
                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                             Alunos (Bolsistas)
                         </div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                        <div class="h6 mb-0 font-weight-bold text-gray-600">
                             {{numeroAlunos}}
                         </div>
                     </div>
@@ -75,7 +81,7 @@
                         <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                             Relatorios Enviados
                         </div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                        <div class="h6 mb-0 font-weight-bold text-gray-600">
                             33
                         </div>
                     </div>
@@ -96,7 +102,7 @@
                         <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
                             Relatorios Pendentes
                         </div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                        <div class="h6 mb-0 font-weight-bold text-gray-600">
                             0
                         </div>
                     </div>
@@ -123,43 +129,53 @@
                 <div class="card-body">
                     <div class="accordion" id="accordionPanelsStayOpenExample">
 
-                        <!-- 
+
+                        {% if not relatorios|length %}
+                            <div class="row">
+                                
+                                <div class="col d-flex justify-content-center">
     
-                            Lembrete para quem for fazer o backend dessa pagina
-                            
-                            ITEM 1
-                         -->
+                                    Nenhum relatório disponivel
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% for relatorio in relatorios %}
                         <div class="accordion-item mb-4">
 
-                            <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                            <h2 class="accordion-header" id="panelsStayOpen-headingOne{{relatorio.id}}">
 
 
                                 <button class="accordion-button collapsed p-4 text-nowrap text-truncate" type="button"
-                                    data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne"
-                                    aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#panelsStayOpen-collapseOne{{relatorio.id}}" aria-expanded="false"
+                                    aria-controls="panelsStayOpen-collapseOne{{relatorio.id}}">
                                     <div class="col-11">
                                         <div class="row">
 
                                             <div class="col-12 col-md-5 text-truncate">
-                                                <i class="fas fa-file-signature mr-2 fs-5"></i><span>Relatório Janeiro
+                                                <i class="fas fa-file-signature mr-2 fs-5"></i><span>Relatório -
+                                                    {{relatorio.data_relatorio|date:'F'}}
                                                 </span>
                                             </div>
 
                                             <div class="col-12 col-md-7 text-left text-truncate">
-                                        
-                                                <em class="text-muted">Framework Back-End Básico</em>
+                                                <em class="text-muted"></em>
+                                                {% for disciplina in relatorio.disciplina.all %}
+                                                    {{disciplina.nome}} 
+                                                {% endfor %}
+                                                </em>
                                             </div>
 
                                         </div>
                                     </div>
                                 </button>
                             </h2>
-                            <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse"
-                                aria-labelledby="panelsStayOpen-headingOne"
+                            <div id="panelsStayOpen-collapseOne{{relatorio.id}}" class="accordion-collapse collapse"
+                                aria-labelledby="panelsStayOpen-headingOne{{relatorio.id}}"
                                 data-bs-parent="#accordionPanelsStayOpenExample">
                                 <div class="accordion-body">
 
-                                  
+
                                     <div class="table-responsive">
                                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                             <thead>
@@ -183,7 +199,7 @@
                                                 </tr>
                                             </tfoot>
                                             <tbody>
-                                            
+
                                                 <tr>
                                                     <td>Bradley Greer</td>
                                                     <td>Software Engineer</td>
@@ -368,100 +384,17 @@
                                                     <td>2008/09/26</td>
                                                     <td>$645,750</td>
                                                 </tr>
-                                        
+
                                             </tbody>
                                         </table>
                                     </div>
-                                
+
                                 </div>
                             </div>
                         </div>
 
+                        {% endfor %}
 
-                        <!-- ITEM 2 -->
-                        <div class="accordion-item mb-4">
-                            <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
-                                <button class="accordion-button collapsed p-4 text-nowrap text-truncate" type="button"
-                                    data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo"
-                                    aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
-                                    <div class="col-11">
-                                        <div class="row">
-
-                                            <div class="col-12 col-md-5 text-truncate">
-                                                <i class="fas fa-file-signature mr-2 fs-5"></i><span>Relatório Fevereiro
-                                                </span>
-                                            </div>
-                                            <div class="col-12 col-md-7 text-left text-truncate">
-                                                <!-- Nome da disciplina qui -->
-                                                <em class="text-muted">Front-End Básico</em>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </button>
-                            </h2>
-                            <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse"
-                                aria-labelledby="panelsStayOpen-headingTwo"
-                                data-bs-parent="#accordionPanelsStayOpenExample">
-                                <div class="accordion-body text-center">
-                                    <a href="" class="btn btn-success btn-sm mb-1">
-                                        <i class="fas fa-edit"></i> Editar
-                                    </a>
-                                    <a href="" class="btn btn-primary btn-sm mb-1">
-                                        <i class="fas fa-download"></i> Baixar
-                                    </a>
-                                    <button class="btn btn-danger btn-sm mb-1">
-                                        <i class="fas fa-trash"></i>
-                                        Excluir
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- ITEM 3 -->
-                        <div class="accordion-item mb-4">
-                            <h2 class="accordion-header" id="panelsStayOpen-headingThree">
-                                <button class="accordion-button collapsed p-4 text-nowrap" type="button"
-                                    data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree"
-                                    aria-expanded="false" aria-controls="panelsStayOspen-collapseThree">
-                                    <div class="col-11">
-                                        <div class="row">
-
-                                            <div class="col-12 col-md-5 text-truncate">
-                                                <i class="fas fa-file-signature mr-2 fs-5"></i><span>Relatório
-                                                    Janeiro</span>
-
-                                            </div>
-
-
-                                            <div class="col-12 col-md-7 text-left text-truncate">
-                                                <!-- Nome da disciplina qui -->
-                                                <em class="text-muted">Framework Front End Básico</em>
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-                                </button>
-                            </h2>
-
-                            <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse"
-                                aria-labelledby="panelsStayOpen-headingThree"
-                                data-bs-parent="#accordionPanelsStayOpenExample">
-                                <div class="accordion-body text-center">
-                                    <a href="" class="btn btn-success btn-sm mb-1">
-                                        <i class="fas fa-edit"></i> Editar
-                                    </a>
-                                    <a href="" class="btn btn-primary btn-sm mb-1">
-                                        <i class="fas fa-download"></i> Baixar
-                                    </a>
-                                    <button class="btn btn-danger btn-sm mb-1">
-                                        <i class="fas fa-trash"></i>
-                                        Excluir
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
