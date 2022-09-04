@@ -359,7 +359,7 @@ def uploadAssinatura(request):
         except Exception:
 
             messages.add_message(request, messages.ERROR,
-                                 "Ocorreu um error ao salva o arquivo")
+                                 "Ocorreu um error ao salvar o arquivo")
 
     return redirect(url)
 
