@@ -61,11 +61,14 @@ def tutorHome(request):
 def coordenadorHome(request):
 
     dados = UsuarioModel.objects.filter(permissao=1)
+    relatorios = RelatorioModel.objects.all().order_by("-data_relatorio")
+    ultimoRelatorio = relatorios[0] if relatorios else NULL
 
     contexto = {
         "tab": dados,
-        "numeroAlunos": dados.count()
-
+        "numeroAlunos": dados.count(),
+        "relatorios":relatorios,
+        "ultimoRelatorio":ultimoRelatorio
     }
 
     contexto['dados_usuarios'] = dados

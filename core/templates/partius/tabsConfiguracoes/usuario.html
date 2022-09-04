@@ -54,6 +54,7 @@
 
 
                     <div class="card-body">
+                        {% if dados_usuarios %}
                         <div class="table-responsive">
                             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                 <thead>
@@ -65,26 +66,29 @@
                                         <th>Ações</th>
                                     </tr>
                                 </thead>
+
                                 <tbody>
 
                                     {% for item in dados_usuarios %}
+
+
                                     <tr>
                                         <td>{{item.nome}}</td>
                                         <td>{{item.email}}</td>
                                         <td> {% if item.status == 1 %}
-                                                Ativo
+                                            Ativo
                                             {% else %}
-                                                Inativo
+                                            Inativo
                                             {% endif %}
                                         </td>
                                         <td>
                                             {% if item.permissao == 1 %}
-                                                Aluno
+                                            Aluno
                                             {% elif item.permissao == 2 %}
-                                                Tutor
+                                            Tutor
                                             {% else %}
-                                                Coordenador
-                                            {% endif %} 
+                                            Coordenador
+                                            {% endif %}
                                         </td>
                                         <td>
                                             <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal"
@@ -103,6 +107,9 @@
                                 </tbody>
                             </table>
                         </div>
+                        {% else %}
+                            Nenhum usuário cadastrado
+                        {% endif %}
                     </div>
                 </div>
 
