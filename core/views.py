@@ -1,34 +1,81 @@
 import base64
 
 import io
-from operator import length_hint
-
 import sys
 from asyncio.windows_events import NULL
 from datetime import datetime
 
 from msilib.schema import Error
+from xmlrpc.client import DateTime
 
 from django.contrib import messages
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import IntegrityError
-
+from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect, render
 from PIL import Image
 
 from core.funcoes_auxiliares.data import isDateMaior
 from core.models import *
-
-from docxtpl import DocxTemplate, InlineImage
+from django.contrib.auth.decorators import login_required,user_passes_test
+from docxtpl import DocxTemplate
+from sgr.settings import EMAIL_HOST_USER,ALLOWED_HOSTS
+from django.template.loader import render_to_string
+from django.core.mail import EmailMultiAlternatives
+from django.contrib.auth.tokens import default_token_generator    
+from django.contrib.auth import login as login_check
+from django.contrib.auth import logout as logout_django
+from django.core.signing import Signer
+from django.core.signing import TimestampSigner
 
 # Controllers do aluno
 
+# Controller do login
 
+def login(request):
+
+    if request.method == "GET":
+
+        return render(request, 'partius/gerenciarAcesso/login.html')
+
+    email = request.POST.get('email')
+    senha = request.POST.get("senha")
+
+    usuario = UsuarioModel.objects.get(email=email)
+
+    
+    is_equal_password = usuario.check_password(senha)
+
+    if(is_equal_password):
+        
+        login_check(request, usuario)
+
+        request.session['permissao'] = usuario.permissao
+
+        if usuario.permissao == 1:
+            return redirect("/aluno/home/")    
+        elif usuario.permissao == 2:
+            return redirect("/tutor/home/")    
+        else:
+            return redirect("/coordenador/home/")    
+
+
+def logout(request):
+
+    logout_django(request)
+
+    return redirect("login")
+
+
+@login_required(login_url="login")
 def alunoHome(request):
+
+    relatorios = RelatorioModel.objects.all().order_by("-data_relatorio")
 
     context = {
 
-        "url": "aluno_home"
+        "url": "aluno_home",
+        "relatorios":relatorios
 
     }
     return render(request, "aluno/home.html", context)
@@ -140,7 +187,7 @@ def configuracoes(request, relatorio):
 
         contexto['dados_usuarios'] = dados
 
-    return render(request, "coordenador/configuracoesCoordenador.html", contexto)
+    return render(request, "configuracoes/configuracoes.html", contexto)
 
 
 # Controller do avisos
@@ -148,14 +195,6 @@ def configuracoes(request, relatorio):
 def avisos(request):
 
     return render(request, "aluno/avisosAluno.html")
-
-# Controller do login
-
-
-def login(request):
-
-    return render(request, 'partius/gerenciarAcesso/login.html')
-
 
 # Controller do registro
 
@@ -166,9 +205,42 @@ def registro(request):
 
 # Controller do registro
 
-def redefine_senha(request):
+def redefine_senha(request,token,id):
 
-    return render(request, 'partius/gerenciarAcesso/redefinicaoSenha.html')
+    if request.method == "GET":
+
+        usuario = get_object_or_404(User,id=id)
+        is_usuario = default_token_generator.check_token(usuario, token)
+
+        if(is_usuario):
+
+            return render(request, 'partius/gerenciarAcesso/redefinicaoSenha.html',{"usuario":usuario})
+
+        else:
+             
+            return redirect('/login/')
+
+def nova_senha(request):
+
+    if request.method == "POST":
+
+        id = request.POST.get("id")
+        senha = request.POST.get("senha")
+        senha_repeat = request.POST.get("senha_repeat")
+
+        usuario = get_object_or_404(User,id=id)
+
+        if senha == senha_repeat:
+
+            usuario.set_password(senha)
+            usuario.save()
+            messages.add_message(request,messages.SUCCESS,"Senha alterada com sucesso")
+
+        else:
+
+            messages.add_message(request,messages.ERROR,"As senha precisão ser iguais")
+
+    return redirect("login")
 
 # Cadastro de usuarios
 
@@ -184,23 +256,64 @@ def cadastroUsuario(request):
         if(permissao == '1'):
 
             novo_usuario = AlunoModel()
-            novo_usuario.nome = nome
+            novo_usuario.username = nome
             novo_usuario.email = email
             novo_usuario.permissao = 1
+            novo_usuario.is_active = False
 
         elif permissao == '2':
             novo_usuario = TutorModel()
-            novo_usuario.nome = nome
+            novo_usuario.username = nome
             novo_usuario.email = email
             novo_usuario.permissao = 2
+            novo_usuario.is_active = False
+            novo_usuario.is_superuser = True
+            novo_usuario.is_staff = True
 
         else:
             novo_usuario = CoordenadorModel()
-            novo_usuario.nome = nome
+            novo_usuario.username = nome
             novo_usuario.email = email
             novo_usuario.permissao = 3
+            novo_usuario.is_active = True
+            novo_usuario.is_superuser = True
+            novo_usuario.is_staff = True
 
-        novo_usuario.save()
+        try:
+
+            novo_usuario.save()
+
+            try:
+
+                token = default_token_generator.make_token(novo_usuario)
+
+                dados = {
+
+                    "url_redefinir":f"{request.headers['Origin']}/redefinicao_senha/{token}/{novo_usuario.id}"
+                }
+
+                body_email = render_to_string("emailTemplate/confirmacaoSenha.html",dados)
+        
+                assunto = "Confirmação de usuário"
+                from_email =  EMAIL_HOST_USER 
+                to = novo_usuario.email
+                text_content = 'This is an important message.'
+                msg = EmailMultiAlternatives(assunto, text_content, from_email, [to])
+                msg.attach_alternative(body_email, "text/html")
+                msg.send()
+
+                messages.add_message(request,messages.SUCCESS,"Usuário foi criado com sucesso. Um email foi enviado para o email fornecido.")
+            
+            except Exception as e:
+                print(e)
+                messages.add_message(request,messages.ERROR,"Email não pode ser enviado")
+                return redirect("/configuracoes/usuario")
+                
+               
+        except Exception as e1:
+
+            messages.add_message(request,messages.ERROR,"Ocorreu algum erro ao criar o usuário")
+            return redirect("/configuracoes/usuario")
 
     return redirect("/configuracoes/usuario")
 
@@ -211,11 +324,11 @@ def editaUsuario(request, id):
 
         instance = UsuarioModel.objects.filter(id=id).first()
 
-        instance.nome = request.POST.get("nome")
+        instance.username = request.POST.get("nome")
         instance.email = request.POST.get("email")
         instance.permissao = request.POST.get("permissao")
-        instance.status = request.POST.get("status")
-        print(request.POST.get("status"))
+        instance.is_active = request.POST.get("status")
+      
 
         instance.save()
 
@@ -343,6 +456,9 @@ def uploadAssinatura(request):
         output = io.BytesIO()
         imagem.save(output, format='png', quality=85)
         output.seek(0)
+        
+        aluno = get_object_or_404(AlunoModel,id=request.user.id)
+
         arquivo = InMemoryUploadedFile(output, 'ImageField',
                                        "assinatura.png",
                                        'image/png',
@@ -358,6 +474,8 @@ def uploadAssinatura(request):
         try:
 
             assinatura.save()
+            aluno.assinatura = assinatura
+            aluno.save()
             messages.add_message(request, messages.SUCCESS,
                                  "Assinatura salva com sucesso")
 
@@ -566,7 +684,13 @@ def salvarAtividades(request):
         dataInicio = request.POST.getlist("dataInicio")
         dataFim = request.POST.getlist("dataFim")
         atividades = request.POST.getlist("atividades")
+        relatorioCorrente = request.POST.get("periodo_relatorio")
 
+        relatorio = get_object_or_404(RelatorioModel,id=relatorioCorrente)
+        
+        aluno = get_object_or_404(AlunoModel, id=request.user.id)
+        assintura_aluno = aluno.assinatura.url_assinatura
+          
         # Importação do doc que será usado como template
         doc = DocxTemplate("media/modelo/modeloRelatorio.docx")
 
@@ -578,19 +702,51 @@ def salvarAtividades(request):
 
         # Trocar informações pelas do modelo
         context = {
-            "nomeAluno": 'Lucas de Lima Chaves',
+            "nomeAluno": aluno.username,
             "mesReferencia": mesReferencia,
             "conteudo": conteudo
         }
 
         # Trocar assinatura do aluno e tutor, pelas do modelo
         doc.replace_pic('Imagem 10', 'media/uploads/assinatura/assinatura.png')
-        doc.replace_pic('Imagem 12', 'media/uploads/assinatura/assinatura.png')
+        doc.replace_pic('Imagem 12', assintura_aluno)
 
         # Aplicar a troca de informações
         doc.render(context)
-
         # Gerar documento
-        doc.save("media/relatorios/teste.docx")
 
-        return redirect("/aluno/gerar_relatorio")
+        # Gerar um hash de
+        signer = TimestampSigner()
+        value = signer.sign(aluno.email).split(":")[-1]
+
+        # Cria um nome unico para o arquivo
+        nome_arquivo = f"media/relatorios/relatorio{value}.docx"
+        
+        try:
+
+
+            doc.save(nome_arquivo)
+
+        except Exception as e1:
+            
+            messages.add_message(request,messages.ERROR,"Não foi possivel gerar o documento")
+            return redirect("/aluno/home")
+
+        novo_documento = DocumentModel()
+        novo_documento.aluno = aluno
+        novo_documento.conteudo = ''
+        novo_documento.relatorio = relatorio
+        novo_documento.url_documento = nome_arquivo
+
+        try:
+
+            novo_documento.save()
+
+            messages.add_message(request,messages.SUCCESS, "Relatório gerado com sucesso")
+
+        except Exception as e:
+
+            messages.add_message(request,messages.ERROR, "Não foi possivel gerar o documento")
+
+
+        return redirect("/aluno/home")

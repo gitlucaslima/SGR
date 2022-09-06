@@ -5,6 +5,10 @@ from core.views import *
 
 urlpatterns = [
 
+    path("login/",login,name="login"),
+
+    path("logout/",logout,name="logout"),
+    
     path("aluno/home/", alunoHome, name="aluno_home"),
 
     path("aluno/gerar_relatorio/", alunoRelatorio, name="aluno_relatorio"),
@@ -21,11 +25,12 @@ urlpatterns = [
 
     path("avisos/", avisos, name="avisos"),
 
-    path("login/", login, name="login"),
 
     path("registro/", registro, name="registro"),
 
-    path("redefinicao_senha/", redefine_senha, name="redefine_senha"),
+    path("redefinicao_senha/<str:token>/<int:id>", redefine_senha, name="redefine_senha"),
+
+    path("nova_senha/",nova_senha,name="nova_senha"),
 
     path("cadastro_usuario/", cadastroUsuario, name="cadastro_usuario"),
 
@@ -49,7 +54,5 @@ urlpatterns = [
     path("deletar_relatorio/", deletarRelatorio, name='deletar_relatorio'),
 
     path("salvar_atividade/", salvarAtividades, name="salvar_atividade")
-
-
 
 ]

@@ -15,7 +15,7 @@
                         </div>
                         <div class="col-12">
                             <input type="text" class="form-control" id="nome" name="nome" placeholder="Nome do usuário"
-                                value="{{item.nome}}">
+                                value="{{item.username}}">
                         </div>
                     </div>
                     <div class="row mt-2">
@@ -66,9 +66,9 @@
                                     {% endif %}
     
                                     {% if item.status == 2 %}
-                                    <option value="2" selected>Inativo</option>
+                                    <option value="0" selected>Inativo</option>
                                     {% else %}
-                                    <option value="2">Desativar</option>
+                                    <option value="0">Desativar</option>
                                     {% endif %}
                                 </select>
                             </div>

@@ -1,11 +1,7 @@
 
-from abc import abstractclassmethod
-from email.policy import default
-from random import choices
-from xml.etree.ElementInclude import default_loader
 
+from django.contrib.auth.models import User
 from django.db import models
-from pyexpat import model
 
 # Variaveis globais
 STATUS_CHOICE = (
@@ -29,48 +25,18 @@ class AssinaturaModel(models.Model):
 
 
 # Model de usuario
-class UsuarioModel(models.Model):
+class UsuarioModel(User):
 
     global STATUS_CHOICE
     global PERMISSAO_CHOICE
 
-    nome = models.CharField(
-
-        max_length=200,
-        null=False,
-        blank=False
-    )
-
-    email = models.EmailField(
-
-        null=False,
-        blank=False,
-        unique=True
-    )
-
-    senha = models.CharField(
-        null=False,
-        blank=False,
-        max_length=6
-    )
-
-    status = models.IntegerField(
-
-        null=False,
-        blank=False,
-        choices=STATUS_CHOICE,
-        default=1
-    )
 
     permissao = models.IntegerField(
         choices=PERMISSAO_CHOICE
-    )
+    )    
 
-    class Meta:
+# Admin modelcls
 
-        abstract = False
-
-# Admin model
 
 
 class AdminModel(UsuarioModel):
@@ -214,11 +180,12 @@ class RelatorioModel(models.Model):
 
 class DocumentModel(models.Model):
 
-    relatorio = models.OneToOneField(
+    relatorio = models.ForeignKey(
 
         RelatorioModel,
         on_delete=models.CASCADE,
         null=False
+   
     )
 
     aluno = models.ForeignKey(
@@ -235,16 +202,10 @@ class DocumentModel(models.Model):
         on_delete=models.SET_NULL
     )
 
-    url_documento = models.CharField(
-
-        max_length=200,
-        null=False,
-        blank=False
-    )
+    url_documento = models.FileField(upload_to="relatorios/")
 
     conteudo = models.TextField(
 
-        unique=True,
         null=False,
         blank=False
     )
@@ -257,6 +218,9 @@ class DocumentModel(models.Model):
 
 # Model email administrativo da plataforma
 
+# class RelatoModel(models.Model):
+
+#     conteudo = models.TextField
 
 class EmailAdministrativo(models.Model):
 

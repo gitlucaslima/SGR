@@ -19,10 +19,9 @@
         {% csrf_token %}
         
         <input type="hidden" name="mesReferencia" value="{{relatorio_corrente.data_relatorio|date:'F'}}">
+        <input type="hidden" name="periodo_relatorio" value="{{relatorio_corrente.id}}">
 
         {% for disciplina in relatorio_corrente.disciplina.all %}
-
-            {% comment %} <input type="hidden" name="nomeAluno"> {% endcomment %}
 
             <input type="hidden" name="nomeDisciplina" value="{{disciplina.nome}}">
             <input type="hidden" name="dataInicio" value="{{disciplina.data_inicio|date:"d/m/Y"}}">

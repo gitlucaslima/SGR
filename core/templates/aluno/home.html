@@ -92,12 +92,8 @@
             <div class="card-body">
                 <div class="accordion" id="accordionPanelsStayOpenExample">
 
-                    <!-- 
+                    {% for relatorio in relatorios %}
 
-                        Lembrete para quem for fazer o backend dessa pagina
-                        
-                        ITEM 1
-                     -->
                     <div class="accordion-item mb-4">
                         <!-- 
                         Ao listar os relatórios de um aluno lembrar de criar um valor dinâmico e unico 
@@ -106,7 +102,7 @@
                         isso é necessário pois o id é usado para abrir ao clicar sobre esse elemento
 
                     -->
-                        <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                        <h2 class="accordion-header" id="panelsStayOpen-headingOne{{relatorio.id}}">
 
                             <!-- 
                                 
@@ -115,13 +111,13 @@
                             -->
 
                             <button class="accordion-button collapsed p-4 text-nowrap text-truncate" type="button"
-                                data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne"
-                                aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
+                                data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne{{relatorio.id}}"
+                                aria-expanded="false" aria-controls="panelsStayOpen-collapseOne{{relatorio.id}}">
                                 <div class="col-11">
                                     <div class="row">
 
                                         <div class="col-12 col-md-5 text-truncate">
-                                            <i class="fas fa-file-signature mr-2 fs-5"></i><span>Relatório Janeiro
+                                            <i class="fas fa-file-signature mr-2 fs-5"></i><span>Relatório {{relatorio.data_relatorio|date:'F'}}
                                             </span>
                                         </div>
 
@@ -134,8 +130,8 @@
                                 </div>
                             </button>
                         </h2>
-                        <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse"
-                            aria-labelledby="panelsStayOpen-headingOne"
+                        <div id="panelsStayOpen-collapseOne{{relatorio.id}}" class="accordion-collapse collapse"
+                            aria-labelledby="panelsStayOpen-headingOne{{relatorio.id}}"
                             data-bs-parent="#accordionPanelsStayOpenExample">
                             <div class="accordion-body text-center">
 
@@ -170,92 +166,8 @@
                             </div>
                         </div>
                     </div>
+                    {% endfor %}
 
-
-                    <!-- ITEM 2 -->
-                    <div class="accordion-item mb-4">
-                        <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
-                            <button class="accordion-button collapsed p-4 text-nowrap text-truncate" type="button"
-                                data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo"
-                                aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
-                                <div class="col-11">
-                                    <div class="row">
-
-                                        <div class="col-12 col-md-5 text-truncate">
-                                            <i class="fas fa-file-signature mr-2 fs-5"></i><span>Relatório Fevereiro
-                                            </span>
-                                        </div>
-                                        <div class="col-12 col-md-7 text-left text-truncate">
-                                            <!-- Nome da disciplina qui -->
-                                            <em class="text-muted">Front-End Básico</em>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </button>
-                        </h2>
-                        <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse"
-                            aria-labelledby="panelsStayOpen-headingTwo"
-                            data-bs-parent="#accordionPanelsStayOpenExample">
-                            <div class="accordion-body text-center">
-                                <a href="" class="btn btn-success btn-sm mb-1">
-                                    <i class="fas fa-edit"></i> Editar
-                                </a>
-                                <a href="" class="btn btn-primary btn-sm mb-1">
-                                    <i class="fas fa-download"></i> Baixar
-                                </a>
-                                <button class="btn btn-danger btn-sm mb-1">
-                                    <i class="fas fa-trash"></i>
-                                    Excluir
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- ITEM 3 -->
-                    <div class="accordion-item mb-4">
-                        <h2 class="accordion-header" id="panelsStayOpen-headingThree">
-                            <button class="accordion-button collapsed p-4 text-nowrap" type="button"
-                                data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree"
-                                aria-expanded="false" aria-controls="panelsStayOspen-collapseThree">
-                                <div class="col-11">
-                                    <div class="row">
-
-                                        <div class="col-12 col-md-5 text-truncate">
-                                            <i class="fas fa-file-signature mr-2 fs-5"></i><span>Relatório
-                                                Janeiro</span>
-
-                                        </div>
-
-
-                                        <div class="col-12 col-md-7 text-left text-truncate">
-                                            <!-- Nome da disciplina qui -->
-                                            <em class="text-muted">Framework Front End Básico</em>
-                                        </div>
-
-                                    </div>
-                                </div>
-
-                            </button>
-                        </h2>
-
-                        <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse"
-                            aria-labelledby="panelsStayOpen-headingThree"
-                            data-bs-parent="#accordionPanelsStayOpenExample">
-                            <div class="accordion-body text-center">
-                                <a href="" class="btn btn-success btn-sm mb-1">
-                                    <i class="fas fa-edit"></i> Editar
-                                </a>
-                                <a href="" class="btn btn-primary btn-sm mb-1">
-                                    <i class="fas fa-download"></i> Baixar
-                                </a>
-                                <button class="btn btn-danger btn-sm mb-1">
-                                    <i class="fas fa-trash"></i>
-                                    Excluir
-                                </button>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
