@@ -176,8 +176,6 @@ class RelatorioModel(models.Model):
 
 
 # Model Documento
-
-
 class DocumentModel(models.Model):
 
     relatorio = models.ForeignKey(
@@ -204,23 +202,21 @@ class DocumentModel(models.Model):
 
     url_documento = models.FileField(upload_to="relatorios/")
 
-    conteudo = models.TextField(
-
-        null=False,
-        blank=False
-    )
-
+ 
     disciplina = models.ManyToManyField(
 
         DisciplinaModel,
         related_name='relatar_disciplina'
     )
 
+
+class RelatoModel(models.Model):
+
+    documento = models.ForeignKey(DocumentModel,on_delete=models.CASCADE)
+    conteudo = models.TextField()
+
 # Model email administrativo da plataforma
 
-# class RelatoModel(models.Model):
-
-#     conteudo = models.TextField
 
 class EmailAdministrativo(models.Model):
 

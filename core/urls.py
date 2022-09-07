@@ -5,7 +5,7 @@ from core.views import *
 
 urlpatterns = [
 
-    path("login/",login,name="login"),
+    path("",login,name="login"),
 
     path("logout/",logout,name="logout"),
     
@@ -24,7 +24,6 @@ urlpatterns = [
     path("configuracoes/<str:aviso>", configuracoes, name="configuracoes"),
 
     path("avisos/", avisos, name="avisos"),
-
 
     path("registro/", registro, name="registro"),
 

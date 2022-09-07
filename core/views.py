@@ -11,28 +11,40 @@ from xmlrpc.client import DateTime
 from django.contrib import messages
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import IntegrityError
-from django.core.mail import send_mail
+
 from django.shortcuts import get_object_or_404, redirect, render
 from PIL import Image
 
 from core.funcoes_auxiliares.data import isDateMaior
+from core.funcoes_auxiliares.send_email import enviar_email
 from core.models import *
-from django.contrib.auth.decorators import login_required,user_passes_test
+from django.contrib.auth.decorators import login_required, user_passes_test
 from docxtpl import DocxTemplate
-from sgr.settings import EMAIL_HOST_USER,ALLOWED_HOSTS
-from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
-from django.contrib.auth.tokens import default_token_generator    
+from django.template.loader import render_to_string
+
+from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth import login as login_check
 from django.contrib.auth import logout as logout_django
 from django.core.signing import Signer
 from django.core.signing import TimestampSigner
 
+from sgr.settings import EMAIL_HOST_USER
+
 # Controllers do aluno
 
 # Controller do login
 
+
 def login(request):
+
+
+    # Verifca se existe algum usuário do tipo coordenador
+    is_usuarios = len(UsuarioModel.objects.filter(permissao=3))
+
+    if(not is_usuarios):
+
+        return redirect('registro')
 
     if request.method == "GET":
 
@@ -43,21 +55,25 @@ def login(request):
 
     usuario = UsuarioModel.objects.get(email=email)
 
-    
     is_equal_password = usuario.check_password(senha)
 
     if(is_equal_password):
-        
+
         login_check(request, usuario)
 
         request.session['permissao'] = usuario.permissao
 
         if usuario.permissao == 1:
-            return redirect("/aluno/home/")    
+            return redirect("/aluno/home/")
         elif usuario.permissao == 2:
-            return redirect("/tutor/home/")    
+            return redirect("/tutor/home/")
         else:
-            return redirect("/coordenador/home/")    
+            return redirect("/coordenador/home/")
+    else:
+
+        messages.add_message(request, messages.ERROR,
+                             "Login ou senha inválidos")
+        return redirect("login")
 
 
 def logout(request):
@@ -75,7 +91,7 @@ def alunoHome(request):
     context = {
 
         "url": "aluno_home",
-        "relatorios":relatorios
+        "relatorios": relatorios
 
     }
     return render(request, "aluno/home.html", context)
@@ -198,27 +214,67 @@ def avisos(request):
 
 # Controller do registro
 
+
 def registro(request):
 
-    return render(request, 'partius/gerenciarAcesso/registro.html')
+    is_usuarios = len(UsuarioModel.objects.all())
+
+    # Impede que alguém acesse essa funcionalidade sem a necessidade
+    if is_usuarios:
+
+        return redirect('login')
+    if(request.method=="POST"):
+
+        usuario = request.POST.get("usuario")
+        email = request.POST.get("email")
+        senha = request.POST.get("senha")
+        senhaRepeat = request.POST.get("senha-repeat")
+
+        if senha == senhaRepeat:
+
+            novo_usuario = UsuarioModel()
+            novo_usuario.email= email
+            novo_usuario.username = usuario
+            novo_usuario.set_password(senha)
+            novo_usuario.permissao = 3
+
+            try:
+
+                novo_usuario.save()
+                messages.add_message(request,messages.SUCCESS,"Usuário criado com sucesso")
+                return redirect('login')                
+            except Exception as e:
+
+                messages.add_message(request,messages.ERROR,"Ocorreu um erro ao salvar o usuário, tente mais tarde")
+                return redirect("login")
+
+        else:
+
+            messages.add_message(request,messages.ERROR,"A senha não são iguais")
+            return redirect("registro")
+
+    else:
+        
+        return render(request, 'partius/gerenciarAcesso/registro.html')
 
 
 # Controller do registro
 
-def redefine_senha(request,token,id):
+def redefine_senha(request, token, id):
 
     if request.method == "GET":
 
-        usuario = get_object_or_404(User,id=id)
+        usuario = get_object_or_404(User, id=id)
         is_usuario = default_token_generator.check_token(usuario, token)
 
         if(is_usuario):
 
-            return render(request, 'partius/gerenciarAcesso/redefinicaoSenha.html',{"usuario":usuario})
+            return render(request, 'partius/gerenciarAcesso/redefinicaoSenha.html', {"usuario": usuario})
 
         else:
-             
-            return redirect('/login/')
+
+            return redirect('login')
+
 
 def nova_senha(request):
 
@@ -228,17 +284,19 @@ def nova_senha(request):
         senha = request.POST.get("senha")
         senha_repeat = request.POST.get("senha_repeat")
 
-        usuario = get_object_or_404(User,id=id)
+        usuario = get_object_or_404(User, id=id)
 
         if senha == senha_repeat:
 
             usuario.set_password(senha)
             usuario.save()
-            messages.add_message(request,messages.SUCCESS,"Senha alterada com sucesso")
+            messages.add_message(request, messages.SUCCESS,
+                                 "Senha alterada com sucesso")
 
         else:
 
-            messages.add_message(request,messages.ERROR,"As senha precisão ser iguais")
+            messages.add_message(request, messages.ERROR,
+                                 "As senha precisão ser iguais")
 
     return redirect("login")
 
@@ -289,23 +347,18 @@ def cadastroUsuario(request):
 
                 dados = {
 
-                    "url_redefinir":f"{request.headers['Origin']}/redefinicao_senha/{token}/{novo_usuario.id}"
+                    "url_redefinir": f"{request.headers['Origin']}/redefinicao_senha/{token}/{novo_usuario.id}"
                 }
 
-                body_email = render_to_string("emailTemplate/confirmacaoSenha.html",dados)
-        
-                assunto = "Confirmação de usuário"
-                from_email =  EMAIL_HOST_USER 
-                to = novo_usuario.email
-                text_content = 'This is an important message.'
-                msg = EmailMultiAlternatives(assunto, text_content, from_email, [to])
-                msg.attach_alternative(body_email, "text/html")
-                msg.send()
+                body_email = render_to_string(
+                    "emailTemplate/confirmacaoSenha.html", dados)
+
+                enviar_email("Confirmação de usuário",body_email,[novo_usuario.email])
 
                 messages.add_message(request,messages.SUCCESS,"Usuário foi criado com sucesso. Um email foi enviado para o email fornecido.")
             
             except Exception as e:
-                print(e)
+                
                 messages.add_message(request,messages.ERROR,"Email não pode ser enviado")
                 return redirect("/configuracoes/usuario")
                 
@@ -699,6 +752,7 @@ def salvarAtividades(request):
         for indice in range(len(nomeDisciplina)):
             conteudo.append(
                 [nomeDisciplina[indice], dataInicio[indice], dataFim[indice], atividades[indice]])
+            
 
         # Trocar informações pelas do modelo
         context = {
@@ -741,6 +795,14 @@ def salvarAtividades(request):
         try:
 
             novo_documento.save()
+
+
+            for atividade in atividades:
+
+                relato_registro = RelatoModel()
+                relato_registro.documento = novo_documento
+                relato_registro.conteudo = atividade
+                relato_registro.save()
 
             messages.add_message(request,messages.SUCCESS, "Relatório gerado com sucesso")
 
