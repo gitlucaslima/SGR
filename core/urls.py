@@ -52,6 +52,8 @@ urlpatterns = [
 
     path("deletar_relatorio/", deletarRelatorio, name='deletar_relatorio'),
 
-    path("salvar_atividade/", salvarAtividades, name="salvar_atividade")
+    path("salvar_atividade/", salvarAtividades, name="salvar_atividade"),
+
+    path("editar_relatorio/<int:id>",editarAtividade,name="editar_relatorio")
 
 ]

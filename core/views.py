@@ -1,41 +1,36 @@
 import base64
-
 import io
+import os
 import sys
 from asyncio.windows_events import NULL
 from datetime import datetime
-
 from msilib.schema import Error
+from posixpath import dirname
+from sqlite3 import Date
 from xmlrpc.client import DateTime
 
 from django.contrib import messages
+from django.contrib.auth import login as login_check
+from django.contrib.auth import logout as logout_django
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.tokens import default_token_generator
 from django.core.files.uploadedfile import InMemoryUploadedFile
+from django.core.mail import EmailMultiAlternatives
+from django.core.signing import Signer, TimestampSigner
 from django.db import IntegrityError
-
 from django.shortcuts import get_object_or_404, redirect, render
+from django.template.loader import render_to_string
+from docxtpl import DocxTemplate
 from PIL import Image
+from sgr.settings import EMAIL_HOST_USER
 
 from core.funcoes_auxiliares.data import isDateMaior
 from core.funcoes_auxiliares.send_email import enviar_email
 from core.models import *
-from django.contrib.auth.decorators import login_required, user_passes_test
-from docxtpl import DocxTemplate
-from django.core.mail import EmailMultiAlternatives
-from django.template.loader import render_to_string
-
-from django.contrib.auth.tokens import default_token_generator
-from django.contrib.auth import login as login_check
-from django.contrib.auth import logout as logout_django
-from django.core.signing import Signer
-from django.core.signing import TimestampSigner
-
-from sgr.settings import EMAIL_HOST_USER
 
 # Controllers do aluno
 
 # Controller do login
-
-
 def login(request):
 
 
@@ -86,12 +81,16 @@ def logout(request):
 @login_required(login_url="login")
 def alunoHome(request):
 
-    relatorios = RelatorioModel.objects.all().order_by("-data_relatorio")
+    aluno = get_object_or_404(AlunoModel,id=request.user.id)
+
+    documentos = DocumentModel.objects.filter(aluno=aluno).order_by('-id')
+    assinatura = AlunoModel.objects.get(id=request.user.id).assinatura
 
     context = {
 
         "url": "aluno_home",
-        "relatorios": relatorios
+        "documentos": documentos,
+        "assinatura":assinatura
 
     }
     return render(request, "aluno/home.html", context)
@@ -103,6 +102,18 @@ def alunoRelatorio(request):
         status=1).order_by("-data_relatorio")
 
     ultimo_relatorio = relatorio_abertos[0] if relatorio_abertos else NULL
+    aluno = AlunoModel.objects.get(id=request.user.id)
+    relatorio_realizado = list(filter(lambda item: item.aluno == aluno,DocumentModel.objects.filter(relatorio=ultimo_relatorio)))
+    
+    if not aluno.assinatura:
+        messages.add_message(request,messages.WARNING,"Forneça uma assinatura.")
+        return redirect("/aluno/home")
+
+    if(relatorio_realizado):
+        
+        messages.add_message(request,messages.WARNING,"Já foi realizado um relatório, edite ou exclua")
+        return redirect("/aluno/home")
+
 
     contexto = {
 
@@ -127,14 +138,22 @@ def tutorHome(request):
 def coordenadorHome(request):
 
     dados = UsuarioModel.objects.filter(permissao=1)
-    relatorios = RelatorioModel.objects.all().order_by("-data_relatorio")
-    ultimoRelatorio = relatorios[0] if relatorios else NULL
 
+    relatorios = [(relatorio,DocumentModel.objects.filter(relatorio=relatorio)) for relatorio in RelatorioModel.objects.all().order_by("-data_relatorio")]
+
+   
+    relatoriosEnviados = len(relatorios[0][1] if relatorios else [])
+    ultimoRelatorio = relatorios[0][0] if relatorios else NULL
+    numAlunos = dados.count()
+    relatoriosPendentes = numAlunos - relatoriosEnviados
+    
     contexto = {
         "tab": dados,
-        "numeroAlunos": dados.count(),
+        "numeroAlunos": numAlunos,
         "relatorios": relatorios,
-        "ultimoRelatorio": ultimoRelatorio
+        "ultimoRelatorio": ultimoRelatorio,
+        "relatoriosPendentes":relatoriosPendentes,
+        "relatoriosEnviados": relatoriosEnviados
     }
 
     contexto['dados_usuarios'] = dados
@@ -509,13 +528,16 @@ def uploadAssinatura(request):
         output = io.BytesIO()
         imagem.save(output, format='png', quality=85)
         output.seek(0)
+
         
         aluno = get_object_or_404(AlunoModel,id=request.user.id)
 
+       
         arquivo = InMemoryUploadedFile(output, 'ImageField',
-                                       "assinatura.png",
+                                        "assinatura.png",
                                        'image/png',
                                        sys.getsizeof(output), None)
+       
 
         if(not arquivo):
 
@@ -525,13 +547,21 @@ def uploadAssinatura(request):
         assinatura = AssinaturaModel(url_assinatura=arquivo)
 
         try:
+            
+            # Analiza se o aluno possui uma assinatura
+            if(aluno.assinatura):
+            
+                # Remove o arquivo anterios se existir
+                os.remove(f'./media/{aluno.assinatura.url_assinatura}')
+                aluno.assinatura.delete()
 
             assinatura.save()
             aluno.assinatura = assinatura
             aluno.save()
             messages.add_message(request, messages.SUCCESS,
-                                 "Assinatura salva com sucesso")
+                                "Assinatura salva com sucesso")
 
+        
         except Exception:
 
             messages.add_message(request, messages.ERROR,
@@ -733,25 +763,32 @@ def salvarAtividades(request):
     if(request.method == "POST"):
 
         mesReferencia = request.POST.get("mesReferencia")
-        nomeDisciplina = request.POST.getlist("nomeDisciplina")
+        disciplinas_id = request.POST.getlist("nomeDisciplina")
         dataInicio = request.POST.getlist("dataInicio")
         dataFim = request.POST.getlist("dataFim")
         atividades = request.POST.getlist("atividades")
         relatorioCorrente = request.POST.get("periodo_relatorio")
 
         relatorio = get_object_or_404(RelatorioModel,id=relatorioCorrente)
-        
         aluno = get_object_or_404(AlunoModel, id=request.user.id)
         assintura_aluno = aluno.assinatura.url_assinatura
-          
+        relatorio_realizado = list(filter(lambda item: item.aluno == aluno,DocumentModel.objects.filter(relatorio=relatorio)))
+        
+        if( relatorio_realizado ):
+            
+            messages.add_message(request,messages.WARNING,"Já foi realizado um relatório, edite ou exclua")
+            return redirect("/aluno/home")
+
+
         # Importação do doc que será usado como template
         doc = DocxTemplate("media/modelo/modeloRelatorio.docx")
 
         conteudo = []
 
-        for indice in range(len(nomeDisciplina)):
+        for indice in range(len(disciplinas_id)):
+            nome_disciplina=DisciplinaModel.objects.get(id=disciplinas_id[indice]).nome
             conteudo.append(
-                [nomeDisciplina[indice], dataInicio[indice], dataFim[indice], atividades[indice]])
+                [nome_disciplina, dataInicio[indice], dataFim[indice], atividades[indice]])
             
 
         # Trocar informações pelas do modelo
@@ -762,7 +799,7 @@ def salvarAtividades(request):
         }
 
         # Trocar assinatura do aluno e tutor, pelas do modelo
-        doc.replace_pic('Imagem 10', 'media/uploads/assinatura/assinatura.png')
+        # doc.replace_pic('Imagem 10', 'media/uploads/assinatura/assinatura.png')
         doc.replace_pic('Imagem 12', assintura_aluno)
 
         # Aplicar a troca de informações
@@ -774,7 +811,7 @@ def salvarAtividades(request):
         value = signer.sign(aluno.email).split(":")[-1]
 
         # Cria um nome unico para o arquivo
-        nome_arquivo = f"media/relatorios/relatorio{value}.docx"
+        nome_arquivo = f"media/relatorios/relatorio{aluno.username}{value}.docx"
         
         try:
 
@@ -786,29 +823,46 @@ def salvarAtividades(request):
             messages.add_message(request,messages.ERROR,"Não foi possivel gerar o documento")
             return redirect("/aluno/home")
 
+     
+
         novo_documento = DocumentModel()
         novo_documento.aluno = aluno
         novo_documento.conteudo = ''
         novo_documento.relatorio = relatorio
         novo_documento.url_documento = nome_arquivo
-
+        novo_documento.data_update = datetime.now()
         try:
 
             novo_documento.save()
 
 
-            for atividade in atividades:
+            for indice in range(len(atividades)):
 
                 relato_registro = RelatoModel()
                 relato_registro.documento = novo_documento
-                relato_registro.conteudo = atividade
+                relato_registro.conteudo = atividades[indice]
+                relato_registro.disciplina = DisciplinaModel.objects.get(id=disciplinas_id[indice])
                 relato_registro.save()
 
             messages.add_message(request,messages.SUCCESS, "Relatório gerado com sucesso")
 
         except Exception as e:
-
+            print(e)
             messages.add_message(request,messages.ERROR, "Não foi possivel gerar o documento")
 
 
         return redirect("/aluno/home")
+
+
+def editarAtividade(request,id):
+
+    documento = get_object_or_404(DocumentModel,id=id)
+    relatorio_corrente =RelatorioModel.objects.get(id=documento.relatorio.id)
+    disciplinas_relatadas = documento.disciplina
+    print(dir(documento))
+    context = {
+
+        "relatorio_corrente": relatorio_corrente,
+        "disciplinas_relatadas": disciplinas_relatadas
+    }
+    return render(request,'aluno/editarRelatorio.html',context)

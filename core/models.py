@@ -209,15 +209,17 @@ class DocumentModel(models.Model):
         related_name='relatar_disciplina'
     )
 
+    data_update = models.DateField()
+
+
 
 class RelatoModel(models.Model):
 
     documento = models.ForeignKey(DocumentModel,on_delete=models.CASCADE)
+    disciplina = models.ForeignKey(DisciplinaModel,on_delete=models.CASCADE)    
     conteudo = models.TextField()
 
 # Model email administrativo da plataforma
-
-
 class EmailAdministrativo(models.Model):
 
     STATUS_CHOISE = (

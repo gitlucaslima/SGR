@@ -10,17 +10,28 @@
       </div>
       <div class="modal-body">
 
-        <form action="{% url 'apload_assinatura' %}" method="POST" class="form form-assinatura mt-5"
+        <form action="{% url 'apload_assinatura' %}" method="POST" class="form form-assinatura mt-1"
           enctype="multipart/form-data">
           {% csrf_token %}
           <div class="row">
+       
+            {% if assinatura.url_assinatura %}
+            <div class="col">
+              
+              <strong>Assinatura atual</strong>
+              <div class="col border ">
+                <img src="../../../media/{{assinatura.url_assinatura}}" alt="">
+              </div>
+            </div>
+
+            {% endif %}
             <div class="col-12">
               <label for="">Assinatura</label>
             </div>
 
             <div class="col-12">
               <div class="input-group">
-                <input type="file"  class="form-control img-input" accept=".png" id="inputGroupFile04"
+                <input type="file" class="form-control img-input" accept=".png" id="inputGroupFile04"
                   aria-describedby="inputGroupFileAddon04" required name="img-assinatura" aria-label="Upload">
                 <input type="hidden" name="imagem_base64" id="campo_imagem_base64">
                 <input type="hidden" name="urlOrigem" value="{{url}}">
@@ -28,11 +39,12 @@
               </div>
             </div>
 
-            <div class="col-12 text-center mt-3 scroll" >
+            <div class="col-12 text-center mt-3 scroll">
               <div class="row mb-2">
                 <div class="col">
                   <button class="btn border" id="btn-zoom-mais" type="button"><i class="bi bi-plus-circle"></i></button>
-                  <button class="btn border" id="btn-zoom-menos" type="button"><i class="bi bi-dash-circle"></i></button>
+                  <button class="btn border" id="btn-zoom-menos" type="button"><i
+                      class="bi bi-dash-circle"></i></button>
 
                 </div>
               </div>
@@ -42,7 +54,7 @@
                   <h3>Seu Navegador não suporta este recurso</h3>
                 </canvas>
               </div>
-              
+
             </div>
           </div>
           <div class="col-12 mt-3 text-center">
@@ -63,7 +75,7 @@
         </form>
       </div>
       <div class="modal-footer">
-        
+
       </div>
     </div>
   </div>
