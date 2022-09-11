@@ -14,13 +14,13 @@
           enctype="multipart/form-data">
           {% csrf_token %}
           <div class="row">
-       
-            {% if assinatura.url_assinatura %}
+            
+            {% if assinatura and assinatura.url_assinatura %}
             <div class="col">
               
               <strong>Assinatura atual</strong>
-              <div class="col border ">
-                <img src="../../../media/{{assinatura.url_assinatura}}" alt="">
+              <div class="col border">
+                <img src="../../../media/{{assinatura.url_assinatura}}" alt="assinatura">
               </div>
             </div>
 

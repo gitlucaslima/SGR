@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block pageTitle %}
-<h4> <i class="fas fa-file-word"></i> Editar relatório</h4>
+<h4> <i class="fas fa-file-word"></i> Editar relatório {{documento.relatorio.data_relatorio|date:'F'}}</h4>
 {% endblock pageTitle %}
 
 {% block "sidebar" %}
@@ -14,32 +14,29 @@
 {% block conteudo %}
 <div>
 
-    <form action="{% url 'salvar_atividade' %}" method="post">
+    <form action="{% url 'update_relatorio' %}" method="post">
 
         {% csrf_token %}
         
-        <input type="hidden" name="mesReferencia" value="{{relatorio_corrente.data_relatorio|date:'F'}}">
-        <input type="hidden" name="periodo_relatorio" value="{{relatorio_corrente.id}}">
+        <input type="hidden" name="id_documento" value="{{documento.id}}">
+      
+        {% for relato in relatos%}
 
-        {% for disciplina in disciplinas_relatadas.all %}
-
-            <input type="hidden" name="nomeDisciplina" value="{{disciplina.nome}}">
-            <input type="hidden" name="dataInicio" value="{{disciplina.data_inicio|date:"d/m/Y"}}">
-            <input type="hidden" name="dataFim" value="{{disciplina.data_termino|date:"d/m/Y"}}">
-
+            <input type="hidden" name="id_relato" value="{{relato.id}}">
+            
             <div class="card border-left-warning mb-3">
                 <div class="card-body">
                     <div class="row mb-2">
                         <div class="col-md-6">
                             <div class="col-12">Data inicio</div>
                             <div class="col-12 border pt-2 pb-2 bg-white rounded shadow">
-                                <div>{{disciplina.data_inicio|date:"d/m/Y"}}</div>
+                                <div>{{relato.disciplina.data_inicio|date:"d/m/Y"}}</div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="col-12">Data final:</div>
                             <div class="col-12 border pt-2 pb-2 bg-white rounded shadow">
-                                <div>{{disciplina.data_termino|date:"d/m/Y"}}</div>
+                                <div>{{relato.disciplina.data_termino|date:"d/m/Y"}}</div>
                             </div>
                         </div>
                     </div>
@@ -48,14 +45,14 @@
                         <div class="col-x3-6 col-md-12 mb-6">
                             <div class="card shadow h-100 py-2">
                                 <div class="card-header bg-white">
-                                    <h3 class="h5">{{disciplina.nome}}</h3>
+                                    <h3 class="h5">{{relato.disciplina.nome}}</h3>
                                 </div>
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
         
                                             <textarea  name="atividades" class="form-control" rows="7"
-                                                placeholder="Descreva suas atividades"></textarea>
+                                                placeholder="Descreva suas atividades">{{relato.conteudo}}</textarea>
         
                                         </div>
                                     </div>

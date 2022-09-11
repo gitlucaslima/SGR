@@ -83,7 +83,7 @@
         </div>
 
     </div>
-    
+
     <div class="col-12 mb-5 col-md-11">
 
         <div class="card">
@@ -91,16 +91,16 @@
                 <h3>Relatórios</h3>
             </di>
             <div class="card-body">
-               
+
                 <div class="accordion" id="accordionPanelsStayOpenExample">
 
                     {% if not documentos %}
-                        Nenhum relatório foi gerado
+                    Nenhum relatório foi gerado
                     {% endif %}
                     {% for documento in documentos %}
 
                     <div class="accordion-item mb-4">
-                     
+
                         <h2 class="accordion-header" id="panelsStayOpen-headingOne{{documento.id}}">
 
 
@@ -111,7 +111,8 @@
                                     <div class="row">
 
                                         <div class="col-12 col-md-5 text-truncate">
-                                            <i class="fas fa-file-signature mr-2 fs-5"></i><span>Relatório - {{documento.relatorio.data_relatorio|date:'F'}}
+                                            <i class="fas fa-file-signature mr-2 fs-5"></i><span>Relatório -
+                                                {{documento.relatorio.data_relatorio|date:'F'}}
                                             </span>
                                         </div>
 
@@ -119,7 +120,7 @@
                                             <!-- Nome da disciplina qui -->
                                             <em class="text-muted">
                                                 {% for disciplina in documento.relatorio.disciplina.all %}
-                                                    {{disciplina.nome}} 
+                                                {{disciplina.nome}}
                                                 {% endfor %}
                                             </em>
                                         </div>
@@ -133,20 +134,25 @@
                             data-bs-parent="#accordionPanelsStayOpenExample">
                             <div class="accordion-body text-center">
 
-                             
-                                <a href="{% url 'editar_relatorio' documento.id  %}" class="btn btn-success btn-sm mb-1">
+
+                                <a href="{% url 'editar_relatorio' documento.id  %}"
+                                    class="btn btn-success btn-sm mb-1">
                                     <i class="fas fa-edit"></i> Editar
                                 </a>
-                                <a href="../../../{{documento.url_documento}}" download="" class="btn btn-primary btn-sm mb-1">
+                                <a href="../../../{{documento.url_documento}}" download=""
+                                    class="btn btn-primary btn-sm mb-1">
                                     <i class="fas fa-download"></i> Baixar
                                 </a>
-                                <button class="btn btn-danger btn-sm mb-1">
+
+                                <button class="btn btn-danger btn-sm mb-1" data-bs-toggle="modal" data-bs-target="#modalDeletaDocumento{{documento.id}}">
                                     <i class="fas fa-trash"></i>
                                     Excluir
                                 </button>
                             </div>
                         </div>
                     </div>
+
+                    {% include 'partius/modais/deletarDocumentoModal.html' %}
                     {% endfor %}
 
                 </div>
@@ -156,5 +162,3 @@
 </div>
 
 {% endblock conteudo %}
-
-
