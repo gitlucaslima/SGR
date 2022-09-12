@@ -19,11 +19,9 @@ urlpatterns = [
 
     path("configuracoes/<str:relatorio>", configuracoes, name="configuracoes"),
 
-    path("configuracoes/<str:usuario>", configuracoes, name="configuracoes"),
-
-    path("configuracoes/<str:aviso>", configuracoes, name="configuracoes"),
-
     path("avisos/", avisos, name="avisos"),
+
+    path("enviar_avisos/",enviarAvisos,name="enviar_avisos"),
 
     path("registro/", registro, name="registro"),
 

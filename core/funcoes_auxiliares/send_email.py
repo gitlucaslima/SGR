@@ -10,4 +10,12 @@ def enviar_email(assunto:str,body_email: str, destinatarios: list[str]) -> bool:
     text_content = 'This is an important message.'
     msg = EmailMultiAlternatives(assunto, text_content, from_email, to)
     msg.attach_alternative(body_email, "text/html")
-    msg.send()
+
+    try:
+        msg.send()
+        return True
+
+    except Exception as e:
+
+        print(e)
+        return False

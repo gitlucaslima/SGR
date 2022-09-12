@@ -95,7 +95,12 @@
                 <div class="accordion" id="accordionPanelsStayOpenExample">
 
                     {% if not documentos %}
-                    Nenhum relatório foi gerado
+                    <div class="row">
+                        <div class="col text-center">
+                            
+                            Nenhum relatório foi gerado
+                        </div>
+                    </div>
                     {% endif %}
                     {% for documento in documentos %}
 

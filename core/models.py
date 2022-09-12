@@ -301,14 +301,11 @@ class EmailAdministrativo(models.Model):
 
 
 # Models aviso
-
 class AvisoModel(models.Model):
 
-    email_origem = models.OneToOneField(
-        EmailAdministrativo,
-        on_delete=models.SET_NULL,
-        null=True
-    )
+    email_origem = models.CharField(null=False,blank=False,max_length=100)
+
+    assunto = models.CharField(null=False,blank=False,max_length=150)
 
     usuario_remetente = models.ForeignKey(
 
@@ -327,3 +324,5 @@ class AvisoModel(models.Model):
 
         null=False
     )
+    
+    data_envio = models.DateTimeField()

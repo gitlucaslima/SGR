@@ -37,7 +37,7 @@
                                                                 <div class="col-12">
 
                                                                     <select name="mesRelatorio" id="mes"
-                                                                        class="form-control select-mes-relatorio">
+                                                                        class="form-select select-mes-relatorio">
                                                                         {% for mes in meses %}
 
                                                                         {% if mes.0 >= ultimoRelatorio %}
@@ -153,7 +153,12 @@
                                     <div class="card-body">
 
                                         {% if not relatorios %}
-                                        <strong>Nenhum relatório cadastrado</strong>
+                                        <div class="row">
+                                            <div class="col text-center">
+                                                <strong>Nenhum relatório cadastrado</strong>
+                                                
+                                            </div>
+                                        </div>
                                         {% endif %}
                                         {% for item in relatorios %}
 

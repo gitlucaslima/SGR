@@ -1,4 +1,5 @@
 import base64
+import email
 import io
 
 import sys
@@ -17,9 +18,10 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from PIL import Image
 
-from core.funcoes_auxiliares.data import isDateMaior
+from core.funcoes_auxiliares.data import isDateMaior, isDatePassou
 from core.funcoes_auxiliares.send_email import enviar_email
 from core.models import *
+from sgr.settings import EMAIL_BACKEND, EMAIL_HOST_USER
 
 # Controllers do aluno
 
@@ -102,7 +104,7 @@ def alunoHome(request):
         return redirect("login")
 
     aluno = get_object_or_404(UsuarioModel,id=request.user.id)
-    assinatura = get_object_or_404(AssinaturaModel,usuario=aluno)
+    assinatura = AssinaturaModel.objects.filter(usuario=aluno).first()
     
     documentos = DocumentModel.objects.filter(aluno=aluno).order_by('-id')
 
@@ -124,12 +126,23 @@ def alunoRelatorio(request):
         messages.add_message(request,messages.INFO,"Usuário não têm acesso a esse recurso")
         return redirect("login")
 
-    relatorio_abertos = RelatorioModel.objects.filter(
-        status=1).order_by("-data_relatorio")
+    relatorio_aberto = RelatorioModel.objects.filter(
+        status=1).order_by("-data_relatorio").first()
 
-    ultimo_relatorio = relatorio_abertos[0] if relatorio_abertos else NULL
+    if not relatorio_aberto:
+
+        messages.add_message(request,messages.WARNING,"Não existe nenhum relatório disponível")
+        return redirect('aluno_home')
+    
+    if isDatePassou(relatorio_aberto.data_limite):
+
+        messages.add_message(request,messages.WARNING,"Período para entrega do relatório já passou!")
+        return redirect('aluno_home')
+
+
+
     aluno = UsuarioModel.objects.get(id=request.user.id)
-    relatorio_realizado = list(filter(lambda item: item.aluno == aluno,DocumentModel.objects.filter(relatorio=ultimo_relatorio)))
+    relatorio_realizado = list(filter(lambda item: item.aluno == aluno,DocumentModel.objects.filter(relatorio=relatorio_aberto)))
     assinatura = AssinaturaModel.objects.filter(usuario = aluno)
 
     if not assinatura:
@@ -144,7 +157,7 @@ def alunoRelatorio(request):
 
     contexto = {
 
-        "relatorio_corrente": ultimo_relatorio
+        "relatorio_corrente": relatorio_aberto
     }
     return render(request, "aluno/gerarRelatorio.html", contexto)
 
@@ -158,7 +171,8 @@ def tutorHome(request):
         return redirect("login")
 
     tutor = get_object_or_404(UsuarioModel,id=request.user.id)
-    assinatura = get_object_or_404(AssinaturaModel,usuario=tutor)
+    assinatura = AssinaturaModel.objects.filter(usuario=tutor).first()
+
 
     context = {
 
@@ -278,7 +292,27 @@ def configuracoes(request, relatorio):
 @login_required(login_url="login")
 def avisos(request):
 
-    return render(request, "aluno/avisosAluno.html")
+    if request.session.get('permissao') == 1:
+        
+        aluno = get_object_or_404(UsuarioModel,id = request.user.id)
+        avisos = AvisoModel.objects.filter(aluno=aluno).order_by("-data_envio")
+         
+        context = {
+
+            'avisos':avisos
+        }
+        return render(request, "avisos/avisosAluno.html",context)
+    
+    else:
+
+        avisos = AvisoModel.objects.all().order_by("-data_envio")
+
+        context = {
+
+            'avisos':avisos
+        }
+        return render(request, "avisos/avisosAdmin.html",context)
+
 
 # Controller do registro
 
@@ -982,3 +1016,60 @@ def excluirDocumento(request):
 
 
     return redirect('aluno_home')
+
+
+# Controle de avisos
+
+@login_required(login_url="login")
+def enviarAvisos(request):
+
+    usuario = get_object_or_404(UsuarioModel,id=request.user.id)
+
+    if request.method == 'POST':
+
+        destinatario = int(request.POST.get('destinatario'))
+        assunto = request.POST.get('assunto')
+        conteudo = request.POST.get('conteudo')
+
+        # EMAIL_HOST_USER
+
+        if destinatario == -1:
+
+            destinatarios = UsuarioModel.objects.filter(permissao=1)
+
+        emails = []
+
+        for aluno in destinatarios:
+
+            emails.append(aluno.email)
+
+    
+        enviado = enviar_email(assunto=assunto,body_email=conteudo,destinatarios=emails)
+
+        if enviado:
+
+            aviso = AvisoModel()
+            aviso.conteudo =conteudo
+            aviso.email_origem = EMAIL_HOST_USER
+            aviso.usuario_remetente = usuario
+            aviso.assunto = assunto
+            aviso.data_envio = datetime.now()
+            aviso.save()
+
+            for aluno in destinatarios:
+
+                aviso.aluno.add(aluno)
+                aviso.save()
+            
+            messages.add_message(request,messages.SUCCESS,"Aviso enviado com sucesso!")
+
+        else:
+
+            messages.add_message(request,messages.ERROR,"Ocorreu um erro ao enviar o aviso!")
+
+
+     
+    return redirect('avisos')
+
+   
+
