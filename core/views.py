@@ -1040,10 +1040,10 @@ def enviarAvisos(request):
 
         emails = []
 
-        if not emails:
+        # if not emails:
 
-            messages.add_message(request,messages.WARNING,"Nenhum aluno foi encontrado. Cadastre primeiramente algum aluno")
-            return redirect('avisos')
+        #     messages.add_message(request,messages.WARNING,"Nenhum aluno foi encontrado. Cadastre primeiramente algum aluno")
+        #     return redirect('avisos')
 
 
 
