@@ -1,0 +1,30 @@
+<div class="modal fade" id="modalDeletaDocumento{{documento.id}}" aria-labelledby="modalDeletaDocumento{{documento.id}}"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><b>Excluir Disciplina</b></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <span>Deseja deletar documento?</span>
+            
+
+            </div>
+            <div class="modal-footer">
+
+                <form action="{% url 'excluir_documento' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="id" value="{{ documento.id }}">
+                    <button type="submit" class="btn btn-success">Apagar</button>
+                </form>
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                    data-bs-target="#modalDeletaDocumento{{documento.id}}" data-bs-whatever="@mdo">Cancelar
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
