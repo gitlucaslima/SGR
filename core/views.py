@@ -1,5 +1,4 @@
 import base64
-import email
 import io
 
 import sys
@@ -454,7 +453,9 @@ def cadastroUsuario(request):
 
                 dados = {
 
-                    "url_redefinir": f"{request.headers['Origin']}/redefinicao_senha/{token}/{novo_usuario.id}"
+                    "url_redefinir": f"{request.headers['Origin']}/redefinicao_senha/{token}/{novo_usuario.id}",
+                    "assunto":"Definição de senha",
+                    
                 }
 
                 body_email = render_to_string(
@@ -1038,6 +1039,13 @@ def enviarAvisos(request):
             destinatarios = UsuarioModel.objects.filter(permissao=1)
 
         emails = []
+
+        if not emails:
+
+            messages.add_message(request,messages.WARNING,"Nenhum aluno foi encontrado. Cadastre primeiramente algum aluno")
+            return redirect('avisos')
+
+
 
         for aluno in destinatarios:
 
