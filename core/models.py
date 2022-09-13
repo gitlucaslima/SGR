@@ -1,11 +1,13 @@
 
 
 from datetime import date, datetime
+import os
 from django.contrib.auth.models import User
 from django.db import models
 from django_unused_media import cleanup
 from docxtpl import DocxTemplate
 from django.core.signing import TimestampSigner
+from sgr.settings import BASE_DIR
 
 from core.funcoes_auxiliares.converteData import converteMes
 
@@ -244,6 +246,13 @@ class DocumentModel(models.Model):
         value = signer.sign(self.aluno.email).split(":")[-1]
         
         # Cria um nome unico para o arquivo
+
+        # Cria diretorios se não existir diretorio cria
+        if not os.path.isdir(os.path.join(BASE_DIR,"media/uploads/relatorios")):
+
+            os.makedirs(os.path.join(BASE_DIR,"media/uploads/relatorios"))
+        
+
         nome_arquivo = f"media/uploads/relatorios/relatorio{self.aluno.username}{value}.docx"
       
         
