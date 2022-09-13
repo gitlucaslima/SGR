@@ -1,0 +1,182 @@
+<div class="modal fade" id="modalEditarRelatorio{{item.id}}" aria-labelledby="modalEditarRelatorio{{item.id}}"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><b>Editar relatório</b></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <form action="{% url 'editar_relatorio' %}" method="POST">
+
+                    {% csrf_token %}
+                    <div class="card border">
+                        <div class="card-body">
+
+                            <div class="row">
+
+                                <div class="col-lg-6 col-md-12">
+
+                                    <div class="row">
+                                        <div class="col-12">
+
+                                            <div class="row">
+                                                <div class="col-12">
+
+                                                    <label for="mes">Mês</label>
+                                                </div>
+                                                <input type="hidden" name="id" value={{item.id}} />
+
+                                                <div class="col-12">
+
+
+                                                    <select name="mesRelatorio" id="mes"
+                                                        class="form-control select-edit">
+                                                        {% for mes in meses %}
+
+
+                                                        {% if mes.1 == item.data_relatorio|date:'F' %}
+
+                                                        <option value="{{mes.0}}" selected>{{mes.1}}</option>
+
+                                                        {% else %}
+
+                                                        <option value="{{mes.0}}">{{mes.1}}</option>
+
+                                                        {% endif %}
+                                                        {% endfor %}
+
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 col-md-12">
+
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <label for="dataLimite">Data Limite</label>
+                                        </div>
+                                        <div class="col-12">
+                                            <input type="date" name="dataLimite" id="dataLimite"
+                                                class="form-control input-edit"
+                                                value="{{item.data_limite|date:'Y-m-d'}}"
+                                                min="{{item.data_limite|date:'Y-m-d'}}">
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <label for="" class="mt-3">Situação</label>
+                            <div class="row">
+                                <div class="col ml-2">
+
+                                    {% if item.status == 1%}
+                                    <div class="form-check ">
+                                        <input class="form-check-input" type="radio" value="1" name="status"
+                                            id="flexRadioDefault1" checked>
+                                        <label class="form-check-label" for="flexRadioDefault1">
+                                            Aberto
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="status" value="2"
+                                            id="flexRadioDefault2">
+                                        <label class="form-check-label" for="flexRadioDefault2">
+                                            Fechado
+                                        </label>
+                                    </div>
+                                    {% else %}
+                                    <div class="form-check ">
+                                        <input class="form-check-input" type="radio" value="1" name="status"
+                                            id="flexRadioDefault1">
+                                        <label class="form-check-label" for="flexRadioDefault1">
+                                            Aberto
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="status" value="2"
+                                            id="flexRadioDefault2" checked>
+                                        <label class="form-check-label" for="flexRadioDefault2">
+                                            Fechado
+                                        </label>
+                                    </div>
+                                    {% endif %}
+                                </div>
+
+
+                            </div>
+
+                            <label for="Disciplinas" class="mt-3">Disciplinas</label>
+                            <div class="w-100 ">
+                                <strong>No minimo uma disciplina deve ser selecionada</strong>
+                                {% if disciplinas %}
+                                <div class="overflow-auto" style="height: 150px;">
+                                    <ul class="list-group">
+
+                                        {% for item_disciplina in listDisciplinas %}
+
+                                        {% if item_disciplina in item.disciplina.all %}
+                                        <li class="list-group-item">
+                                            <div class="custom-control custom-checkbox">
+                                                <input class="form-check-input mr-1" type="checkbox"
+                                                    id="customCheckEdit{{item_disciplina.id}}" name="disciplina"
+                                                    value="{{item_disciplina.id}}" checked>
+                                                <label
+                                                    class="cursor-pointer font-italic d-block custom-control-label text-truncate"
+                                                    for="customCheckEdit{{item_disciplina.id}}">{{item_disciplina.nome}}</label>
+                                            </div>
+                                        </li>
+                                        {% else %}
+                                        <li class="list-group-item">
+                                            <div class="custom-control custom-checkbox">
+                                                <input class="form-check-input mr-1" type="checkbox"
+                                                    id="customCheckEdit{{item_disciplina.id}}" name="disciplina"
+                                                    value="{{item_disciplina.id}}">
+                                                <label
+                                                    class="cursor-pointer font-italic d-block custom-control-label text-truncate"
+                                                    for="customCheckEdit{{item_disciplina.id}}">{{item_disciplina.nome}}</label>
+                                            </div>
+                                        </li>
+                                        {% endif %}
+
+                                        {% endfor %}
+
+                                    </ul>
+                                </div>
+
+                                {% else %}
+                                <label for="Disciplinas" class="ml-3 mt-3">Sem disicplinas
+                                    cadastradas</label>
+                                {% endif %}
+
+                            </div>
+                            <div class="col text-center">
+                                <button type="submit" class="btn btn-success btn-icon-split">
+                                    <span class="icon text-white-50">
+                                        <i class="fas fa-check"></i>
+                                    </span>
+                                    <span class="text">Salvar alterações</span>
+                                </button>
+
+                                <button type="reset" class="btn btn-danger" data-bs-dismiss="modal">
+                                    <span class="icon text-white-50">
+                                        <i class="fa fa-close"></i>
+                                    </span>
+                                    <span class="text">Cancelar</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

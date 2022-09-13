@@ -1,0 +1,170 @@
+{% load static %}
+<div class="container-fluid mt-3">
+
+    <div class="row d-flex justify-content-center">
+
+        <!-- Pending Requests Card Example -->
+        <div class="col-x5-10 col-md-10 col-sm-12 mb-6">
+
+            <div class="card shadow  py-1">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-1">
+
+
+                            <!-- Pending Requests Card Example -->
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-4">
+
+                                        <form action="{% url 'cadastrar_disciplina' %}" method="POST">
+                                            {% csrf_token %}
+                                            <h5>Cadastrar Disciplinas</h5>
+                                            <hr>
+                                            <label for="nomeDisciplina">Nome</label>
+                                            <input type="text" id="nomeDisciplina" name="nome" class="form-control"
+                                                placeholder="Nome da disciplina" value="{{disciplina.nome}}" required>
+
+                                            <div class="row mt-2">
+                                                <div class="col-md-6 col-sm-12">
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <label for="dataInicio">Inicio da disciplina</label>
+
+                                                        </div>
+                                                    </div>
+                                                    <input type="date" name="dataInicio" id="dataInicio"
+                                                        class="form-control"
+                                                        value="{{disciplina.data_inicio|date:'Y-m-d'}}" required>
+                                                </div>
+                                                <div class="col-md-6 col-sm-12">
+                                                    <div class="row">
+                                                        <div class="col">
+
+                                                            <label for="dataTermino">Término da disciplina</label>
+                                                        </div>
+
+                                                    </div>
+                                                    <input type="date" name="dataFim" id="dataTermino"
+                                                        class="form-control"
+                                                        value="{{disciplina.data_termino|date:'Y-m-d'}}" required>
+                                                </div>
+                                            </div>
+                                            <label for="descricao" class="mt-2">Descriçao (Opcional)</label>
+                                            <textarea name="descricao" id="descricao" cols="30" rows="3"
+                                                class="form-control" placeholder="Ementa da disciplina"
+                                                value="{{disciplina.descricao}}"></textarea>
+                                            <button type="submit" class="btn btn-success mt-4 btn-icon-split">
+                                                <span class="icon text-white-50">
+                                                    <i class="fas fa-check"></i>
+                                                </span>
+                                                <span class="text">Salvar disciplina</span>
+                                            </button>
+                                        </form>
+
+                                        <div class="table-responsive mt-3">
+
+                                            {% if disciplinas %}
+                                            <table class="table table-bordered" id="dataTable" width="100%"
+                                                cellspacing="0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Nome</th>
+                                                        <th>Início</th>
+                                                        <th>Término</th>
+                                                        <th>Operações</th>
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                    {% for item in disciplinas %}
+                                                    <tr>
+
+                                                        <td>{{item.nome}}</td>
+                                                        <td>{{item.data_inicio|date:"d/m/Y"}}</td>
+                                                        <td>{{item.data_termino|date:"d/m/Y"}}</td>
+                                                        <td class="text-center">
+                                                            <!-- Default dropstart button -->
+                                                            <div class="btn-group dropstart">
+                                                                <button type="button"
+                                                                    class="btn btn-warning btn-sm dropdown-toggle"
+                                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                                    Opções
+                                                                </button>
+                                                                <ul class="dropdown-menu">
+                                                                    <li class="text-center">
+                                                                        <a class="btn btn-block" data-bs-toggle="modal"
+                                                                            data-bs-target="#modalEditarDisciplina{{item.id}}"
+                                                                            data-bs-whatever="@mdo">
+
+
+                                                                            <div class="row">
+                                                                                <div class="col-2">
+                                                                                    <span class="icon text-secondary">
+                                                                                        <i class="bi bi-pencil-square"></i>
+                                                                                    </span>
+
+                                                                                </div>
+                                                                                <div class="col-10 text-left">
+
+                                                                                    <span class="text">Editar</span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </a>
+
+                                                                    </li>
+                                                                    <li class="text-center">
+
+                                                                        <button type="button" class="btn btn-block"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#modalDeletaDisciplina{{item.id}}"
+                                                                            data-bs-whatever="@mdo">
+                                                                            <div class="row">
+                                                                                <div class="col-2">
+                                                                                    <span class="icon text-secondary">
+                                                                                        <i class="bi bi-trash"></i>
+                                                                                    </span>
+
+                                                                                </div>
+                                                                                <div class="col-10 text-left">
+
+                                                                                    <span class="text">
+                                                                                        Excluir</span>
+                                                                                </div>
+                                                                            </div>
+
+                                                                        </button>
+
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+
+                                                        </td>
+
+
+                                                    </tr>
+
+                                                    {% include 'partius/modais/editarDisciplinaModal.html' %}
+                                                    {% include 'partius/modais/deletarDisciplinaModal.html' %}
+
+                                                    {% endfor %}
+
+                                                </tbody>
+                                            </table>
+                                            
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/validaCampoDataDisciplina.js' %}"></script>

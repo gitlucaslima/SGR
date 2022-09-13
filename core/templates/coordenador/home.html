@@ -1,0 +1,251 @@
+{% extends 'modeloBase.html' %}
+{% load static %}
+
+
+{% block "sidebar" %}
+
+{% include "partius/menusPersonalizados/menuCoordenador.html" %}
+
+{% endblock "sidebar" %}
+
+{% block pageTitle %}
+<h4>Dashboard</h4>
+{% endblock pageTitle %}
+
+{% block conteudo %}
+
+{% block meusStyles %}
+
+<link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+
+{% endblock meusStyles %}
+
+<!-- Content Row -->
+<div class="row">
+
+    <!-- Mês corrente -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                            Relatórios do mês
+                        </div>
+                        <div class="h6 mb-0 font-weight-bold text-gray-600">
+
+                            {% if ultimoRelatorio %}
+                            {{ultimoRelatorio.data_relatorio|date:'F' }}
+
+                            {% else %}
+                            Nenhum relatório
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="bi bi-calendar-date fa-2x text-gray-300"></i>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Total de Alunos -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                            Alunos (Bolsistas)
+                        </div>
+                        <div class="h6 mb-0 font-weight-bold text-gray-600">
+                            {{numeroAlunos}}
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-graduation-cap fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Relatorios Enviados -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                            Relatorios Enviados
+                        </div>
+                        <div class="h6 mb-0 font-weight-bold text-gray-600">
+                            {{  relatoriosEnviados }}
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-file-upload fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Relatorios Pendentes -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-danger shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                            Relatorios Pendentes
+                        </div>
+                        <div class="h6 mb-0 font-weight-bold text-gray-600">
+                           {{relatoriosPendentes}}
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="far fa-file-excel fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- DataTales Example -->
+    <div class="card-body d-flex justify-content-center">
+        <div class="col-12 mb-5 col-md-11">
+
+            <div class="card">
+                <di class="card-header text-center bg-primary">
+                    <h3 class="text-white">Relatórios</h3>
+                </di>
+                <div class="card-body">
+                    <div class="accordion" id="accordionPanelsStayOpenExample">
+
+
+                        {% if not relatorios|length %}
+                        <div class="row">
+
+                            <div class="col d-flex justify-content-center">
+
+                                Nenhum relatório disponivel
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% for relatorio in relatorios %}
+                        <div class="accordion-item mb-4">
+
+                            <h2 class="accordion-header" id="panelsStayOpen-headingOne{{relatorio.0.id}}">
+
+
+                                <button class="accordion-button collapsed p-4 text-nowrap text-truncate" type="button"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#panelsStayOpen-collapseOne{{relatorio.0.id}}" aria-expanded="false"
+                                    aria-controls="panelsStayOpen-collapseOne{{relatorio.0.id}}">
+                                    <div class="col-11">
+                                        <div class="row">
+
+                                            <div class="col-12 col-md-5 text-truncate">
+                                                <i class="fas fa-file-signature mr-2 fs-5"></i><span>Relatório -
+                                                    {{relatorio.0.data_relatorio|date:'F'}}
+                                                </span>
+                                            </div>
+
+                                            <div class="col-12 col-md-7 text-left text-truncate">
+                                                <em class="text-muted"></em>
+                                                {% for disciplina in relatorio.0.disciplina.all %}
+                                                {{disciplina.nome}}
+                                                {% endfor %}
+                                                </em>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </button>
+                            </h2>
+                            <div id="panelsStayOpen-collapseOne{{relatorio.0.id}}" class="accordion-collapse collapse"
+                                aria-labelledby="panelsStayOpen-headingOne{{relatorio.0.id}}"
+                                data-bs-parent="#accordionPanelsStayOpenExample">
+                                <div class="accordion-body">
+
+
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Aluno</th>
+                                                    <th>Status</th>
+                                                    <th>Data de entrega</th>
+                                                    <th>Download</th>
+                                                </tr>
+                                            </thead>
+                                            <tfoot>
+                                                <tr>
+                                                    <th>Aluno</th>
+                                                    <th>Assinado</th>
+                                                    <th>Data de entrega</th>
+                                                    <th>Download</th>
+                                                </tr>
+                                            </tfoot>
+                                            <tbody>
+
+                                                {% for documento in relatorio.1 %}
+                                                <tr>
+                                                    <td class="text-truncate">{{documento.aluno.username}}</td>
+                                                    <td class="text-truncate">
+                                                        {% if not documento.tutor %}
+                                                        Não assinado
+                                                        {% else %}
+                                                        Assinado
+                                                        {% endif %}
+                                                    </td>
+                                                    <td class="text-truncate">
+                                                        {{documento.data_update|date:'d/m/Y'}}
+                                                    </td>
+                                                    <td class="text-truncate">
+
+                                                        <a href="../../../{{documento.url_documento}}"
+                                                            download="">Documento</a>
+
+                                                    </td>
+                                                </tr>
+                                                {% endfor %}
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        {% endfor %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- /.container-fluid -->
+
+
+{% endblock conteudo %}
+
+{% block meusScripts %}
+
+<script src="{% static 'vendor/datatables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
+
+<!-- Page level custom scripts -->
+<script src="{% static 'js/demo/datatables-demo.js' %}"></script>
+
+{% endblock meusScripts %}

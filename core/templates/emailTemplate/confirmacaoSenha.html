@@ -1,0 +1,17 @@
+{% extends 'emailTemplate/baseTemplateEmail.html' %}
+{% load static %}
+
+{% block 'assunto' %}
+
+{{assunto}}
+{% endblock 'assunto' %}
+
+{% block 'conteudo' %}
+<p>
+    Ao clicar no link para defenir uma nova senha. Seu usuário para acessar a plataforma é o email fornecido.
+</p>
+<a href="{{url_redefinir}}" class="btn btn-primary" >
+    Defenir nova senha
+</a>
+
+{% endblock 'conteudo' %}

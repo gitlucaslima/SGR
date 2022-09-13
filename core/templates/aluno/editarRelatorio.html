@@ -1,0 +1,86 @@
+{% extends 'modeloBase.html' %}
+{% load static %}
+
+{% block pageTitle %}
+<h4> <i class="fas fa-file-word"></i> Editar relatório {{documento.relatorio.data_relatorio|date:'F'}}</h4>
+{% endblock pageTitle %}
+
+{% block "sidebar" %}
+
+{% include "partius/menusPersonalizados/menuAluno.html" %}
+
+{% endblock "sidebar" %}
+
+{% block conteudo %}
+<div>
+
+    <form action="{% url 'update_relatorio' %}" method="post">
+
+        {% csrf_token %}
+        
+        <input type="hidden" name="id_documento" value="{{documento.id}}">
+      
+        {% for relato in relatos%}
+
+            <input type="hidden" name="id_relato" value="{{relato.id}}">
+            
+            <div class="card border-left-warning mb-3">
+                <div class="card-body">
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                            <div class="col-12">Data inicio</div>
+                            <div class="col-12 border pt-2 pb-2 bg-white rounded shadow">
+                                <div>{{relato.disciplina.data_inicio|date:"d/m/Y"}}</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="col-12">Data final:</div>
+                            <div class="col-12 border pt-2 pb-2 bg-white rounded shadow">
+                                <div>{{relato.disciplina.data_termino|date:"d/m/Y"}}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <!-- Pending Requests Card Example -->
+                        <div class="col-x3-6 col-md-12 mb-6">
+                            <div class="card shadow h-100 py-2">
+                                <div class="card-header bg-white">
+                                    <h3 class="h5">{{relato.disciplina.nome}}</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+        
+                                            <textarea  name="atividades" class="form-control" rows="7"
+                                                placeholder="Descreva suas atividades">{{relato.conteudo}}</textarea>
+        
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+        {% endfor %}
+        <hr>
+        <button type="submit" class="btn btn-primary btn-icon-split">
+            <span class="icon text-white">
+                <i class="fa fa-pencil-square-o"></i>
+            </span>
+            <span class="text"> Assinar</span>
+        </button>
+
+        <a href="{% url 'aluno_home' %}" class="btn btn-danger btn-icon-split">
+            <span class="icon text-white">
+                <i class="fa fa-close"></i>
+            </span>
+            <span class="text"> Cancelar</span>
+        </a>
+
+    </form>
+  
+
+</div>
+{% endblock conteudo %}

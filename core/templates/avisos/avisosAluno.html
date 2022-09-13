@@ -1,0 +1,72 @@
+{% extends 'modeloBase.html' %}
+{% load static %}
+
+{% block title %}
+<title>Avisos</title>
+{% endblock title %}
+
+{% block pageTitle %}
+<h4><i class="fa fa-paper-plane"></i> Avisos </h4>
+{% endblock pageTitle %}
+
+{% comment %} Personalizar menu, Coord/Tutor {% endcomment %}
+{% block "sidebar" %}
+{% include "partius/menusPersonalizados/menuAluno.html" %}
+{% endblock "sidebar" %}
+
+
+{% block conteudo %}
+
+<div class="container mb-5">
+
+    <h4>Notificações</h4>
+    <hr>
+    <div id="accordion">
+
+        {% if not avisos %}
+        <div class="row">
+            <div class="col">
+                Nenhum aviso foi recebido
+            </div>
+        </div>
+        {% endif %}
+        {% for aviso in avisos %}
+        <div class="card border-left-primary shadow h-100 py-2 p-0 mb-3" id="headingOne{{aviso.id}}">
+            <!-- <div class="card-header" id="headingOne"> -->
+            <a class="btn m-0 pt-3 pb-3" data-toggle="collapse" data-target="#collapseOne{{aviso.id}}"
+                aria-expanded="true" aria-controls="collapseOne{{aviso.id}}">
+                <div class="row">
+                    <div class="col-md-10 col-12 d-flex align-items-center">
+
+                        <h4 class="mb-0">
+                            <i class="bi bi-chat-square-text-fill text-gray-400 mr-3"></i>
+                            <h5 class="d-inline text-truncate">{{aviso.assunto}}</h5>
+                        </h4>
+                    </div>
+                    <div class="col-md-2 col-12 text-right">
+
+                        <em class="text-nowrap"><i class="bi bi-calendar3"></i> {{aviso.data_envio|date:'d/m/Y'}}</em>
+                        <em class="text-nowrap"><i class="far fa-clock"></i> {{aviso.data_envio|date:'h:i'}}</em>
+
+                    </div>
+                </div>
+            </a>
+        </div>
+
+
+        <div id="collapseOne{{aviso.id}}" class="collapse" aria-labelledby="headingOne{{aviso.id}}"
+            data-parent="#accordion">
+            <div class="card-body text-justify pl-5 pr-5" style="max-height:250px; overflow-y: auto;">
+                {% autoescape off %}
+                {{aviso.conteudo}}
+                {% endautoescape %}
+            </div>
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock conteudo %}

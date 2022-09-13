@@ -1,0 +1,87 @@
+{% load static %}
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Assinatura</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <form action="{% url 'apload_assinatura' %}" method="POST" class="form form-assinatura mt-1"
+          enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="row">
+            
+            {% if assinatura and assinatura.url_assinatura %}
+            <div class="col">
+              
+              <strong>Assinatura atual</strong>
+              <div class="col border">
+                <img src="../../../media/{{assinatura.url_assinatura}}" alt="assinatura">
+              </div>
+            </div>
+
+            {% endif %}
+            <div class="col-12">
+              <label for="">Assinatura</label>
+            </div>
+
+            <div class="col-12">
+              <div class="input-group">
+                <input type="file" class="form-control img-input" accept=".png" id="inputGroupFile04"
+                  aria-describedby="inputGroupFileAddon04" required name="img-assinatura" aria-label="Upload">
+                <input type="hidden" name="imagem_base64" id="campo_imagem_base64">
+                <input type="hidden" name="urlOrigem" value="{{url}}">
+
+              </div>
+            </div>
+
+            <div class="col-12 text-center mt-3 scroll">
+              <div class="row mb-2">
+                <div class="col">
+                  <button class="btn border" id="btn-zoom-mais" type="button"><i class="bi bi-plus-circle"></i></button>
+                  <button class="btn border" id="btn-zoom-menos" type="button"><i
+                      class="bi bi-dash-circle"></i></button>
+
+                </div>
+              </div>
+              <div class="overflow-auto">
+
+                <canvas id="UgCanvas" style="border:1px solid #c6c6c6;">
+                  <h3>Seu Navegador não suporta este recurso</h3>
+                </canvas>
+              </div>
+
+            </div>
+          </div>
+          <div class="col-12 mt-3 text-center">
+            <button type="submit" class="btn btn-success btn-icon-split">
+              <span class="icon text-white">
+                <i class="fa fa-save"></i>
+              </span>
+              <span class="text">Salvar</span>
+            </button>
+            <button type="reset" class="btn btn-danger btn-icon-split" id="btn-cancelar" data-bs-dismiss="modal">
+              <span class="icon text-white">
+                <i class="fa fa-close"></i>
+              </span>
+              <span class="text">Cancelar</span>
+
+            </button>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{% block meusScripts %}
+
+<script src="{% static 'js/script-visualizar.js' %}"></script>
+{% endblock meusScripts %}

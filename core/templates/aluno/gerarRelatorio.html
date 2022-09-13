@@ -1,0 +1,89 @@
+{% extends 'modeloBase.html' %}
+{% load static %}
+
+{% block pageTitle %}
+<h4> <i class="fas fa-file-word"></i> Gerar Relatório</h4>
+{% endblock pageTitle %}
+
+{% block "sidebar" %}
+
+{% include "partius/menusPersonalizados/menuAluno.html" %}
+
+{% endblock "sidebar" %}
+
+{% block conteudo %}
+<div>
+
+    <form action="{% url 'salvar_atividade' %}" method="post">
+
+        {% csrf_token %}
+        
+        <input type="hidden" name="mesReferencia" value="{{relatorio_corrente.data_relatorio|date:'F'}}">
+        <input type="hidden" name="periodo_relatorio" value="{{relatorio_corrente.id}}">
+
+        {% for disciplina in relatorio_corrente.disciplina.all %}
+
+            <input type="hidden" name="nomeDisciplina" value="{{disciplina.id}}">
+            <input type="hidden" name="dataInicio" value="{{disciplina.data_inicio|date:"d/m/Y"}}">
+            <input type="hidden" name="dataFim" value="{{disciplina.data_termino|date:"d/m/Y"}}">
+
+            <div class="card border-left-warning mb-3">
+                <div class="card-body">
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                            <div class="col-12">Data inicio</div>
+                            <div class="col-12 border pt-2 pb-2 bg-white rounded shadow">
+                                <div>{{disciplina.data_inicio|date:"d/m/Y"}}</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="col-12">Data final:</div>
+                            <div class="col-12 border pt-2 pb-2 bg-white rounded shadow">
+                                <div>{{disciplina.data_termino|date:"d/m/Y"}}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <!-- Pending Requests Card Example -->
+                        <div class="col-x3-6 col-md-12 mb-6">
+                            <div class="card shadow h-100 py-2">
+                                <div class="card-header bg-white">
+                                    <h3 class="h5">{{disciplina.nome}}</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+        
+                                            <textarea  name="atividades" class="form-control" rows="7"
+                                                placeholder="Descreva suas atividades"></textarea>
+        
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+        {% endfor %}
+        <hr>
+        <button type="submit" class="btn btn-primary btn-icon-split">
+            <span class="icon text-white">
+                <i class="fa fa-pencil-square-o"></i>
+            </span>
+            <span class="text"> Assinar</span>
+        </button>
+
+        <a href="{% url 'aluno_home' %}" class="btn btn-danger btn-icon-split">
+            <span class="icon text-white">
+                <i class="fa fa-close"></i>
+            </span>
+            <span class="text"> Cancelar</span>
+        </a>
+
+    </form>
+  
+
+</div>
+{% endblock conteudo %}

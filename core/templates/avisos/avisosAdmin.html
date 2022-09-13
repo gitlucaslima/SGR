@@ -1,0 +1,187 @@
+{% extends 'modeloBase.html' %}
+{% load static %}
+
+{% block title %}
+<title>Avisos</title>
+{% endblock title %}
+
+{% block pageTitle %}
+<h4><i class="fa fa-paper-plane"></i> Avisos </h4>
+{% endblock pageTitle %}
+
+
+{% block "sidebar" %}
+
+{% if request.session.permissao == 1 %}
+
+{% include "partius/menusPersonalizados/menuAluno.html" %}
+
+{% elif request.session.permissao == 2 %}
+
+{% include "partius/menusPersonalizados/menuTutor.html" %}
+
+{% else %}
+
+{% include "partius/menusPersonalizados/menuCoordenador.html" %}
+
+{% endif %}
+
+{% endblock "sidebar" %}
+
+{% block meusScripts %}
+
+<script src="{% static 'tinymce/tinymce.min.js'%}"></script>
+
+<script>
+    tinymce.init({
+        selector: '#editor',
+        language: 'pt_BR',
+        resize: true,
+        statusbar: false,
+        height: 250,
+        plugins: 'advlist link image lists tinydrive fullscreen',
+        toolbar: ' insertfile | fullscreen |  undo redo | styles | bold italic | alignleft aligncenter alignright alignjustify | outdent indent',
+        image_title: true,
+        automatic_uploads: true,
+        file_picker_types: 'image',
+        file_picker_callback: (cb, value, meta) => {
+            const input = document.createElement('input');
+            input.setAttribute('type', 'file');
+            input.setAttribute('accept', 'image/*');
+
+            input.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+
+                const reader = new FileReader();
+                reader.addEventListener('load', () => {
+
+                    const id = 'blobid' + (new Date()).getTime();
+                    const blobCache = tinymce.activeEditor.editorUpload.blobCache;
+                    const base64 = reader.result.split(',')[1];
+                    const blobInfo = blobCache.create(id, file, base64);
+                    blobCache.add(blobInfo);
+
+                    cb(blobInfo.blobUri(), { title: file.name });
+                });
+                reader.readAsDataURL(file);
+            });
+
+            input.click();
+        },
+        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }'
+    })
+</script>
+{% endblock meusScripts %}
+
+{% block conteudo %}
+
+{% include 'partius/alerts/alerts.html' %}
+<div class="container mb-5">
+    <div class="row mb-2">
+        <div class="col text-right">
+
+            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"
+                aria-expanded="false" aria-controls="collapseExample">
+                <i class="fa fa-send"></i>
+                <span class="d-none d-md-inline">
+                    Nova mensagem
+                </span>
+            </button>
+        </div>
+    </div>
+    <div class="row mb-2">
+        <div class="col">
+            <div class="collapse" id="collapseExample">
+                <div class="card card-body">
+                    <form action="{% url 'enviar_avisos' %}" method="POST">
+                        {% csrf_token %}
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1">Para</span>
+                            <select class="form-select" name="destinatario" aria-label="Username"
+                                aria-describedby="basic-addon1">
+                                <option value="-1">Todos</option>
+                                <option value="1">Tumar 1</option>
+                                <option value="2">Turma 2</option>
+                            </select>
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon2">Assunto</span>
+                            <input type="text" name="assunto" class="form-control" placeholder="Assunto do email"
+                                aria-label="Recipient's username" aria-describedby="basic-addon2">
+                        </div>
+                        <textarea id="editor" name="conteudo" placeholder="Conteudo da mensagem aqui"></textarea>
+                        <div class="row mt-3">
+
+                            <div class="col text-center">
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fa fa-send"></i>
+                                    <span class="d-none d-md-inline">
+                                        Enviar
+                                    </span>
+                                </button>
+                                <button class="btn btn-primary" type="reset" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseExample" aria-expanded="false"
+                                    aria-controls="collapseExample">
+                                    <i class="fa fa-close"></i>
+                                    <span class="d-none d-md-inline">
+                                        Cancelar
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h4>Notificações</h4>
+    <hr>
+    <div id="accordion">
+
+        {% if not avisos %}
+            <div class="row">
+                <div class="col">
+                    Nenhum aviso foi enviado
+                </div>
+            </div>
+        {% endif %}
+        {% for aviso in avisos %}
+        <div class="card border-left-primary shadow h-100 py-2 p-0 mb-3" id="headingOne{{aviso.id}}">
+            <!-- <div class="card-header" id="headingOne"> -->
+            <a class="btn m-0 pt-3 pb-3" data-toggle="collapse" data-target="#collapseOne{{aviso.id}}"
+                aria-expanded="true" aria-controls="collapseOne{{aviso.id}}">
+                <div class="row">
+                    <div class="col-md-10 col-12 d-flex align-items-center">
+
+                        <h4 class="mb-0">
+                            <i class="bi bi-chat-square-text-fill text-gray-400 mr-3"></i>
+                            <h5 class="d-inline text-truncate">{{aviso.assunto}}</h5>
+                        </h4>
+                    </div>
+                    <div class="col-md-2 col-12 text-right">
+
+                        <em class="text-nowrap"><i class="bi bi-calendar3"></i> {{aviso.data_envio|date:'d/m/Y'}}</em>
+                        <em class="text-nowrap"><i class="far fa-clock"></i> {{aviso.data_envio|date:'h:i'}}</em>
+
+                    </div>
+                </div>
+            </a>
+        </div>
+
+
+        <div id="collapseOne{{aviso.id}}" class="collapse" aria-labelledby="headingOne{{aviso.id}}"
+            data-parent="#accordion">
+            <div class="card-body text-justify pl-5 pr-5" style="max-height:250px; overflow-y: auto;">
+                {% autoescape off %}
+                {{aviso.conteudo}}
+                {% endautoescape %}
+            </div>
+        </div>
+
+        {% endfor %}
+
+    </div>
+</div>
+
+{% endblock conteudo %}
