@@ -934,12 +934,13 @@ def salvarAtividades(request):
                 relato_registro.disciplina = DisciplinaModel.objects.get(id=disciplinas_id[indice])
                 relato_registro.save()
 
-            messages.add_message(request,messages.SUCCESS, "Relatório gerado com sucesso")
             
             novo_documento.assinarDocumento()
 
+            messages.add_message(request,messages.SUCCESS, "Relatório gerado com sucesso")
         except Exception as e:
-       
+            print(e)
+            novo_documento.delete()
             messages.add_message(request,messages.ERROR, "Não foi possivel gerar o documento")
 
 

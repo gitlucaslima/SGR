@@ -232,8 +232,8 @@ class DocumentModel(models.Model):
         doc = DocxTemplate("static/modelo/modeloRelatorio.docx")
 
         doc.render(conteudo)
-
-        return doc
+  
+        return doc  
 
     def salvarRelatorio(self,doc: DocxTemplate):
         
@@ -242,15 +242,19 @@ class DocumentModel(models.Model):
 
         signer = TimestampSigner()
         value = signer.sign(self.aluno.email).split(":")[-1]
+        
         # Cria um nome unico para o arquivo
         nome_arquivo = f"media/relatorios/relatorio{self.aluno.username}{value}.docx"
-
+      
+        
         doc.save(nome_arquivo)
 
         # atualiza documento com o novo arquivo
         self.url_documento = nome_arquivo
 
         self.save()
+
+
 
     def assinarDocumento(self):
 
@@ -265,6 +269,7 @@ class DocumentModel(models.Model):
             assinatura = AssinaturaModel.objects.get(usuario=self.tutor)
             doc.replace_pic('Imagem 10',assinatura.url_assinatura)            
 
+     
         self.salvarRelatorio(doc)
 
 class RelatoModel(models.Model):
