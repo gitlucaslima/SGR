@@ -248,12 +248,12 @@ class DocumentModel(models.Model):
         # Cria um nome unico para o arquivo
 
         # Cria diretorios se não existir diretorio cria
-        if not os.path.isdir(os.path.join(BASE_DIR,"media/uploads/relatorios")):
+        if not os.path.isdir(os.path.join(BASE_DIR,"media/relatorios")):
 
-            os.makedirs(os.path.join(BASE_DIR,"media/uploads/relatorios"))
+            os.makedirs(os.path.join(BASE_DIR,"media/relatorios"))
         
 
-        nome_arquivo = f"media/uploads/relatorios/relatorio{self.aluno.username}{value}.docx"
+        nome_arquivo = f"media/relatorios/relatorio{self.aluno.username}{value}.docx"
       
         
         doc.save(nome_arquivo)
