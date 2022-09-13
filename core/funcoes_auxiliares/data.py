@@ -1,5 +1,5 @@
 
-from datetime import date, datetime
+from datetime import datetime
 
 
 def isDateMaior(dataInicio,dataFim):
@@ -13,11 +13,3 @@ def isDateMaior(dataInicio,dataFim):
 
     return dataFormInicio > dataFormFim
 
-
-def isDatePassou(data):
-
-    print(data)
-    return data > date(datetime.now().year,datetime.now().month,datetime.now().day)
-
-  
-  

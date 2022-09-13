@@ -73,12 +73,9 @@
 
 
                                     <tr>
-                                        <td class="text-truncate" style="max-width: 150px;">
-                                            {{item.username}}
-                                        </td>
-                                        <td class="text-truncate" style="max-width: 150px;">{{item.email}}</td>
-                                        <td> 
-                                            {% if item.is_active == 1 %}
+                                        <td>{{item.username}}</td>
+                                        <td>{{item.email}}</td>
+                                        <td> {% if item.is_active == 1 %}
                                             Ativo
                                             {% else %}
                                             Inativo
@@ -92,8 +89,8 @@
                                             {% else %}
                                             Coordenador
                                             {% endif %}
-                                        </td >
-                                        <td class="text-center">
+                                        </td>
+                                        <td>
                                             <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal"
                                                 data-bs-target="#modalEditarUsuario{{item.id}}"
                                                 data-bs-whatever="@mdo">Editar</button>

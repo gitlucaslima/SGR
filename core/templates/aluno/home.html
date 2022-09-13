@@ -83,7 +83,6 @@
         </div>
 
     </div>
-
     <div class="col-12 mb-5 col-md-11">
 
         <div class="card">
@@ -91,73 +90,82 @@
                 <h3>Relatórios</h3>
             </di>
             <div class="card-body">
-
                 <div class="accordion" id="accordionPanelsStayOpenExample">
 
-                    {% if not documentos %}
-                    <div class="row">
-                        <div class="col text-center">
-                            
-                            Nenhum relatório foi gerado
-                        </div>
-                    </div>
-                    {% endif %}
-                    {% for documento in documentos %}
+                    {% for relatorio in relatorios %}
 
                     <div class="accordion-item mb-4">
+                        <!-- 
+                        Ao listar os relatórios de um aluno lembrar de criar um valor dinâmico e unico 
+                        para o id para h2 abaixo, por exemplo: no de baixo temos o id = panelsStayOpen-headingOne,
+                        podem criar um id = acordion1, e para o proximo accordion-item da interação o id será acordion2,
+                        isso é necessário pois o id é usado para abrir ao clicar sobre esse elemento
 
-                        <h2 class="accordion-header" id="panelsStayOpen-headingOne{{documento.id}}">
+                    -->
+                        <h2 class="accordion-header" id="panelsStayOpen-headingOne{{relatorio.id}}">
 
+                            <!-- 
+                                
+                                A propriedade data-bs-target deve receber #acordion1 (o id definido para o elemento anterior, a # é necessario) 
+                                A propriedade aria-controls deve receber acordion1 
+                            -->
 
                             <button class="accordion-button collapsed p-4 text-nowrap text-truncate" type="button"
-                                data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne{{documento.id}}"
-                                aria-expanded="false" aria-controls="panelsStayOpen-collapseOne{{documento.id}}">
+                                data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne{{relatorio.id}}"
+                                aria-expanded="false" aria-controls="panelsStayOpen-collapseOne{{relatorio.id}}">
                                 <div class="col-11">
                                     <div class="row">
 
                                         <div class="col-12 col-md-5 text-truncate">
-                                            <i class="fas fa-file-signature mr-2 fs-5"></i><span>Relatório -
-                                                {{documento.relatorio.data_relatorio|date:'F'}}
+                                            <i class="fas fa-file-signature mr-2 fs-5"></i><span>Relatório {{relatorio.data_relatorio|date:'F'}}
                                             </span>
                                         </div>
 
                                         <div class="col-12 col-md-7 text-left text-truncate">
                                             <!-- Nome da disciplina qui -->
-                                            <em class="text-muted">
-                                                {% for disciplina in documento.relatorio.disciplina.all %}
-                                                {{disciplina.nome}}
-                                                {% endfor %}
-                                            </em>
+                                            <em class="text-muted">Framework Back-End Básico</em>
                                         </div>
 
                                     </div>
                                 </div>
                             </button>
                         </h2>
-                        <div id="panelsStayOpen-collapseOne{{documento.id}}" class="accordion-collapse collapse"
-                            aria-labelledby="panelsStayOpen-headingOne{{documento.id}}"
+                        <div id="panelsStayOpen-collapseOne{{relatorio.id}}" class="accordion-collapse collapse"
+                            aria-labelledby="panelsStayOpen-headingOne{{relatorio.id}}"
                             data-bs-parent="#accordionPanelsStayOpenExample">
                             <div class="accordion-body text-center">
 
+                                <!-- 
 
-                                <a href="{% url 'editar_relatorio' documento.id  %}"
-                                    class="btn btn-success btn-sm mb-1">
+                                    Regras de negocio:
+
+                                    Editar: deve ser possivel somente enquanto o relatório ainda estiver aberto para tal.
+                                            Deve-se verificar se o mesmo pode ser editado ou não, caso não possa mais editar,
+                                            essa opção deve ser desabilitada, se possivel mostrar uma notificação do porque essa operação
+                                            não pode ser realizada, uma vez que esse projeto será usado em IHM :( 
+                                 -->
+                                <a href="" class="btn btn-success btn-sm mb-1">
                                     <i class="fas fa-edit"></i> Editar
                                 </a>
-                                <a href="../../../{{documento.url_documento}}" download=""
-                                    class="btn btn-primary btn-sm mb-1">
+
+
+                                <!-- Baixar: Opção de Baixa deve ser possivel independente do momento -->
+                                <a href="" class="btn btn-primary btn-sm mb-1">
                                     <i class="fas fa-download"></i> Baixar
                                 </a>
 
-                                <button class="btn btn-danger btn-sm mb-1" data-bs-toggle="modal" data-bs-target="#modalDeletaDocumento{{documento.id}}">
+                                <!-- Excluir: Essa opção deve ser possivel somente enquanto o relatório mensal estiver aberto,
+                                    após o fechamento não poderá mais. Um dos motivos disso é que o aluno pode excluir o relatório após ter
+                                    passado do prazo, assim ele não poderá refazer novamente, e nem o tutor poderá acessa-lo, uma vez que
+                                    foi excluido banco. Deve ser implementado uma regra para evitar isso e notificar o aluno
+                                -->
+                                <button class="btn btn-danger btn-sm mb-1">
                                     <i class="fas fa-trash"></i>
                                     Excluir
                                 </button>
                             </div>
                         </div>
                     </div>
-
-                    {% include 'partius/modais/deletarDocumentoModal.html' %}
                     {% endfor %}
 
                 </div>
@@ -167,3 +175,5 @@
 </div>
 
 {% endblock conteudo %}
+
+

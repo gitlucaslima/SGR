@@ -1,0 +1,158 @@
+{% extends 'modeloBase.html' %}
+{% load static %}
+
+{% block pageTitle %}
+<h4><i class="fa fa-gear"></i> Configurações</h4>
+{% endblock pageTitle %}
+
+{% block "sidebar" %}
+
+{% include "partius/menusPersonalizados/menuCoordenador.html" %}
+
+{% endblock "sidebar" %}
+
+{% block conteudo %}
+
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+
+    {% if tab == 'relatorio' %}
+
+    <li class="nav-item">
+        <a class="nav-link active tab-configuracao" data-opcao-tab="relatorio" id="home-tab" data-toggle="tab"
+            href="#home" role="tab" aria-controls="home" aria-selected="true">
+            <i class="bi bi-file-text-fill"></i>
+            Relatório
+        </a>
+    </li>
+
+    {% else %}
+
+    <li class="nav-item">
+        <a class="nav-link tab-configuracao" data-opcao-tab="relatorio" id="home-tab" data-toggle="tab" href="#home"
+            role="tab" aria-controls="home" aria-selected="true">
+            <i class="bi bi-file-text-fill"></i>
+            Relatório
+        </a>
+    </li>
+
+    {% endif %}
+
+    {% if tab == 'disciplinas' %}
+
+    <li class="nav-item">
+        <a class="nav-link active tab-configuracao" data-opcao-tab="disciplinas" id="home-tab" data-toggle="tab"
+            href="#home" role="tab" aria-controls="home" aria-selected="true">
+            <i class="bi bi-file-text-fill"></i>
+            Disciplinas
+        </a>
+    </li>
+
+    {% else %}
+
+    <li class="nav-item">
+        <a class="nav-link tab-configuracao" data-opcao-tab="disciplinas" id="home-tab" data-toggle="tab" href="#home"
+            role="tab" aria-controls="home" aria-selected="true">
+            <i class="bi bi-file-text-fill"></i>
+            Disciplinas
+        </a>
+    </li>
+
+    {% endif %}
+
+
+
+
+    {% if tab == "usuario" %}
+    <li class="nav-item">
+        <a class="nav-link active tab-configuracao" data-opcao-tab="usuario" id="profile-tab" data-toggle="tab"
+            href="#perfil" role="tab" aria-controls="profile" aria-selected="false">
+            <i class="bi bi-person-fill"></i>
+            Usuário
+        </a>
+    </li>
+    {% else %}
+
+    <li class="nav-item">
+        <a class="nav-link tab-configuracao" data-opcao-tab="usuario" id="profile-tab" data-toggle="tab" href="#perfil"
+            role="tab" aria-controls="profile" aria-selected="false">
+            <i class="bi bi-person-fill"></i>
+            Usuário
+        </a>
+    </li>
+
+    {% endif %}
+
+
+  
+
+    {% block meusScripts %}
+    <script src="{% static 'js/scripts.js' %}"></script>
+
+    {% endblock %}
+
+
+</ul>
+
+<div class="tab-content" id="myTabContent">
+
+    {% include 'partius/alerts/alerts.html' %}
+    {% if tab == 'relatorio' %}
+    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+        <!-- Begin Page Content -->
+
+        {% include 'partius/tabsConfiguracoes/relatorio.html' %}
+        <!-- /.container-fluid -->
+    </div>
+    {% else %}
+
+    <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
+        <!-- Begin Page Content -->
+
+        {% include 'partius/tabsConfiguracoes/relatorio.html' %}
+        <!-- /.container-fluid -->
+    </div>
+    {% endif %}
+
+    {% if tab == 'disciplinas' %}
+
+    <div class="tab-pane fade show active" id="perfil" role="tabpanel" aria-labelledby="profile-tab">
+
+        {% include 'partius/tabsConfiguracoes/disciplinas.html' %}
+    </div>
+
+    {% else %}
+
+    <div class="tab-pane fade" id="perfil" role="tabpanel" aria-labelledby="profile-tab">
+
+        {% include 'partius/tabsConfiguracoes/disciplinas.html' %}
+    </div>
+    {% endif %}
+
+
+    {% if tab == 'usuario' %}
+
+    <div class="tab-pane fade show active" id="perfil" role="tabpanel" aria-labelledby="profile-tab">
+
+        {% include 'partius/tabsConfiguracoes/usuario.html' %}
+    </div>
+
+    {% else %}
+
+    <div class="tab-pane fade" id="perfil" role="tabpanel" aria-labelledby="profile-tab">
+
+        {% include 'partius/tabsConfiguracoes/usuario.html' %}
+    </div>
+    {% endif %}
+
+
+    {% if tab == 'aviso' %}
+    <div class="tab-pane fade show active" id="contato" role="tabpanel" aria-labelledby="contact-tab">...</div>
+    {% else %}
+
+    <div class="tab-pane fade" id="contato" role="tabpanel" aria-labelledby="contact-tab">...</div>
+    {% endif %}
+
+</div>
+{% endblock conteudo %}
+
+

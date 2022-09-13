@@ -19,9 +19,11 @@ urlpatterns = [
 
     path("configuracoes/<str:relatorio>", configuracoes, name="configuracoes"),
 
-    path("avisos/", avisos, name="avisos"),
+    path("configuracoes/<str:usuario>", configuracoes, name="configuracoes"),
 
-    path("enviar_avisos/",enviarAvisos,name="enviar_avisos"),
+    path("configuracoes/<str:aviso>", configuracoes, name="configuracoes"),
+
+    path("avisos/", avisos, name="avisos"),
 
     path("registro/", registro, name="registro"),
 
@@ -50,12 +52,6 @@ urlpatterns = [
 
     path("deletar_relatorio/", deletarRelatorio, name='deletar_relatorio'),
 
-    path("salvar_atividade/", salvarAtividades, name="salvar_atividade"),
-
-    path("editar_relatorio/<int:id>",editarAtividade,name="editar_relatorio"),
-
-    path("update_relatorio/",update_relatorio,name="update_relatorio"),
-
-    path("excluir_documento/",excluirDocumento,name="excluir_documento")
+    path("salvar_atividade/", salvarAtividades, name="salvar_atividade")
 
 ]

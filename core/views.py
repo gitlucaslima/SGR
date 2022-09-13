@@ -1,52 +1,48 @@
 import base64
-import io
 
+import io
 import sys
 from asyncio.windows_events import NULL
 from datetime import datetime
+
 from msilib.schema import Error
+from xmlrpc.client import DateTime
 
 from django.contrib import messages
-from django.contrib.auth import login as login_check
-from django.contrib.auth import logout as logout_django
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.tokens import default_token_generator
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import IntegrityError
+
 from django.shortcuts import get_object_or_404, redirect, render
-from django.template.loader import render_to_string
 from PIL import Image
 
-from core.funcoes_auxiliares.data import isDateMaior, isDatePassou
+from core.funcoes_auxiliares.data import isDateMaior
 from core.funcoes_auxiliares.send_email import enviar_email
 from core.models import *
-from sgr.settings import EMAIL_BACKEND, EMAIL_HOST_USER
+from django.contrib.auth.decorators import login_required, user_passes_test
+from docxtpl import DocxTemplate
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.auth import login as login_check
+from django.contrib.auth import logout as logout_django
+from django.core.signing import Signer
+from django.core.signing import TimestampSigner
+
+from sgr.settings import EMAIL_HOST_USER
 
 # Controllers do aluno
 
 # Controller do login
+
+
 def login(request):
 
-    
-    permissao = request.session.get('permissao')
-    if permissao:
 
-        if permissao == 1:
-
-            return redirect("aluno_home")
-
-        elif permissao == 2:
-            return redirect("tutor_home")
-
-        elif permissao == 3:
-
-            return redirect("coordenador_home")
-
-    # Verifca se existe algum usuário
-    is_usuarios = len(UsuarioModel.objects.all())
+    # Verifca se existe algum usuário do tipo coordenador
+    is_usuarios = len(UsuarioModel.objects.filter(permissao=3))
 
     if(not is_usuarios):
-
 
         return redirect('registro')
 
@@ -57,13 +53,7 @@ def login(request):
     email = request.POST.get('email')
     senha = request.POST.get("senha")
 
-    usuario =  UsuarioModel.objects.filter(email=email).first()
-    
-    if(not usuario):
-
-        messages.add_message(request,messages.ERROR,"Login ou senha inválidos")
-        return redirect("login")
-
+    usuario = UsuarioModel.objects.get(email=email)
 
     is_equal_password = usuario.check_password(senha)
 
@@ -88,7 +78,6 @@ def login(request):
 
 def logout(request):
 
-
     logout_django(request)
 
     return redirect("login")
@@ -97,86 +86,37 @@ def logout(request):
 @login_required(login_url="login")
 def alunoHome(request):
 
-    if request.session['permissao'] != 1:
-
-        messages.add_message(request,messages.INFO,"Usuário não têm acesso a esse recurso")
-        return redirect("login")
-
-    aluno = get_object_or_404(UsuarioModel,id=request.user.id)
-    assinatura = AssinaturaModel.objects.filter(usuario=aluno).first()
-    
-    documentos = DocumentModel.objects.filter(aluno=aluno).order_by('-id')
+    relatorios = RelatorioModel.objects.all().order_by("-data_relatorio")
 
     context = {
 
         "url": "aluno_home",
-        "documentos": documentos,
-        "assinatura":assinatura
+        "relatorios": relatorios
 
     }
     return render(request, "aluno/home.html", context)
 
 
-@login_required(login_url="login")
 def alunoRelatorio(request):
 
-    if request.session['permissao'] != 1:
+    relatorio_abertos = RelatorioModel.objects.filter(
+        status=1).order_by("-data_relatorio")
 
-        messages.add_message(request,messages.INFO,"Usuário não têm acesso a esse recurso")
-        return redirect("login")
-
-    relatorio_aberto = RelatorioModel.objects.filter(
-        status=1).order_by("-data_relatorio").first()
-
-    if not relatorio_aberto:
-
-        messages.add_message(request,messages.WARNING,"Não existe nenhum relatório disponível")
-        return redirect('aluno_home')
-    
-    if isDatePassou(relatorio_aberto.data_limite):
-
-        messages.add_message(request,messages.WARNING,"Período para entrega do relatório já passou!")
-        return redirect('aluno_home')
-
-
-
-    aluno = UsuarioModel.objects.get(id=request.user.id)
-    relatorio_realizado = list(filter(lambda item: item.aluno == aluno,DocumentModel.objects.filter(relatorio=relatorio_aberto)))
-    assinatura = AssinaturaModel.objects.filter(usuario = aluno)
-
-    if not assinatura:
-        messages.add_message(request,messages.WARNING,"Forneça uma assinatura.")
-        return redirect("/aluno/home")
-
-    if(relatorio_realizado):
-        
-        messages.add_message(request,messages.WARNING,"Já foi realizado um relatório, edite ou exclua")
-        return redirect("/aluno/home")
-
+    ultimo_relatorio = relatorio_abertos[0] if relatorio_abertos else NULL
 
     contexto = {
 
-        "relatorio_corrente": relatorio_aberto
+        "relatorio_corrente": ultimo_relatorio
     }
     return render(request, "aluno/gerarRelatorio.html", contexto)
 
 
-@login_required(login_url="login")
+# Controller do tutor
 def tutorHome(request):
-
-    if request.session['permissao'] != 2:
-
-        messages.add_message(request,messages.INFO,"Usuário não têm acesso a esse recurso")
-        return redirect("login")
-
-    tutor = get_object_or_404(UsuarioModel,id=request.user.id)
-    assinatura = AssinaturaModel.objects.filter(usuario=tutor).first()
-
 
     context = {
 
-        "url": "tutor_home",
-        "assinatura":assinatura
+        "url": "tutor_home"
 
     }
     return render(request, "tutor/home.html", context)
@@ -184,31 +124,17 @@ def tutorHome(request):
 
 # Controller do coordenador
 
-@login_required(login_url="login")
 def coordenadorHome(request):
 
-    if request.session['permissao'] != 3:
-
-        messages.add_message(request,messages.INFO,"Usuário não têm acesso a esse recurso")
-        return redirect("login")
-
     dados = UsuarioModel.objects.filter(permissao=1)
+    relatorios = RelatorioModel.objects.all().order_by("-data_relatorio")
+    ultimoRelatorio = relatorios[0] if relatorios else NULL
 
-    relatorios = [(relatorio,DocumentModel.objects.filter(relatorio=relatorio)) for relatorio in RelatorioModel.objects.all().order_by("-data_relatorio")]
-
-   
-    relatoriosEnviados = len(relatorios[0][1] if relatorios else [])
-    ultimoRelatorio = relatorios[0][0] if relatorios else NULL
-    numAlunos = dados.count()
-    relatoriosPendentes = numAlunos - relatoriosEnviados
-    
     contexto = {
         "tab": dados,
-        "numeroAlunos": numAlunos,
+        "numeroAlunos": dados.count(),
         "relatorios": relatorios,
-        "ultimoRelatorio": ultimoRelatorio,
-        "relatoriosPendentes":relatoriosPendentes,
-        "relatoriosEnviados": relatoriosEnviados
+        "ultimoRelatorio": ultimoRelatorio
     }
 
     contexto['dados_usuarios'] = dados
@@ -218,13 +144,7 @@ def coordenadorHome(request):
 
 # Controller do configuraçoes
 
-@login_required(login_url="login")
 def configuracoes(request, relatorio):
-
-    if request.session['permissao'] == 1:
-
-        messages.add_message(request,messages.INFO,"Usuário não têm acesso a esse recurso")
-        return redirect("login")
 
     MESES_CHOICE = [
 
@@ -288,30 +208,9 @@ def configuracoes(request, relatorio):
 
 # Controller do avisos
 
-@login_required(login_url="login")
 def avisos(request):
 
-    if request.session.get('permissao') == 1:
-        
-        aluno = get_object_or_404(UsuarioModel,id = request.user.id)
-        avisos = AvisoModel.objects.filter(aluno=aluno).order_by("-data_envio")
-         
-        context = {
-
-            'avisos':avisos
-        }
-        return render(request, "avisos/avisosAluno.html",context)
-    
-    else:
-
-        avisos = AvisoModel.objects.all().order_by("-data_envio")
-
-        context = {
-
-            'avisos':avisos
-        }
-        return render(request, "avisos/avisosAdmin.html",context)
-
+    return render(request, "aluno/avisosAluno.html")
 
 # Controller do registro
 
@@ -403,13 +302,8 @@ def nova_senha(request):
 
 # Cadastro de usuarios
 
-@login_required(login_url="login")
+
 def cadastroUsuario(request):
-
-    if request.session['permissao'] == 1:
-
-        messages.add_message(request,messages.INFO,"Usuário não têm acesso a esse recurso")
-        return redirect("login")
 
     if request.method == "POST":
 
@@ -419,14 +313,14 @@ def cadastroUsuario(request):
 
         if(permissao == '1'):
 
-            novo_usuario = UsuarioModel()
+            novo_usuario = AlunoModel()
             novo_usuario.username = nome
             novo_usuario.email = email
             novo_usuario.permissao = 1
             novo_usuario.is_active = False
 
         elif permissao == '2':
-            novo_usuario = UsuarioModel
+            novo_usuario = TutorModel()
             novo_usuario.username = nome
             novo_usuario.email = email
             novo_usuario.permissao = 2
@@ -435,7 +329,7 @@ def cadastroUsuario(request):
             novo_usuario.is_staff = True
 
         else:
-            novo_usuario = UsuarioModel()
+            novo_usuario = CoordenadorModel()
             novo_usuario.username = nome
             novo_usuario.email = email
             novo_usuario.permissao = 3
@@ -453,9 +347,7 @@ def cadastroUsuario(request):
 
                 dados = {
 
-                    "url_redefinir": f"{request.headers['Origin']}/redefinicao_senha/{token}/{novo_usuario.id}",
-                    "assunto":"Definição de senha",
-                    
+                    "url_redefinir": f"{request.headers['Origin']}/redefinicao_senha/{token}/{novo_usuario.id}"
                 }
 
                 body_email = render_to_string(
@@ -479,13 +371,7 @@ def cadastroUsuario(request):
     return redirect("/configuracoes/usuario")
 
 
-@login_required(login_url="login")
 def editaUsuario(request, id):
-
-    if request.session['permissao'] == 1:
-
-        messages.add_message(request,messages.INFO,"Usuário não têm acesso a esse recurso")
-        return redirect("login")
 
     if request.method == "POST":
 
@@ -501,13 +387,8 @@ def editaUsuario(request, id):
 
     return redirect("/configuracoes/usuario")
 
-@login_required(login_url="login")
+
 def deletaUsuario(request):
-
-    if request.session['permissao'] == 1:
-
-        messages.add_message(request,messages.INFO,"Usuário não têm acesso a esse recurso")
-        return redirect("login")
 
     if request.method == 'POST':
 
@@ -518,13 +399,7 @@ def deletaUsuario(request):
     return redirect("/configuracoes/usuario")
 
 
-@login_required(login_url='login')
 def cadastrarDisciplina(request):
-
-    if request.session['permissao'] == 1:
-
-        messages.add_message(request,messages.INFO,"Usuário não têm acesso a esse recurso")
-        return redirect("login")
 
     if(request.method == "POST"):
 
@@ -563,14 +438,7 @@ def cadastrarDisciplina(request):
         return redirect("/configuracoes/disciplinas")
 
 
-@login_required(login_url='login')
 def editarDisciplina(request):
-
-    if request.session['permissao'] == 1:
-
-        messages.add_message(request,messages.INFO,"Usuário não têm acesso a esse recurso")
-        return redirect("login")
-
 
     id = request.POST.get("id")
     nome = request.POST.get("nome")
@@ -609,14 +477,7 @@ def editarDisciplina(request):
     return redirect("/configuracoes/disciplinas")
 
 
-@login_required(login_url="login")
 def deletarDisciplina(request):
-
-    if request.session['permissao'] == 1:
-
-        messages.add_message(request,messages.INFO,"Usuário não têm acesso a esse recurso")
-        return redirect("login")
-
 
     if(request.method == "POST"):
 
@@ -637,56 +498,40 @@ def deletarDisciplina(request):
 
     return redirect("/configuracoes/disciplinas")
 
-@login_required(login_url="login")
+
 def uploadAssinatura(request):
 
-    if request.session['permissao'] == 3:
-
-        messages.add_message(request,messages.INFO,"Usuário não têm acesso a esse recurso")
-        return redirect("login")
-
-
     if(request.method == "POST"):
-
 
         imagem_base64 = request.POST.get("imagem_base64")
         url = request.POST.get("urlOrigem")
         imagem = Image.open(io.BytesIO(base64.b64decode(imagem_base64)))
         output = io.BytesIO()
-
-    
         imagem.save(output, format='png', quality=85)
         output.seek(0)
-       
+        
+        aluno = get_object_or_404(AlunoModel,id=request.user.id)
+
         arquivo = InMemoryUploadedFile(output, 'ImageField',
-                                        "assinatura.png",
+                                       "assinatura.png",
                                        'image/png',
                                        sys.getsizeof(output), None)
-        
-        usuario = get_object_or_404(UsuarioModel,id=request.user.id)
-        assinatura = AssinaturaModel.objects.filter(usuario=usuario)
-        # Analiza se o aluno possui uma assinatura
-        if(assinatura):
-           
-            # Remove o arquivo anterios se existir
-        
-            assinatura.delete()
-            
 
         if(not arquivo):
 
             messages.add_message(request, messages.WARNING,
                                  "É necessário um arquivo")
 
-        assinatura = AssinaturaModel(usuario=usuario,url_assinatura=arquivo)
+        assinatura = AssinaturaModel(url_assinatura=arquivo)
 
         try:
-            
-            assinatura.save()
-            messages.add_message(request, messages.SUCCESS,
-                                "Assinatura salva com sucesso")
 
-        
+            assinatura.save()
+            aluno.assinatura = assinatura
+            aluno.save()
+            messages.add_message(request, messages.SUCCESS,
+                                 "Assinatura salva com sucesso")
+
         except Exception:
 
             messages.add_message(request, messages.ERROR,
@@ -694,10 +539,9 @@ def uploadAssinatura(request):
 
     return redirect(url)
 
-@login_required(login_url='login')
+
 def cadastrarRelatorio(request):
 
-        
     MESES_CHOICE = [
 
         [1, "Janeiro"],
@@ -784,9 +628,8 @@ def cadastrarRelatorio(request):
 
     return redirect('/configuracoes/relatorio')
 
-@login_required(login_url="login")
-def editaRelatorio(request):
 
+def editaRelatorio(request):
 
     MESES_CHOICE = [
 
@@ -865,10 +708,7 @@ def editaRelatorio(request):
     return redirect("/configuracoes/relatorio")
 
 
-@login_required(login_url="login")
 def deletarRelatorio(request):
-
-
     if (request.method == "POST"):
         id = request.POST.get("id")
         nome = request.POST.get("nome")
@@ -888,196 +728,87 @@ def deletarRelatorio(request):
     return redirect("/configuracoes/relatorio")
 
 
-@login_required(login_url='login')
 def salvarAtividades(request):
-
 
     if(request.method == "POST"):
 
-        disciplinas_id = request.POST.getlist("nomeDisciplina")
+        mesReferencia = request.POST.get("mesReferencia")
+        nomeDisciplina = request.POST.getlist("nomeDisciplina")
         dataInicio = request.POST.getlist("dataInicio")
         dataFim = request.POST.getlist("dataFim")
         atividades = request.POST.getlist("atividades")
         relatorioCorrente = request.POST.get("periodo_relatorio")
 
         relatorio = get_object_or_404(RelatorioModel,id=relatorioCorrente)
-        aluno = get_object_or_404(UsuarioModel, id=request.user.id)
-        relatorio_realizado = list(filter(lambda item: item.aluno == aluno,DocumentModel.objects.filter(relatorio=relatorio)))
         
-        if( relatorio_realizado ):
-            
-            messages.add_message(request,messages.WARNING,"Já foi realizado um relatório, edite ou exclua")
-            return redirect("/aluno/home")
-       
+        aluno = get_object_or_404(AlunoModel, id=request.user.id)
+        assintura_aluno = aluno.assinatura.url_assinatura
+          
+        # Importação do doc que será usado como template
+        doc = DocxTemplate("media/modelo/modeloRelatorio.docx")
+
         conteudo = []
 
-        for indice in range(len(disciplinas_id)):
-            nome_disciplina=DisciplinaModel.objects.get(id=disciplinas_id[indice]).nome
+        for indice in range(len(nomeDisciplina)):
             conteudo.append(
-                [nome_disciplina, dataInicio[indice], dataFim[indice], atividades[indice]])
+                [nomeDisciplina[indice], dataInicio[indice], dataFim[indice], atividades[indice]])
             
+
+        # Trocar informações pelas do modelo
+        context = {
+            "nomeAluno": aluno.username,
+            "mesReferencia": mesReferencia,
+            "conteudo": conteudo
+        }
+
+        # Trocar assinatura do aluno e tutor, pelas do modelo
+        doc.replace_pic('Imagem 10', 'media/uploads/assinatura/assinatura.png')
+        doc.replace_pic('Imagem 12', assintura_aluno)
+
+        # Aplicar a troca de informações
+        doc.render(context)
+        # Gerar documento
+
+        # Gerar um hash de
+        signer = TimestampSigner()
+        value = signer.sign(aluno.email).split(":")[-1]
+
+        # Cria um nome unico para o arquivo
+        nome_arquivo = f"media/relatorios/relatorio{value}.docx"
+        
+        try:
+
+
+            doc.save(nome_arquivo)
+
+        except Exception as e1:
+            
+            messages.add_message(request,messages.ERROR,"Não foi possivel gerar o documento")
+            return redirect("/aluno/home")
+
         novo_documento = DocumentModel()
         novo_documento.aluno = aluno
+        novo_documento.conteudo = ''
         novo_documento.relatorio = relatorio
-        novo_documento.data_update = datetime.now()
+        novo_documento.url_documento = nome_arquivo
 
         try:
 
             novo_documento.save()
 
 
-            for indice in range(len(atividades)):
+            for atividade in atividades:
 
                 relato_registro = RelatoModel()
                 relato_registro.documento = novo_documento
-                relato_registro.conteudo = atividades[indice]
-                relato_registro.disciplina = DisciplinaModel.objects.get(id=disciplinas_id[indice])
+                relato_registro.conteudo = atividade
                 relato_registro.save()
 
             messages.add_message(request,messages.SUCCESS, "Relatório gerado com sucesso")
-            
-            novo_documento.assinarDocumento()
 
         except Exception as e:
-       
+
             messages.add_message(request,messages.ERROR, "Não foi possivel gerar o documento")
 
 
         return redirect("/aluno/home")
-
-
-@login_required(login_url='login')
-def editarAtividade(request,id):
-
-    if request.session['permissao'] != 1:
-
-        messages.add_message(request,messages.INFO,"Usuário não têm acesso a esse recurso")
-        return redirect("login")
-
-    if request.method == 'GET':
-
-        documento = get_object_or_404(DocumentModel,id=id)
-        relatos = RelatoModel.objects.filter(documento=documento)
-
-        context = {
-
-            "documento": documento,
-            "relatos":relatos
-        }
-       
-    return render(request,'aluno/editarRelatorio.html',context)
-
-
-@login_required(login_url='login')
-def update_relatorio(request):
-
-    if(request.method == "POST"):
-
-        documento_id = request.POST.get("id_documento")
-        atividades = request.POST.getlist("atividades")
-        relato_ids = request.POST.getlist("id_relato")
-
-        documento = get_object_or_404(DocumentModel,id=documento_id)
-
-        for indice,id_relato in enumerate(relato_ids):
-
-            relato = RelatoModel.objects.get(id=id_relato)
-            relato.conteudo = atividades[indice]
-
-            relato.save()
-
-        try:
-            documento.assinarDocumento()
-            messages.add_message(request,messages.SUCCESS,"Documento alterado com sucesso!")
-
-        except Exception:
-
-            messages.add_message(request,messages.ERROR,"Documento não pode ser alterado")
-
-        return redirect("aluno_home")
-
-
-@login_required(login_url='login')
-def excluirDocumento(request):
-
-    
-    if request.method == 'POST':
-        
-        id = request.POST.get('id')
-        documento = get_object_or_404(DocumentModel,id=id)
-
-        try:
-            
-            documento.delete()
-            messages.add_message(request,messages.SUCCESS,"Documento deletado com sucesso!")
-
-        except Exception:
-
-            messages.add_message(request,messages.ERROR,"Documento não pode ser deletado")
-
-
-    return redirect('aluno_home')
-
-
-# Controle de avisos
-
-@login_required(login_url="login")
-def enviarAvisos(request):
-
-    usuario = get_object_or_404(UsuarioModel,id=request.user.id)
-
-    if request.method == 'POST':
-
-        destinatario = int(request.POST.get('destinatario'))
-        assunto = request.POST.get('assunto')
-        conteudo = request.POST.get('conteudo')
-
-        # EMAIL_HOST_USER
-
-        if destinatario == -1:
-
-            destinatarios = UsuarioModel.objects.filter(permissao=1)
-
-        emails = []
-
-        # if not emails:
-
-        #     messages.add_message(request,messages.WARNING,"Nenhum aluno foi encontrado. Cadastre primeiramente algum aluno")
-        #     return redirect('avisos')
-
-
-
-        for aluno in destinatarios:
-
-            emails.append(aluno.email)
-
-    
-        enviado = enviar_email(assunto=assunto,body_email=conteudo,destinatarios=emails)
-
-        if enviado:
-
-            aviso = AvisoModel()
-            aviso.conteudo =conteudo
-            aviso.email_origem = EMAIL_HOST_USER
-            aviso.usuario_remetente = usuario
-            aviso.assunto = assunto
-            aviso.data_envio = datetime.now()
-            aviso.save()
-
-            for aluno in destinatarios:
-
-                aviso.aluno.add(aluno)
-                aviso.save()
-            
-            messages.add_message(request,messages.SUCCESS,"Aviso enviado com sucesso!")
-
-        else:
-
-            messages.add_message(request,messages.ERROR,"Ocorreu um erro ao enviar o aviso!")
-
-
-     
-    return redirect('avisos')
-
-   
-

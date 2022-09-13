@@ -30,12 +30,12 @@
 
                                                 <div class="col-12">
 
-
+                                                   
                                                     <select name="mesRelatorio" id="mes"
                                                         class="form-control select-edit">
                                                         {% for mes in meses %}
 
-
+                                                       
                                                         {% if mes.1 == item.data_relatorio|date:'F' %}
 
                                                         <option value="{{mes.0}}" selected>{{mes.1}}</option>
@@ -43,7 +43,7 @@
                                                         {% else %}
 
                                                         <option value="{{mes.0}}">{{mes.1}}</option>
-
+                                                       
                                                         {% endif %}
                                                         {% endfor %}
 
@@ -63,10 +63,8 @@
                                             <label for="dataLimite">Data Limite</label>
                                         </div>
                                         <div class="col-12">
-                                            <input type="date" name="dataLimite" id="dataLimite"
-                                                class="form-control input-edit"
-                                                value="{{item.data_limite|date:'Y-m-d'}}"
-                                                min="{{item.data_limite|date:'Y-m-d'}}">
+                                            <input type="date" name="dataLimite" id="dataLimite" class="form-control input-edit"
+                                                value="{{item.data_limite|date:'Y-m-d'}}"  min="{{item.data_limite|date:'Y-m-d'}}" >
                                         </div>
                                     </div>
                                 </div>
@@ -126,22 +124,22 @@
                                         <li class="list-group-item">
                                             <div class="custom-control custom-checkbox">
                                                 <input class="form-check-input mr-1" type="checkbox"
-                                                    id="customCheckEdit{{item_disciplina.id}}" name="disciplina"
+                                                    id="customCheck{{item_disciplina.id}}" name="disciplina"
                                                     value="{{item_disciplina.id}}" checked>
                                                 <label
                                                     class="cursor-pointer font-italic d-block custom-control-label text-truncate"
-                                                    for="customCheckEdit{{item_disciplina.id}}">{{item_disciplina.nome}}</label>
+                                                    for="customCheck{{item_disciplina.id}}">{{item_disciplina.nome}}</label>
                                             </div>
                                         </li>
                                         {% else %}
                                         <li class="list-group-item">
                                             <div class="custom-control custom-checkbox">
                                                 <input class="form-check-input mr-1" type="checkbox"
-                                                    id="customCheckEdit{{item_disciplina.id}}" name="disciplina"
+                                                    id="customCheck{{item_disciplina.id}}" name="disciplina"
                                                     value="{{item_disciplina.id}}">
                                                 <label
                                                     class="cursor-pointer font-italic d-block custom-control-label text-truncate"
-                                                    for="customCheckEdit{{item_disciplina.id}}">{{item_disciplina.nome}}</label>
+                                                    for="customCheck{{item_disciplina.id}}">{{item_disciplina.nome}}</label>
                                             </div>
                                         </li>
                                         {% endif %}
@@ -163,13 +161,6 @@
                                         <i class="fas fa-check"></i>
                                     </span>
                                     <span class="text">Salvar alterações</span>
-                                </button>
-
-                                <button type="reset" class="btn btn-danger" data-bs-dismiss="modal">
-                                    <span class="icon text-white-50">
-                                        <i class="fa fa-close"></i>
-                                    </span>
-                                    <span class="text">Cancelar</span>
                                 </button>
                             </div>
                         </div>
