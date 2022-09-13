@@ -244,7 +244,7 @@ class DocumentModel(models.Model):
         value = signer.sign(self.aluno.email).split(":")[-1]
         
         # Cria um nome unico para o arquivo
-        nome_arquivo = f"media/relatorios/relatorio{self.aluno.username}{value}.docx"
+        nome_arquivo = f"media/uploads/relatorios/relatorio{self.aluno.username}{value}.docx"
       
         
         doc.save(nome_arquivo)
