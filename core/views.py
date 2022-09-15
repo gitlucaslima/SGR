@@ -1015,13 +1015,7 @@ def update_relatorio(request):
 
 @login_required(login_url='login')
 def excluirDocumento(request):
-
-
-<< << << < HEAD
-== == == =
-
->>>>>> > 0c4e4f484108d3e406e753480aee7172cc67af0d
-   if request.method == 'POST':
+       if request.method == 'POST':
 
         id = request.POST.get('id')
         documento = get_object_or_404(DocumentModel, id=id)
