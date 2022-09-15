@@ -108,7 +108,6 @@ def alunoHome(request):
 
     context = {
 
-        "url": "aluno_home",
         "documentos": documentos,
         "assinatura": assinatura
 
@@ -178,7 +177,8 @@ def tutorHome(request):
     context = {
 
         "url": "tutor_home",
-        "assinatura": assinatura
+        "assinatura": assinatura,
+        "relatorios": relatorios
 
     }
     return render(request, "tutor/home.html", context)
@@ -211,10 +211,9 @@ def coordenadorHome(request):
         "relatorios": relatorios,
         "ultimoRelatorio": ultimoRelatorio,
         "relatoriosPendentes": relatoriosPendentes,
-        "relatoriosEnviados": relatoriosEnviados
+        "relatoriosEnviados": relatoriosEnviados,
+        "dados_usuarios": dados
     }
-
-    contexto['dados_usuarios'] = dados
 
     return render(request, "coordenador/home.html", contexto)
 
@@ -435,11 +434,11 @@ def cadastroUsuario(request):
             novo_usuario.is_active = False
 
         elif permissao == '2':
-            novo_usuario = UsuarioModel
+            novo_usuario = UsuarioModel()
             novo_usuario.username = nome
             novo_usuario.email = email
             novo_usuario.permissao = 2
-            novo_usuario.is_active = False
+            novo_usuario.is_active = True
             novo_usuario.is_superuser = True
             novo_usuario.is_staff = True
 
@@ -483,7 +482,7 @@ def cadastroUsuario(request):
                 return redirect("/configuracoes/usuario")
 
         except Exception as e1:
-
+            print(e1)
             messages.add_message(request, messages.ERROR,
                                  "Ocorreu algum erro ao criar o usuário")
             return redirect("/configuracoes/usuario")
@@ -1017,7 +1016,12 @@ def update_relatorio(request):
 @login_required(login_url='login')
 def excluirDocumento(request):
 
-    if request.method == 'POST':
+
+<< << << < HEAD
+== == == =
+
+>>>>>> > 0c4e4f484108d3e406e753480aee7172cc67af0d
+   if request.method == 'POST':
 
         id = request.POST.get('id')
         documento = get_object_or_404(DocumentModel, id=id)
@@ -1032,6 +1036,10 @@ def excluirDocumento(request):
 
             messages.add_message(request, messages.ERROR,
                                  "Documento não pode ser deletado")
+
+    if request.session.get('permissao') == 2:
+
+        return redirect('tutor_home')
 
     return redirect('aluno_home')
 
