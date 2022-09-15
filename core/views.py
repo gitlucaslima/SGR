@@ -174,6 +174,9 @@ def tutorHome(request):
     tutor = get_object_or_404(UsuarioModel, id=request.user.id)
     assinatura = AssinaturaModel.objects.filter(usuario=tutor).first()
 
+    relatorios = [(relatorio, DocumentModel.objects.filter(relatorio=relatorio))
+                  for relatorio in RelatorioModel.objects.all().order_by("-data_relatorio")]
+
     context = {
 
         "url": "tutor_home",
@@ -460,14 +463,14 @@ def cadastroUsuario(request):
                 token = default_token_generator.make_token(novo_usuario)
 
                 dados = {
-                    "usuario": f"{novo_usuario.username}",
+
                     "url_redefinir": f"{request.headers['Origin']}/redefinicao_senha/{token}/{novo_usuario.id}",
                     "assunto": "Definição de senha",
 
                 }
 
                 body_email = render_to_string(
-                    "emailTemplate/base.html", dados)
+                    "emailTemplate/confirmacaoSenha.html", dados)
 
                 enviar_email("Confirmação de usuário",
                              body_email, [novo_usuario.email])
@@ -1015,7 +1018,8 @@ def update_relatorio(request):
 
 @login_required(login_url='login')
 def excluirDocumento(request):
-       if request.method == 'POST':
+
+    if request.method == 'POST':
 
         id = request.POST.get('id')
         documento = get_object_or_404(DocumentModel, id=id)
