@@ -1205,12 +1205,12 @@ def devolverDocumento(request):
             "emailTemplate/avisos.html", dados)
 
                 
-        enviado_com_sucesso = enviar_email("Confirmação de usuário",body_email,get_object_or_404(UsuarioModel,id=request.user.id),[documento.aluno])
+        enviado_com_sucesso = enviar_email("Documento devolvido",body_email,get_object_or_404(UsuarioModel,id=request.user.id),[documento.aluno])
 
         if enviado_com_sucesso:
 
             messages.add_message(request,messages.SUCCESS,"Documento devolvido com sucesso. Um email com enviado para o aluno")
-        messages.add_message(request,messages.SUCCESS,"Documento foi devolvido para o aluno")
+       
         return redirect("tutor_home")
 
 
