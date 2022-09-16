@@ -56,6 +56,10 @@ urlpatterns = [
 
     path("update_relatorio/",update_relatorio,name="update_relatorio"),
 
-    path("excluir_documento/",excluirDocumento,name="excluir_documento")
+    path("excluir_documento/",excluirDocumento,name="excluir_documento"),
+
+    path('assinar_documento/<int:documento>/',assinarDocumento,name='assinar_documento'),
+
+    path("devolver_documento/",devolverDocumento,name='devolver_documento')
 
 ]

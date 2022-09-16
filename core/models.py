@@ -1,14 +1,16 @@
 
 
 from datetime import date, datetime
+from ntpath import join
 import os
+from platform import python_compiler
 from django.contrib.auth.models import User
 from django.db import models
 from django_unused_media import cleanup
 from docxtpl import DocxTemplate
 from django.core.signing import TimestampSigner
 from sgr.settings import BASE_DIR
-
+from docx2pdf import convert
 from core.funcoes_auxiliares.converteData import converteMes
 
 # Variaveis globais
@@ -26,34 +28,36 @@ PERMISSAO_CHOICE = (
 )
 
 
-
-
 # Model de usuario
 class UsuarioModel(User):
 
     global STATUS_CHOICE
     global PERMISSAO_CHOICE
 
-
     permissao = models.IntegerField(
         choices=PERMISSAO_CHOICE
     )
 
-    def delete(self,using=None, keep_parents=False):
+    def delete(self, using=None, keep_parents=False):
 
         cleanup.remove_unused_media()
-        super(UsuarioModel,self).delete(using=using,keep_parents=keep_parents)    
+        super(UsuarioModel, self).delete(
+            using=using, keep_parents=keep_parents)
 
 # Model de assinatura
+
+
 class AssinaturaModel(models.Model):
 
-    usuario = models.ForeignKey(UsuarioModel,on_delete=models.CASCADE)
+    usuario = models.ForeignKey(UsuarioModel, on_delete=models.CASCADE)
     url_assinatura = models.ImageField(upload_to="uploads/assinatura/")
+    validada = models.BooleanField(default=False)
 
-    def delete(self,using=None, keep_parents=False):
+    def delete(self, using=None, keep_parents=False):
 
         cleanup.remove_unused_media()
-        super(AssinaturaModel,self).delete(using=using,keep_parents=keep_parents)
+        super(AssinaturaModel, self).delete(
+            using=using, keep_parents=keep_parents)
 
 
 # Model disciplina
@@ -98,10 +102,11 @@ class DisciplinaModel(models.Model):
         null=False
     )
 
-    def delete(self,using=None, keep_parents=False):
+    def delete(self, using=None, keep_parents=False):
 
         cleanup.remove_unused_media()
-        super(DisciplinaModel,self).delete(using=using,keep_parents=keep_parents)
+        super(DisciplinaModel, self).delete(
+            using=using, keep_parents=keep_parents)
 
 # Model Relatório
 
@@ -159,12 +164,11 @@ class RelatorioModel(models.Model):
 
     disciplina = models.ManyToManyField(DisciplinaModel)
 
-    def delete(self,using=None, keep_parents=False):
+    def delete(self, using=None, keep_parents=False):
 
         cleanup.remove_unused_media()
-        super(RelatorioModel,self).delete(using=using,keep_parents=keep_parents)
-
-
+        super(RelatorioModel, self).delete(
+            using=using, keep_parents=keep_parents)
 
 
 # Model Documento
@@ -175,7 +179,7 @@ class DocumentModel(models.Model):
         RelatorioModel,
         on_delete=models.CASCADE,
         null=False
-   
+
     )
 
     aluno = models.ForeignKey(
@@ -196,7 +200,6 @@ class DocumentModel(models.Model):
 
     url_documento = models.FileField(upload_to="relatorios/")
 
- 
     disciplina = models.ManyToManyField(
 
         DisciplinaModel,
@@ -205,13 +208,12 @@ class DocumentModel(models.Model):
 
     data_update = models.DateField()
 
-    
-    def delete(self,using=None, keep_parents=False):
+    def delete(self, using=None, keep_parents=False):
 
         cleanup.remove_unused_media()
-        super(DocumentModel,self).delete(using=using,keep_parents=keep_parents)
+        super(DocumentModel, self).delete(
+            using=using, keep_parents=keep_parents)
 
-    
     def gerarRelatorio(self):
 
         conteudo = []
@@ -222,40 +224,38 @@ class DocumentModel(models.Model):
             disciplina = relato.disciplina
             conteudo.append(
                 [disciplina.nome, disciplina.data_inicio.strftime("%d/%m/%Y"), disciplina.data_termino.strftime("%d/%m/%Y"), relato.conteudo])
-        
-    
+
         conteudo = {
             "nomeAluno": self.aluno.username,
             "mesReferencia":  converteMes(self.relatorio.data_relatorio.month),
             "conteudo": conteudo
         }
 
-
         doc = DocxTemplate("static/modelo/modeloRelatorio.docx")
 
         doc.render(conteudo)
-  
-        return doc  
 
-    def salvarRelatorio(self,doc: DocxTemplate):
-        
+        return doc
+
+    def salvarRelatorio(self, doc: DocxTemplate):
+
         # Exclui arquivo anterios da pasta
         cleanup.remove_unused_media()
 
         signer = TimestampSigner()
         value = signer.sign(self.aluno.email).split(":")[-1]
-        
+
         # Cria um nome unico para o arquivo
 
         # Cria diretorios se não existir diretorio cria
-        if not os.path.isdir(os.path.join(BASE_DIR,"media/relatorios")):
+        if not os.path.isdir(os.path.join(BASE_DIR, "media/relatorios")):
 
-            os.makedirs(os.path.join(BASE_DIR,"media/relatorios"))
-        
+            os.makedirs(os.path.join(BASE_DIR, "media/relatorios"))
 
-        nome_arquivo = f"media/relatorios/relatorio{self.aluno.username}{value}.docx"
-      
-        
+        nome_aluno = self.aluno.username.replace(' ', '_')
+
+        nome_arquivo = f"media/relatorios/relatorio{nome_aluno}{value}.docx"
+
         doc.save(nome_arquivo)
 
         # atualiza documento com o novo arquivo
@@ -264,11 +264,10 @@ class DocumentModel(models.Model):
         self.save()
 
 
-
     def assinarDocumento(self):
 
         doc = self.gerarRelatorio()
-        
+
         # Verifica se aluno e/ou tutor para assinar documento
         if self.aluno:
             assinatura = AssinaturaModel.objects.get(usuario=self.aluno)
@@ -276,23 +275,34 @@ class DocumentModel(models.Model):
 
         if self.tutor:
             assinatura = AssinaturaModel.objects.get(usuario=self.tutor)
-            doc.replace_pic('Imagem 10',assinatura.url_assinatura)            
+            doc.replace_pic('Imagem 10', assinatura.url_assinatura)            
 
-     
-        self.salvarRelatorio(doc)
+        try:
+            
+            self.salvarRelatorio(doc)
+            return True
+
+        except Exception:
+
+            return False
+
+
+        
+
 
 class RelatoModel(models.Model):
 
-    documento = models.ForeignKey(DocumentModel,on_delete=models.CASCADE)
-    disciplina = models.ForeignKey(DisciplinaModel,on_delete=models.CASCADE)    
+    documento = models.ForeignKey(DocumentModel, on_delete=models.CASCADE)
+    disciplina = models.ForeignKey(DisciplinaModel, on_delete=models.CASCADE)    
     conteudo = models.TextField()
 
-    def delete(self,using=None, keep_parents=False):
+    def delete(self, using=None, keep_parents=False):
 
         cleanup.remove_unused_media()
-        super(RelatoModel,self).delete(using=using,keep_parents=keep_parents)
+        super(RelatoModel, self).delete(using=using,keep_parents=keep_parents)
 
 # Model email administrativo da plataforma
+
 class EmailAdministrativo(models.Model):
 
     STATUS_CHOISE = (
@@ -317,9 +327,18 @@ class EmailAdministrativo(models.Model):
 # Models aviso
 class AvisoModel(models.Model):
 
-    email_origem = models.CharField(null=False,blank=False,max_length=100)
+    TIPO_CHOISE = (
 
-    assunto = models.CharField(null=False,blank=False,max_length=150)
+        (1,'aviso'),
+        (2,'comunicado'),
+        (3,'validacao_assinatura'),
+        (4,'reset_senha')
+    )
+
+    tipo_aviso = models.IntegerField(choices=TIPO_CHOISE,null=False)
+    email_origem = models.CharField(null=False, blank=False,max_length=100)
+
+    assunto = models.CharField(null=False, blank=False,max_length=150)
 
     usuario_remetente = models.ForeignKey(
 
@@ -338,5 +357,5 @@ class AvisoModel(models.Model):
 
         null=False
     )
-    
+
     data_envio = models.DateTimeField()
