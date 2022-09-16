@@ -17,7 +17,6 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from PIL import Image
 from sgr.settings import EMAIL_BACKEND, EMAIL_HOST_USER
-from django.utils import timezone
 from core.funcoes_auxiliares.data import isDateMaior, isDatePassou
 from core.funcoes_auxiliares.send_email import enviar_email
 from core.models import *
@@ -487,20 +486,14 @@ def cadastroUsuario(request):
                     "emailTemplate/confirmacaoSenha.html", dados)
 
                 
-                enviar_email("Confirmação de usuário",body_email,[novo_usuario.email])
+                enviado_com_sucesso = enviar_email("Confirmação de usuário",body_email,get_object_or_404(UsuarioModel,id=request.user.id),[novo_usuario])
 
-
-
-                aviso = AvisoModel()
-                aviso.assunto = "Confirmação de usuário"
-                aviso.conteudo =  body_email
-                aviso.tipo_aviso = 1
-                aviso.usuario_remetente = get_object_or_404(UsuarioModel,id=request.user.id)
-                aviso.data_envio = timezone.now()
-                aviso.save()
-                aviso.aluno.add(novo_usuario)
-                aviso.save()
-                messages.add_message(request,messages.SUCCESS,"Usuário foi criado com sucesso. Um email foi enviado para o email fornecido.")
+                if enviado_com_sucesso:                
+                    messages.add_message(request,messages.SUCCESS,"Usuário foi criado com sucesso. Um email foi enviado para o email fornecido.")
+                else:
+                    
+                    novo_usuario.delete()
+                    messages.add_message(request,messages.ERROR,"Email não pode ser enviado")
 
             except Exception as e:
                 print(e)
@@ -1159,15 +1152,16 @@ def assinarDocumento(request,documento):
     usuario = get_object_or_404(UsuarioModel,id=request.user.id)
     assinatura = AssinaturaModel.objects.filter(usuario=usuario).first()
 
+    if not assinatura:
+    
+        messages.add_message(request,messages.WARNING,"É necessário fornecer uma assinatura")    
+        return redirect("tutor_home")
+
     documento.tutor = usuario
     documento.save()    
 
     assinado = documento.assinarDocumento()
 
-    if not assinatura:
-        
-        messages.add_message(request,messages.WARNING,"É necessário fornecer uma assinatura")    
-        return redirect("tutor_home")
 
     if assinado:
         messages.add_message(request,messages.SUCCESS,"Documento assinado com sucesso!")    

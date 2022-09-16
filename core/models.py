@@ -1,9 +1,12 @@
 
 
+from asyncore import read
 from datetime import date, datetime
+import io
 from ntpath import join
 import os
 from platform import python_compiler
+import sys
 from django.contrib.auth.models import User
 from django.db import models
 from django_unused_media import cleanup
@@ -12,6 +15,7 @@ from django.core.signing import TimestampSigner
 from sgr.settings import BASE_DIR
 from docx2pdf import convert
 from core.funcoes_auxiliares.converteData import converteMes
+from django.core.files.uploadedfile import InMemoryUploadedFile
 
 # Variaveis globais
 STATUS_CHOICE = (
@@ -255,13 +259,15 @@ class DocumentModel(models.Model):
         nome_aluno = self.aluno.username.replace(' ', '_')
 
         nome_arquivo = f"media/relatorios/relatorio{nome_aluno}{value}.docx"
-
+        
         doc.save(nome_arquivo)
-
-        # atualiza documento com o novo arquivo
+        
+        nome_arquivo = f'relatorios/relatorio{nome_aluno}{value}.docx'
         self.url_documento = nome_arquivo
+        
 
         self.save()
+
 
 
     def assinarDocumento(self):
