@@ -148,8 +148,10 @@ def alunoRelatorio(request):
         return redirect('aluno_home')
 
     aluno = UsuarioModel.objects.get(id=request.user.id)
+
     relatorio_realizado = list(filter(
         lambda item: item.aluno == aluno, DocumentModel.objects.filter(relatorio=relatorio_aberto)))
+
     assinatura = AssinaturaModel.objects.filter(usuario=aluno)
 
     if not assinatura:
