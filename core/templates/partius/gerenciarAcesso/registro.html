@@ -21,58 +21,74 @@
 
     <!-- Custom styles for this template-->
     <link href=" {% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
+    <link href=" {% static 'css/login/registro.css' %}" rel="stylesheet">
+
 
 </head>
 
-<body class="bg-gradient-primary">
+<body class="bg-dark text-dark">
 
     <div class="container">
-
-        <div class="card o-hidden border-0 shadow-lg my-5">
-            <div class="card-body p-0">
-                <!-- Nested Row within Card Body -->
-                <div class="row">
-                    <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
-                    <div class="col-lg-7">
-                        <div class="p-5">
-                            <div class="text-center">
-                                <h1 class="h4 text-gray-900 mb-4">Primeiro usuário</h1>
-                            </div>
-                            <form class="user" action="{% url 'registro' %}" method="POST">
-                                {% csrf_token %}
-                                <div class="form-group">
-                                    <div class="mb-3 mb-sm-0">
-                                        <input type="text" name="usuario" class="form-control form-control-user" id="exampleFirstName"
-                                            placeholder="Usuário">
-                                    </div>
-                    
-                                </div>
-                                <div class="form-group">
-                                    <input type="email" name="email" class="form-control form-control-user" id="exampleInputEmail"
-                                        placeholder="Email">
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <input type="password" name="senha" class="form-control form-control-user"
-                                            id="exampleInputPassword" placeholder="Password">
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <input type="password" name="senha-repeat" class="form-control form-control-user"
-                                            id="exampleRepeatPassword" placeholder="Repeat Password">
-                                    </div>
-                                </div>
-                                <button type="submit" class="btn btn-primary btn-user btn-block">
-                                    Registrar usuário
-                                </button>
-                            </form>
-                            
+        <div class="card">
+          <section class="vh-100">
+            <div class="container-fluid h-custom">
+              <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="p-0">
+                  <img src={% static 'img/logos.png' %}
+                  class="img-fluid"  width="100%" height="100%" alt="Sample image">
+                  <hr>
+                </div>
+                <div class="col-md-9 col-lg-6 col-xl-5">
+                  <img src="https://cdn-icons-png.flaticon.com/512/914/914032.png"
+                    class="img-fluid" width="70%" height="70%" alt="Sample image">
+                </div>
+                <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+                  <div class="text-center">
+                        <h1 class="h1 text-gray-900 mb-4">WebAcademy</h1>
+                        <h4 class="h5 text-gray-900 mb-5">Por favor cadastre-se para obter seu primeiro acesso.</h4>
+                </div>
+    
+                <form class="user" action="{% url 'registro' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <div class="mb-3 mb-sm-0">
+                            <input type="text" name="usuario" class="form-control form-control-user" id="exampleFirstName"
+                                placeholder="Usuário">
+                        </div>
+        
+                    </div>
+                    <div class="form-group">
+                        <input type="email" name="email" class="form-control form-control-user" id="exampleInputEmail"
+                            placeholder="Email">
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-6 mb-3 mb-sm-0">
+                            <input type="password" name="senha" class="form-control form-control-user"
+                                id="exampleInputPassword" placeholder="Password">
+                        </div>
+                        <div class="col-sm-6">
+                            <input type="password" name="senha-repeat" class="form-control form-control-user"
+                                id="exampleRepeatPassword" placeholder="Repeat Password">
                         </div>
                     </div>
+                    <button type="submit" class="btn btn-primary btn-user btn-block">
+                        Registrar usuário
+                    </button>
+                </form>
+                
                 </div>
+              </div>
             </div>
+            <div class="d-flex flex-column flex-md-row text-center text-md-start justify-content-center py-4 px-4 px-xl-5 bg-primary">
+              <!-- Copyright -->
+              <div class="text-white mb-3 mb-md-0">
+                WebAcademy | Copyright © 2020. All rights reserved.
+              </div>
+              <!-- Copyright -->
+            </div>
+          
+          </section>
         </div>
-
-    </div>
 
     <!-- Bootstrap core JavaScript-->
     <script src=" {% static 'vendor/jquery/jquery.min.js' %} "></script>

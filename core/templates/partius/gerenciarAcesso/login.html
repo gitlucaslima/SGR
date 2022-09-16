@@ -19,74 +19,71 @@
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
-    <!-- Custom styles for this template-->
+    <!-- Custom styles for this template -->
     <link href=" {% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
+    <link href=" {% static 'css/login/registro.css' %}" rel="stylesheet">
+
 
 </head>
+<body class="bg-dark text-dark">
 
-<body class="bg-gradient-primary">
-
-    <div class="container">
-
-        <!-- Outer Row -->
-        <div class="row justify-content-center">
-
-            <div class="col-xl-10 col-lg-12 col-md-9">
-
-                <div class="card o-hidden border-0 shadow-lg my-5">
-                    <div class="card-body p-0">
-                        <!-- Nested Row within Card Body -->
-                        <div class="row">
-                            <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
-                            <div class="col-lg-6">
-                                <div class="p-5">
-                                    <div class="text-center">
-                                        <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
-                                    </div>
-                                    <form class="user" action="{% url 'login' %}" method="POST">
-                                        {% csrf_token %}
-                                        <div class="form-group">
-                                            <input type="email" class="form-control form-control-user"
-                                                id="exampleInputEmail" name="email" aria-describedby="emailHelp"
-                                                placeholder="Email">
-                                        </div>
-                                        <div class="form-group">
-                                            <input type="password" name="senha" class="form-control form-control-user"
-                                                id="exampleInputPassword" placeholder="Senha">
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="custom-control custom-checkbox small">
-                                                <input type="checkbox" class="custom-control-input" id="customCheck">
-                                                <label class="custom-control-label" for="customCheck">Lembre-me</label>
-                                            </div>
-                                        </div>
-                                        <button class="btn btn-primary btn-user btn-block">
-                                            Entrar
-                                        </button>
-                                    </form>
-                                  
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+  <div class="container">
+    <div class="card">
+      <section class="vh-100">
+        <div class="container-fluid h-custom">
+          <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="p-0">
+              <img src={% static 'img/logos.png' %}
+              class="img-fluid"  width="100%" height="100%" alt="Sample image">
+              <hr>
+            </div>
+            <div class="col-md-9 col-lg-6 col-xl-5">
+              <img src="https://cdn-icons-png.flaticon.com/512/914/914032.png"
+                class="img-fluid" width="70%" height="70%" alt="Sample image">
+            </div>
+            <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+              <div class="text-center">
+                <h1 class="h1 text-gray-900 mb-4">Login!</h1>
             </div>
 
+              <form class="user" action="{% url 'login' %}" method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <input type="email" class="form-control form-control-user"
+                        id="exampleInputEmail" name="email" aria-describedby="emailHelp"
+                        placeholder="Email">
+                </div>
+                <div class="form-group">
+                    <input type="password" name="senha" class="form-control form-control-user"
+                        id="exampleInputPassword" placeholder="Senha">
+                </div>
+                <button class="btn btn-primary btn-user btn-block">
+                    Entrar
+                </button>
+            </form>
+            
+            </div>
+          </div>
         </div>
-
+        <div class="d-flex flex-column flex-md-row text-center text-md-start justify-content-center py-4 px-4 px-xl-5 bg-primary">
+          <!-- Copyright -->
+          <div class="text-white mb-3 mb-md-0">
+            WebAcademy | Copyright © 2020. All rights reserved.
+          </div>
+          <!-- Copyright -->
+        </div>
+      
+      </section>
     </div>
-
-    <!-- Bootstrap core JavaScript-->
-    <script src=" {% static 'vendor/jquery/jquery.min.js' %} "></script>
-    <script src=" {% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %} "></script>
-
-    <!-- Core plugin JavaScript-->
-    <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %} "></script>
-
-    <!-- Custom scripts for all pages-->
-    <script src="{% static 'js/sb-admin-2.min.js' %} "></script>
-
+        <!-- Bootstrap core JavaScript-->
+        <script src=" {% static 'vendor/jquery/jquery.min.js' %} "></script>
+        <script src=" {% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %} "></script>
+    
+        <!-- Core plugin JavaScript-->
+        <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %} "></script>
+    
+        <!-- Custom scripts for all pages-->
+        <script src="{% static 'js/sb-admin-2.min.js' %} "></script>
 </body>
 
 </html>

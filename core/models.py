@@ -1,21 +1,23 @@
 
 
+import io
+import os
+import sys
 from asyncore import read
 from datetime import date, datetime
-import io
 from ntpath import join
-import os
 from platform import python_compiler
-import sys
+
 from django.contrib.auth.models import User
+from django.core.files.uploadedfile import InMemoryUploadedFile
+from django.core.signing import TimestampSigner
 from django.db import models
 from django_unused_media import cleanup
-from docxtpl import DocxTemplate
-from django.core.signing import TimestampSigner
-from sgr.settings import BASE_DIR
 from docx2pdf import convert
+from docxtpl import DocxTemplate
+from sgr.settings import BASE_DIR
+
 from core.funcoes_auxiliares.converteData import converteMes
-from django.core.files.uploadedfile import InMemoryUploadedFile
 
 # Variaveis globais
 STATUS_CHOICE = (
@@ -259,16 +261,13 @@ class DocumentModel(models.Model):
         nome_aluno = self.aluno.username.replace(' ', '_')
 
         nome_arquivo = f"media/relatorios/relatorio{nome_aluno}{value}.docx"
-        
+
         doc.save(nome_arquivo)
-        
+
         nome_arquivo = f'relatorios/relatorio{nome_aluno}{value}.docx'
         self.url_documento = nome_arquivo
-        
 
         self.save()
-
-
 
     def assinarDocumento(self):
 
@@ -277,14 +276,14 @@ class DocumentModel(models.Model):
         # Verifica se aluno e/ou tutor para assinar documento
         if self.aluno:
             assinatura = AssinaturaModel.objects.get(usuario=self.aluno)
-            doc.replace_pic('Imagem 12', assinatura.url_assinatura)
+            doc.replace_pic('Imagem 10', assinatura.url_assinatura)
 
         if self.tutor:
             assinatura = AssinaturaModel.objects.get(usuario=self.tutor)
-            doc.replace_pic('Imagem 10', assinatura.url_assinatura)            
+            doc.replace_pic('Imagem 12', assinatura.url_assinatura)
 
         try:
-            
+
             self.salvarRelatorio(doc)
             return True
 
@@ -293,21 +292,19 @@ class DocumentModel(models.Model):
             return False
 
 
-        
-
-
 class RelatoModel(models.Model):
 
     documento = models.ForeignKey(DocumentModel, on_delete=models.CASCADE)
-    disciplina = models.ForeignKey(DisciplinaModel, on_delete=models.CASCADE)    
+    disciplina = models.ForeignKey(DisciplinaModel, on_delete=models.CASCADE)
     conteudo = models.TextField()
 
     def delete(self, using=None, keep_parents=False):
 
         cleanup.remove_unused_media()
-        super(RelatoModel, self).delete(using=using,keep_parents=keep_parents)
+        super(RelatoModel, self).delete(using=using, keep_parents=keep_parents)
 
 # Model email administrativo da plataforma
+
 
 class EmailAdministrativo(models.Model):
 
@@ -335,16 +332,16 @@ class AvisoModel(models.Model):
 
     TIPO_CHOISE = (
 
-        (1,'aviso'),
-        (2,'comunicado'),
-        (3,'validacao_assinatura'),
-        (4,'reset_senha')
+        (1, 'aviso'),
+        (2, 'comunicado'),
+        (3, 'validacao_assinatura'),
+        (4, 'reset_senha')
     )
 
-    tipo_aviso = models.IntegerField(choices=TIPO_CHOISE,null=False)
-    email_origem = models.CharField(null=False, blank=False,max_length=100)
+    tipo_aviso = models.IntegerField(choices=TIPO_CHOISE, null=False)
+    email_origem = models.CharField(null=False, blank=False, max_length=100)
 
-    assunto = models.CharField(null=False, blank=False,max_length=150)
+    assunto = models.CharField(null=False, blank=False, max_length=150)
 
     usuario_remetente = models.ForeignKey(
 
