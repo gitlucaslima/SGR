@@ -21,14 +21,20 @@ from core.funcoes_auxiliares.data import isDateMaior, isDatePassou
 from core.funcoes_auxiliares.send_email import enviar_email
 from core.models import *
 from sgr.settings import EMAIL_BACKEND, EMAIL_HOST_USER
+from django.db.models import Q
 
 # Controllers do aluno
 
 # Controller do login
 def login(request):
 
+    if request.session.get('permissao'):
+
+        logout(request)
     
     permissao = request.session.get('permissao')
+
+
     if permissao:
 
         if permissao == 1:
@@ -281,8 +287,10 @@ def configuracoes(request, relatorio):
 
     if relatorio == 'usuario':
 
-        dados = UsuarioModel.objects.all()
-
+        if request.session.get('permissao') == 3:
+            dados = UsuarioModel.objects.all()
+        else:
+            dados = UsuarioModel.objects.filter(permissao=1)
         contexto['dados_usuarios'] = dados
 
     return render(request, "configuracoes/configuracoes.html", contexto)
@@ -418,6 +426,9 @@ def cadastroUsuario(request):
         nome = request.POST.get("nome")
         email = request.POST.get("email")
         permissao = request.POST.get("permissao")
+        status = request.POST.get("status")
+
+        status = True if status else False
 
         if(permissao == '1'):
 
@@ -425,14 +436,14 @@ def cadastroUsuario(request):
             novo_usuario.username = nome
             novo_usuario.email = email
             novo_usuario.permissao = 1
-            novo_usuario.is_active = False
+            novo_usuario.is_active = status
 
         elif permissao == '2':
             novo_usuario = UsuarioModel()
             novo_usuario.username = nome
             novo_usuario.email = email
             novo_usuario.permissao = 2
-            novo_usuario.is_active = True
+            novo_usuario.is_active = status
             novo_usuario.is_superuser = True
             novo_usuario.is_staff = True
 
@@ -441,7 +452,7 @@ def cadastroUsuario(request):
             novo_usuario.username = nome
             novo_usuario.email = email
             novo_usuario.permissao = 3
-            novo_usuario.is_active = True
+            novo_usuario.is_active = status
             novo_usuario.is_superuser = True
             novo_usuario.is_staff = True
 
@@ -463,18 +474,30 @@ def cadastroUsuario(request):
                 body_email = render_to_string(
                     "emailTemplate/confirmacaoSenha.html", dados)
 
+                
                 enviar_email("Confirmação de usuário",body_email,[novo_usuario.email])
 
+
+                aviso = AvisoModel()
+                aviso.assunto = "Confirmação de usuário"
+                aviso.conteudo =  body_email
+                aviso.tipo_aviso = 1
+                aviso.usuario_remetente = get_object_or_404(UsuarioModel,id=request.user.id)
+                aviso.data_envio = datetime.now()
+                aviso.save()
+                aviso.aluno.add(novo_usuario)
+                aviso.save()
                 messages.add_message(request,messages.SUCCESS,"Usuário foi criado com sucesso. Um email foi enviado para o email fornecido.")
-            
+
             except Exception as e:
-                
+                print(e)
+                novo_usuario.delete()
                 messages.add_message(request,messages.ERROR,"Email não pode ser enviado")
                 return redirect("/configuracoes/usuario")
                 
                
         except Exception as e1:
-            print(e1)
+            
             messages.add_message(request,messages.ERROR,"Ocorreu algum erro ao criar o usuário")
             return redirect("/configuracoes/usuario")
 
@@ -515,6 +538,15 @@ def deletaUsuario(request):
 
         id = request.POST.get('id')
         instance = get_object_or_404(UsuarioModel, id=id)
+
+        if instance.permissao == 3:
+
+            administradores = UsuarioModel.objects.filter(permissao=3)
+
+            if len(administradores) == 1:
+
+                messages.add_message(request,messages.INFO,"Operação não pode ser realizada. Para o funcionamento correto do sistema é necessário no mínimo um usuário com esse nível de acesso")
+                return redirect("/configuracoes/usuario")
         instance.delete()
 
     return redirect("/configuracoes/usuario")
@@ -941,7 +973,7 @@ def salvarAtividades(request):
 
             messages.add_message(request,messages.SUCCESS, "Relatório gerado com sucesso")
         except Exception as e:
-            print(e)
+            
             novo_documento.delete()
             messages.add_message(request,messages.ERROR, "Não foi possivel gerar o documento")
 
@@ -1087,4 +1119,20 @@ def enviarAvisos(request):
     return redirect('avisos')
 
    
+@login_required(login_url="login")
+def assinarDocumento(request):
 
+    if request.method == 'POST':
+
+        assinatura_aluno = request.POST.get("assinatura_aluno")
+
+        assinatura = get_object_or_404(AssinaturaModel,id=assinatura_aluno)
+
+        if not assinatura.url_assinatura or not assinatura.usuario:
+
+            messages.add_message(request,messages.ERROR,"Assinatura não pode ser validada")
+            return redirect("tutor_home")
+
+        assinatura.validada = True
+
+        

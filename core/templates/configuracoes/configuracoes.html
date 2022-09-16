@@ -75,7 +75,11 @@
         <a class="nav-link active tab-configuracao" data-opcao-tab="usuario" id="profile-tab" data-toggle="tab"
             href="#perfil" role="tab" aria-controls="profile" aria-selected="false">
             <i class="bi bi-person-fill"></i>
+            {% if request.session.permissao == 3 %}
             Usuário
+            {% else  %}
+            Aluno
+            {% endif %}
         </a>
     </li>
     {% else %}
@@ -84,7 +88,11 @@
         <a class="nav-link tab-configuracao" data-opcao-tab="usuario" id="profile-tab" data-toggle="tab" href="#perfil"
             role="tab" aria-controls="profile" aria-selected="false">
             <i class="bi bi-person-fill"></i>
+            {% if request.session.permissao == 3 %}
             Usuário
+            {% else  %}
+            Aluno
+            {% endif %}
         </a>
     </li>
 
