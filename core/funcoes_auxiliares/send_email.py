@@ -33,11 +33,11 @@ def enviar_email(assunto: str, body_email: str, remetente, destinatarios: list) 
 
         except Exception as e:
             aviso.delete()
-            print(e)
+       
             return False
 
 
     except Exception as e2:
-        print(e2)
+       
         return False         
    
