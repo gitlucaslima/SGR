@@ -1,0 +1,41 @@
+<div class="modal fade" id="modalDevolverDocumento{{documento.id}}" aria-labelledby="modalDevolverDocumento{{documento.id}}"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><b>Devolver documento</b></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <form action="{% url 'excluir_documento' %}" method="post">
+                    {% csrf_token %}
+                    <div class="row">
+
+                        <div class="col">
+
+                         
+                            <input type="hidden" name="documento" value="{{documento.id}}">
+                            <span>Descreva os problemas encontrados?</span>
+                            <textarea name="conteudo" class="form-control mt-3 mb-3" placeholder="Digite aqui"></textarea>
+                        </div>
+                        
+                    </div>
+                    <div class="row">
+                        <div class="col text-center">
+
+                            <button type="submit" class="btn btn-success">Apagar</button>
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                            data-bs-target="#modalDevolverDocumento{{documento.id}}" data-bs-whatever="@mdo">Cancelar
+                        </div>
+                    </div>
+                </button>
+                </form>
+            
+
+            </div>
+        </div>
+
+    </div>
+</div>
+

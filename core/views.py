@@ -1,5 +1,6 @@
 import base64
 import io
+from pydoc import doc
 import sys
 from asyncio.windows_events import NULL
 from datetime import datetime
@@ -16,15 +17,12 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from PIL import Image
 from sgr.settings import EMAIL_BACKEND, EMAIL_HOST_USER
-
+from django.utils import timezone
 from core.funcoes_auxiliares.data import isDateMaior, isDatePassou
 from core.funcoes_auxiliares.send_email import enviar_email
 from core.models import *
-<<<<<<< HEAD
 from sgr.settings import EMAIL_BACKEND, EMAIL_HOST_USER
 from django.db.models import Q
-=======
->>>>>>> 4edf5800a732b39c64140ae2ad907be33f467d7d
 
 # Controllers do aluno
 
@@ -33,13 +31,10 @@ from django.db.models import Q
 
 def login(request):
 
-<<<<<<< HEAD
     if request.session.get('permissao'):
 
         logout(request)
     
-=======
->>>>>>> 4edf5800a732b39c64140ae2ad907be33f467d7d
     permissao = request.session.get('permissao')
 
 
@@ -147,7 +142,7 @@ def alunoRelatorio(request):
                              "Não existe nenhum relatório disponível")
         return redirect('aluno_home')
 
-    if isDatePassou(relatorio_aberto.data_limite):
+    if not isDatePassou(relatorio_aberto.data_limite):
 
         messages.add_message(request, messages.WARNING,
                              "Período para entrega do relatório já passou!")
@@ -491,9 +486,9 @@ def cadastroUsuario(request):
                 body_email = render_to_string(
                     "emailTemplate/confirmacaoSenha.html", dados)
 
-<<<<<<< HEAD
                 
                 enviar_email("Confirmação de usuário",body_email,[novo_usuario.email])
+
 
 
                 aviso = AvisoModel()
@@ -501,7 +496,7 @@ def cadastroUsuario(request):
                 aviso.conteudo =  body_email
                 aviso.tipo_aviso = 1
                 aviso.usuario_remetente = get_object_or_404(UsuarioModel,id=request.user.id)
-                aviso.data_envio = datetime.now()
+                aviso.data_envio = timezone.now()
                 aviso.save()
                 aviso.aluno.add(novo_usuario)
                 aviso.save()
@@ -511,29 +506,11 @@ def cadastroUsuario(request):
                 print(e)
                 novo_usuario.delete()
                 messages.add_message(request,messages.ERROR,"Email não pode ser enviado")
-=======
-                enviar_email("Confirmação de usuário",
-                             body_email, [novo_usuario.email])
-
-                messages.add_message(
-                    request, messages.SUCCESS, "Usuário foi criado com sucesso. Um email foi enviado para o email fornecido.")
-
-            except Exception as e:
-
-                messages.add_message(
-                    request, messages.ERROR, "Email não pode ser enviado")
->>>>>>> 4edf5800a732b39c64140ae2ad907be33f467d7d
                 return redirect("/configuracoes/usuario")
 
         except Exception as e1:
-<<<<<<< HEAD
-            
-            messages.add_message(request,messages.ERROR,"Ocorreu algum erro ao criar o usuário")
-=======
             print(e1)
-            messages.add_message(request, messages.ERROR,
-                                 "Ocorreu algum erro ao criar o usuário")
->>>>>>> 4edf5800a732b39c64140ae2ad907be33f467d7d
+            messages.add_message(request,messages.ERROR,"Ocorreu algum erro ao criar o usuário")
             return redirect("/configuracoes/usuario")
 
     return redirect("/configuracoes/usuario")
@@ -722,7 +699,6 @@ def uploadAssinatura(request):
     if(request.method == "POST"):
 
         imagem_base64 = request.POST.get("imagem_base64")
-        url = request.POST.get("urlOrigem")
         imagem = Image.open(io.BytesIO(base64.b64decode(imagem_base64)))
         output = io.BytesIO()
 
@@ -761,7 +737,19 @@ def uploadAssinatura(request):
             messages.add_message(request, messages.ERROR,
                                  "Ocorreu um error ao salvar o arquivo")
 
-    return redirect(url)
+    if request.session.get('permissao') == 1:
+        return redirect('aluno_home')
+
+    elif request.session.get("permissao") == 2:
+
+        return redirect('tutor_home')
+
+    else:
+
+        return redirect('login')
+
+
+
 
 
 @login_required(login_url='login')
@@ -1154,25 +1142,63 @@ def enviarAvisos(request):
                                  "Ocorreu um erro ao enviar o aviso!")
 
     return redirect('avisos')
-<<<<<<< HEAD
 
    
 @login_required(login_url="login")
-def assinarDocumento(request):
+def assinarDocumento(request,documento):
+
+    
+    documento = get_object_or_404(DocumentModel,id=documento)
+
+    if documento.tutor:
+
+        messages.add_message(request,messages.WARNING,"Documento já foi assinado!")    
+        return redirect("tutor_home")
+
+
+    usuario = get_object_or_404(UsuarioModel,id=request.user.id)
+    assinatura = AssinaturaModel.objects.filter(usuario=usuario).first()
+
+    documento.tutor = usuario
+    documento.save()    
+
+    assinado = documento.assinarDocumento()
+
+    if not assinatura:
+        
+        messages.add_message(request,messages.WARNING,"É necessário fornecer uma assinatura")    
+        return redirect("tutor_home")
+
+    if assinado:
+        messages.add_message(request,messages.SUCCESS,"Documento assinado com sucesso!")    
+    
+    else:
+        
+        messages.add_message(request,messages.ERROR,"Documento não pode ser assinado!")
+
+
+    return redirect("tutor_home")
+    
+
+        
+def devolverDocumento(request):
 
     if request.method == 'POST':
 
-        assinatura_aluno = request.POST.get("assinatura_aluno")
+        documento = request.POST.get('documento')
+        conteudo = request.POST.get('conteudo')
 
-        assinatura = get_object_or_404(AssinaturaModel,id=assinatura_aluno)
+        documento = get_object_or_404(DocumentModel,id=documento)
 
-        if not assinatura.url_assinatura or not assinatura.usuario:
+        if documento.tutor:
 
-            messages.add_message(request,messages.ERROR,"Assinatura não pode ser validada")
-            return redirect("tutor_home")
+            documento.tutor = NULL
 
-        assinatura.validada = True
+        documento.save()
 
-        
-=======
->>>>>>> 4edf5800a732b39c64140ae2ad907be33f467d7d
+        messages.add_message(request,messages.SUCCESS,"Documento foi devolvido para o aluno")
+        return redirect("tutor_home")
+
+
+
+

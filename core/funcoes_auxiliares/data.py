@@ -17,6 +17,7 @@ def isDateMaior(dataInicio,dataFim):
 def isDatePassou(data):
 
     print(data)
+    print(date(datetime.now().year,datetime.now().month,datetime.now().day))
     return data > date(datetime.now().year,datetime.now().month,datetime.now().day)
 
   

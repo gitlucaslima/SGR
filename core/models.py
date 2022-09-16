@@ -277,7 +277,17 @@ class DocumentModel(models.Model):
             assinatura = AssinaturaModel.objects.get(usuario=self.tutor)
             doc.replace_pic('Imagem 10', assinatura.url_assinatura)            
 
-        self.salvarRelatorio(doc)
+        try:
+            
+            self.salvarRelatorio(doc)
+            return True
+
+        except Exception:
+
+            return False
+
+
+        
 
 
 class RelatoModel(models.Model):
