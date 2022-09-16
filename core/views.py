@@ -1183,16 +1183,34 @@ def devolverDocumento(request):
 
         documento = request.POST.get('documento')
         conteudo = request.POST.get('conteudo')
-
+        
         documento = get_object_or_404(DocumentModel,id=documento)
 
         if documento.tutor:
 
-            documento.tutor = NULL
+            documento.tutor = None
 
         documento.save()
+        documento.assinarDocumento()
 
-        messages.add_message(request,messages.SUCCESS,"Documento foi devolvido para o aluno")
+        conteudo = conteudo if conteudo.strip() else "Seu relatório foi devolvido, por favor corrija."
+        dados = {
+
+            "assunto": "Documento devolvido",
+            "aviso":conteudo
+
+        }
+
+        body_email = render_to_string(
+            "emailTemplate/avisos.html", dados)
+
+                
+        enviado_com_sucesso = enviar_email("Documento devolvido",body_email,get_object_or_404(UsuarioModel,id=request.user.id),[documento.aluno])
+
+        if enviado_com_sucesso:
+
+            messages.add_message(request,messages.SUCCESS,"Documento devolvido com sucesso. Um email com enviado para o aluno")
+       
         return redirect("tutor_home")
 
 
