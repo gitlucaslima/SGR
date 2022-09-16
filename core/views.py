@@ -1,6 +1,5 @@
 import base64
 import io
-
 import sys
 from asyncio.windows_events import NULL
 from datetime import datetime
@@ -16,22 +15,31 @@ from django.db import IntegrityError
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from PIL import Image
+from sgr.settings import EMAIL_BACKEND, EMAIL_HOST_USER
 
 from core.funcoes_auxiliares.data import isDateMaior, isDatePassou
 from core.funcoes_auxiliares.send_email import enviar_email
 from core.models import *
+<<<<<<< HEAD
 from sgr.settings import EMAIL_BACKEND, EMAIL_HOST_USER
 from django.db.models import Q
+=======
+>>>>>>> 4edf5800a732b39c64140ae2ad907be33f467d7d
 
 # Controllers do aluno
 
 # Controller do login
+
+
 def login(request):
 
+<<<<<<< HEAD
     if request.session.get('permissao'):
 
         logout(request)
     
+=======
+>>>>>>> 4edf5800a732b39c64140ae2ad907be33f467d7d
     permissao = request.session.get('permissao')
 
 
@@ -53,7 +61,6 @@ def login(request):
 
     if(not is_usuarios):
 
-
         return redirect('registro')
 
     if request.method == "GET":
@@ -63,13 +70,13 @@ def login(request):
     email = request.POST.get('email')
     senha = request.POST.get("senha")
 
-    usuario =  UsuarioModel.objects.filter(email=email).first()
-    
+    usuario = UsuarioModel.objects.filter(email=email).first()
+
     if(not usuario):
 
-        messages.add_message(request,messages.ERROR,"Login ou senha inválidos")
+        messages.add_message(request, messages.ERROR,
+                             "Login ou senha inválidos")
         return redirect("login")
-
 
     is_equal_password = usuario.check_password(senha)
 
@@ -94,7 +101,6 @@ def login(request):
 
 def logout(request):
 
-
     logout_django(request)
 
     return redirect("login")
@@ -105,19 +111,19 @@ def alunoHome(request):
 
     if request.session['permissao'] != 1:
 
-        messages.add_message(request,messages.INFO,"Usuário não têm acesso a esse recurso")
+        messages.add_message(request, messages.INFO,
+                             "Usuário não têm acesso a esse recurso")
         return redirect("login")
 
-    aluno = get_object_or_404(UsuarioModel,id=request.user.id)
+    aluno = get_object_or_404(UsuarioModel, id=request.user.id)
     assinatura = AssinaturaModel.objects.filter(usuario=aluno).first()
-    
-    documentos = DocumentModel.objects.filter(aluno=aluno).order_by('-id')
 
+    documentos = DocumentModel.objects.filter(aluno=aluno).order_by('-id')
 
     context = {
 
         "documentos": documentos,
-        "assinatura":assinatura
+        "assinatura": assinatura
 
     }
     return render(request, "aluno/home.html", context)
@@ -128,7 +134,8 @@ def alunoRelatorio(request):
 
     if request.session['permissao'] != 1:
 
-        messages.add_message(request,messages.INFO,"Usuário não têm acesso a esse recurso")
+        messages.add_message(request, messages.INFO,
+                             "Usuário não têm acesso a esse recurso")
         return redirect("login")
 
     relatorio_aberto = RelatorioModel.objects.filter(
@@ -136,29 +143,31 @@ def alunoRelatorio(request):
 
     if not relatorio_aberto:
 
-        messages.add_message(request,messages.WARNING,"Não existe nenhum relatório disponível")
+        messages.add_message(request, messages.WARNING,
+                             "Não existe nenhum relatório disponível")
         return redirect('aluno_home')
-    
+
     if isDatePassou(relatorio_aberto.data_limite):
 
-        messages.add_message(request,messages.WARNING,"Período para entrega do relatório já passou!")
+        messages.add_message(request, messages.WARNING,
+                             "Período para entrega do relatório já passou!")
         return redirect('aluno_home')
 
-
-
     aluno = UsuarioModel.objects.get(id=request.user.id)
-    relatorio_realizado = list(filter(lambda item: item.aluno == aluno,DocumentModel.objects.filter(relatorio=relatorio_aberto)))
-    assinatura = AssinaturaModel.objects.filter(usuario = aluno)
+    relatorio_realizado = list(filter(
+        lambda item: item.aluno == aluno, DocumentModel.objects.filter(relatorio=relatorio_aberto)))
+    assinatura = AssinaturaModel.objects.filter(usuario=aluno)
 
     if not assinatura:
-        messages.add_message(request,messages.WARNING,"Forneça uma assinatura.")
+        messages.add_message(request, messages.WARNING,
+                             "Forneça uma assinatura.")
         return redirect("/aluno/home")
 
     if(relatorio_realizado):
-        
-        messages.add_message(request,messages.WARNING,"Já foi realizado um relatório, edite ou exclua")
-        return redirect("/aluno/home")
 
+        messages.add_message(request, messages.WARNING,
+                             "Já foi realizado um relatório, edite ou exclua")
+        return redirect("/aluno/home")
 
     contexto = {
 
@@ -172,19 +181,21 @@ def tutorHome(request):
 
     if request.session['permissao'] != 2:
 
-        messages.add_message(request,messages.INFO,"Usuário não têm acesso a esse recurso")
+        messages.add_message(request, messages.INFO,
+                             "Usuário não têm acesso a esse recurso")
         return redirect("login")
 
-    tutor = get_object_or_404(UsuarioModel,id=request.user.id)
+    tutor = get_object_or_404(UsuarioModel, id=request.user.id)
     assinatura = AssinaturaModel.objects.filter(usuario=tutor).first()
 
-    relatorios = [(relatorio,DocumentModel.objects.filter(relatorio=relatorio)) for relatorio in RelatorioModel.objects.all().order_by("-data_relatorio")]
+    relatorios = [(relatorio, DocumentModel.objects.filter(relatorio=relatorio))
+                  for relatorio in RelatorioModel.objects.all().order_by("-data_relatorio")]
 
     context = {
 
         "url": "tutor_home",
-        "assinatura":assinatura,
-        "relatorios":relatorios
+        "assinatura": assinatura,
+        "relatorios": relatorios
 
     }
     return render(request, "tutor/home.html", context)
@@ -197,29 +208,29 @@ def coordenadorHome(request):
 
     if request.session['permissao'] != 3:
 
-        messages.add_message(request,messages.INFO,"Usuário não têm acesso a esse recurso")
+        messages.add_message(request, messages.INFO,
+                             "Usuário não têm acesso a esse recurso")
         return redirect("login")
 
     dados = UsuarioModel.objects.filter(permissao=1)
 
-    relatorios = [(relatorio,DocumentModel.objects.filter(relatorio=relatorio)) for relatorio in RelatorioModel.objects.all().order_by("-data_relatorio")]
+    relatorios = [(relatorio, DocumentModel.objects.filter(relatorio=relatorio))
+                  for relatorio in RelatorioModel.objects.all().order_by("-data_relatorio")]
 
-   
     relatoriosEnviados = len(relatorios[0][1] if relatorios else [])
     ultimoRelatorio = relatorios[0][0] if relatorios else NULL
     numAlunos = dados.count()
     relatoriosPendentes = numAlunos - relatoriosEnviados
-    
+
     contexto = {
         "tab": dados,
         "numeroAlunos": numAlunos,
         "relatorios": relatorios,
         "ultimoRelatorio": ultimoRelatorio,
-        "relatoriosPendentes":relatoriosPendentes,
+        "relatoriosPendentes": relatoriosPendentes,
         "relatoriosEnviados": relatoriosEnviados,
-        "dados_usuarios":dados
+        "dados_usuarios": dados
     }
-
 
     return render(request, "coordenador/home.html", contexto)
 
@@ -231,7 +242,8 @@ def configuracoes(request, relatorio):
 
     if request.session['permissao'] == 1:
 
-        messages.add_message(request,messages.INFO,"Usuário não têm acesso a esse recurso")
+        messages.add_message(request, messages.INFO,
+                             "Usuário não têm acesso a esse recurso")
         return redirect("login")
 
     MESES_CHOICE = [
@@ -302,25 +314,25 @@ def configuracoes(request, relatorio):
 def avisos(request):
 
     if request.session.get('permissao') == 1:
-        
-        aluno = get_object_or_404(UsuarioModel,id = request.user.id)
+
+        aluno = get_object_or_404(UsuarioModel, id=request.user.id)
         avisos = AvisoModel.objects.filter(aluno=aluno).order_by("-data_envio")
-         
+
         context = {
 
-            'avisos':avisos
+            'avisos': avisos
         }
-        return render(request, "avisos/avisosAluno.html",context)
-    
+        return render(request, "avisos/avisosAluno.html", context)
+
     else:
 
         avisos = AvisoModel.objects.all().order_by("-data_envio")
 
         context = {
 
-            'avisos':avisos
+            'avisos': avisos
         }
-        return render(request, "avisos/avisosAdmin.html",context)
+        return render(request, "avisos/avisosAdmin.html", context)
 
 
 # Controller do registro
@@ -334,7 +346,7 @@ def registro(request):
     if is_usuarios:
 
         return redirect('login')
-    if(request.method=="POST"):
+    if(request.method == "POST"):
 
         usuario = request.POST.get("usuario")
         email = request.POST.get("email")
@@ -344,7 +356,7 @@ def registro(request):
         if senha == senhaRepeat:
 
             novo_usuario = UsuarioModel()
-            novo_usuario.email= email
+            novo_usuario.email = email
             novo_usuario.username = usuario
             novo_usuario.set_password(senha)
             novo_usuario.permissao = 3
@@ -352,20 +364,23 @@ def registro(request):
             try:
 
                 novo_usuario.save()
-                messages.add_message(request,messages.SUCCESS,"Usuário criado com sucesso")
-                return redirect('login')                
+                messages.add_message(
+                    request, messages.SUCCESS, "Usuário criado com sucesso")
+                return redirect('login')
             except Exception as e:
 
-                messages.add_message(request,messages.ERROR,"Ocorreu um erro ao salvar o usuário, tente mais tarde")
+                messages.add_message(
+                    request, messages.ERROR, "Ocorreu um erro ao salvar o usuário, tente mais tarde")
                 return redirect("login")
 
         else:
 
-            messages.add_message(request,messages.ERROR,"A senha não são iguais")
+            messages.add_message(request, messages.ERROR,
+                                 "A senha não são iguais")
             return redirect("registro")
 
     else:
-        
+
         return render(request, 'partius/gerenciarAcesso/registro.html')
 
 
@@ -413,12 +428,14 @@ def nova_senha(request):
 
 # Cadastro de usuarios
 
+
 @login_required(login_url="login")
 def cadastroUsuario(request):
 
     if request.session['permissao'] == 1:
 
-        messages.add_message(request,messages.INFO,"Usuário não têm acesso a esse recurso")
+        messages.add_message(request, messages.INFO,
+                             "Usuário não têm acesso a esse recurso")
         return redirect("login")
 
     if request.method == "POST":
@@ -467,13 +484,14 @@ def cadastroUsuario(request):
                 dados = {
 
                     "url_redefinir": f"{request.headers['Origin']}/redefinicao_senha/{token}/{novo_usuario.id}",
-                    "assunto":"Definição de senha",
-                    
+                    "assunto": "Definição de senha",
+
                 }
 
                 body_email = render_to_string(
                     "emailTemplate/confirmacaoSenha.html", dados)
 
+<<<<<<< HEAD
                 
                 enviar_email("Confirmação de usuário",body_email,[novo_usuario.email])
 
@@ -493,12 +511,29 @@ def cadastroUsuario(request):
                 print(e)
                 novo_usuario.delete()
                 messages.add_message(request,messages.ERROR,"Email não pode ser enviado")
+=======
+                enviar_email("Confirmação de usuário",
+                             body_email, [novo_usuario.email])
+
+                messages.add_message(
+                    request, messages.SUCCESS, "Usuário foi criado com sucesso. Um email foi enviado para o email fornecido.")
+
+            except Exception as e:
+
+                messages.add_message(
+                    request, messages.ERROR, "Email não pode ser enviado")
+>>>>>>> 4edf5800a732b39c64140ae2ad907be33f467d7d
                 return redirect("/configuracoes/usuario")
-                
-               
+
         except Exception as e1:
+<<<<<<< HEAD
             
             messages.add_message(request,messages.ERROR,"Ocorreu algum erro ao criar o usuário")
+=======
+            print(e1)
+            messages.add_message(request, messages.ERROR,
+                                 "Ocorreu algum erro ao criar o usuário")
+>>>>>>> 4edf5800a732b39c64140ae2ad907be33f467d7d
             return redirect("/configuracoes/usuario")
 
     return redirect("/configuracoes/usuario")
@@ -509,7 +544,8 @@ def editaUsuario(request, id):
 
     if request.session['permissao'] == 1:
 
-        messages.add_message(request,messages.INFO,"Usuário não têm acesso a esse recurso")
+        messages.add_message(request, messages.INFO,
+                             "Usuário não têm acesso a esse recurso")
         return redirect("login")
 
     if request.method == "POST":
@@ -520,18 +556,19 @@ def editaUsuario(request, id):
         instance.email = request.POST.get("email")
         instance.permissao = request.POST.get("permissao")
         instance.is_active = request.POST.get("status")
-      
 
         instance.save()
 
     return redirect("/configuracoes/usuario")
+
 
 @login_required(login_url="login")
 def deletaUsuario(request):
 
     if request.session['permissao'] == 1:
 
-        messages.add_message(request,messages.INFO,"Usuário não têm acesso a esse recurso")
+        messages.add_message(request, messages.INFO,
+                             "Usuário não têm acesso a esse recurso")
         return redirect("login")
 
     if request.method == 'POST':
@@ -557,7 +594,8 @@ def cadastrarDisciplina(request):
 
     if request.session['permissao'] == 1:
 
-        messages.add_message(request,messages.INFO,"Usuário não têm acesso a esse recurso")
+        messages.add_message(request, messages.INFO,
+                             "Usuário não têm acesso a esse recurso")
         return redirect("login")
 
     if(request.method == "POST"):
@@ -602,9 +640,9 @@ def editarDisciplina(request):
 
     if request.session['permissao'] == 1:
 
-        messages.add_message(request,messages.INFO,"Usuário não têm acesso a esse recurso")
+        messages.add_message(request, messages.INFO,
+                             "Usuário não têm acesso a esse recurso")
         return redirect("login")
-
 
     id = request.POST.get("id")
     nome = request.POST.get("nome")
@@ -648,9 +686,9 @@ def deletarDisciplina(request):
 
     if request.session['permissao'] == 1:
 
-        messages.add_message(request,messages.INFO,"Usuário não têm acesso a esse recurso")
+        messages.add_message(request, messages.INFO,
+                             "Usuário não têm acesso a esse recurso")
         return redirect("login")
-
 
     if(request.method == "POST"):
 
@@ -671,56 +709,53 @@ def deletarDisciplina(request):
 
     return redirect("/configuracoes/disciplinas")
 
+
 @login_required(login_url="login")
 def uploadAssinatura(request):
 
     if request.session['permissao'] == 3:
 
-        messages.add_message(request,messages.INFO,"Usuário não têm acesso a esse recurso")
+        messages.add_message(request, messages.INFO,
+                             "Usuário não têm acesso a esse recurso")
         return redirect("login")
 
-
     if(request.method == "POST"):
-
 
         imagem_base64 = request.POST.get("imagem_base64")
         url = request.POST.get("urlOrigem")
         imagem = Image.open(io.BytesIO(base64.b64decode(imagem_base64)))
         output = io.BytesIO()
 
-    
         imagem.save(output, format='png', quality=85)
         output.seek(0)
-       
+
         arquivo = InMemoryUploadedFile(output, 'ImageField',
-                                        "assinatura.png",
+                                       "assinatura.png",
                                        'image/png',
                                        sys.getsizeof(output), None)
-        
-        usuario = get_object_or_404(UsuarioModel,id=request.user.id)
+
+        usuario = get_object_or_404(UsuarioModel, id=request.user.id)
         assinatura = AssinaturaModel.objects.filter(usuario=usuario)
         # Analiza se o aluno possui uma assinatura
         if(assinatura):
-           
+
             # Remove o arquivo anterios se existir
-        
+
             assinatura.delete()
-            
 
         if(not arquivo):
 
             messages.add_message(request, messages.WARNING,
                                  "É necessário um arquivo")
 
-        assinatura = AssinaturaModel(usuario=usuario,url_assinatura=arquivo)
+        assinatura = AssinaturaModel(usuario=usuario, url_assinatura=arquivo)
 
         try:
-            
+
             assinatura.save()
             messages.add_message(request, messages.SUCCESS,
-                                "Assinatura salva com sucesso")
+                                 "Assinatura salva com sucesso")
 
-        
         except Exception:
 
             messages.add_message(request, messages.ERROR,
@@ -728,10 +763,10 @@ def uploadAssinatura(request):
 
     return redirect(url)
 
+
 @login_required(login_url='login')
 def cadastrarRelatorio(request):
 
-        
     MESES_CHOICE = [
 
         [1, "Janeiro"],
@@ -818,9 +853,9 @@ def cadastrarRelatorio(request):
 
     return redirect('/configuracoes/relatorio')
 
+
 @login_required(login_url="login")
 def editaRelatorio(request):
-
 
     MESES_CHOICE = [
 
@@ -902,7 +937,6 @@ def editaRelatorio(request):
 @login_required(login_url="login")
 def deletarRelatorio(request):
 
-
     if (request.method == "POST"):
         id = request.POST.get("id")
         nome = request.POST.get("nome")
@@ -925,7 +959,6 @@ def deletarRelatorio(request):
 @login_required(login_url='login')
 def salvarAtividades(request):
 
-
     if(request.method == "POST"):
 
         disciplinas_id = request.POST.getlist("nomeDisciplina")
@@ -934,22 +967,25 @@ def salvarAtividades(request):
         atividades = request.POST.getlist("atividades")
         relatorioCorrente = request.POST.get("periodo_relatorio")
 
-        relatorio = get_object_or_404(RelatorioModel,id=relatorioCorrente)
+        relatorio = get_object_or_404(RelatorioModel, id=relatorioCorrente)
         aluno = get_object_or_404(UsuarioModel, id=request.user.id)
-        relatorio_realizado = list(filter(lambda item: item.aluno == aluno,DocumentModel.objects.filter(relatorio=relatorio)))
-        
-        if( relatorio_realizado ):
-            
-            messages.add_message(request,messages.WARNING,"Já foi realizado um relatório, edite ou exclua")
+        relatorio_realizado = list(filter(
+            lambda item: item.aluno == aluno, DocumentModel.objects.filter(relatorio=relatorio)))
+
+        if(relatorio_realizado):
+
+            messages.add_message(request, messages.WARNING,
+                                 "Já foi realizado um relatório, edite ou exclua")
             return redirect("/aluno/home")
-       
+
         conteudo = []
 
         for indice in range(len(disciplinas_id)):
-            nome_disciplina=DisciplinaModel.objects.get(id=disciplinas_id[indice]).nome
+            nome_disciplina = DisciplinaModel.objects.get(
+                id=disciplinas_id[indice]).nome
             conteudo.append(
                 [nome_disciplina, dataInicio[indice], dataFim[indice], atividades[indice]])
-            
+
         novo_documento = DocumentModel()
         novo_documento.aluno = aluno
         novo_documento.relatorio = relatorio
@@ -959,48 +995,49 @@ def salvarAtividades(request):
 
             novo_documento.save()
 
-
             for indice in range(len(atividades)):
 
                 relato_registro = RelatoModel()
                 relato_registro.documento = novo_documento
                 relato_registro.conteudo = atividades[indice]
-                relato_registro.disciplina = DisciplinaModel.objects.get(id=disciplinas_id[indice])
+                relato_registro.disciplina = DisciplinaModel.objects.get(
+                    id=disciplinas_id[indice])
                 relato_registro.save()
 
-            
             novo_documento.assinarDocumento()
 
-            messages.add_message(request,messages.SUCCESS, "Relatório gerado com sucesso")
+            messages.add_message(request, messages.SUCCESS,
+                                 "Relatório gerado com sucesso")
         except Exception as e:
             
             novo_documento.delete()
-            messages.add_message(request,messages.ERROR, "Não foi possivel gerar o documento")
-
+            messages.add_message(request, messages.ERROR,
+                                 "Não foi possivel gerar o documento")
 
         return redirect("/aluno/home")
 
 
 @login_required(login_url='login')
-def editarAtividade(request,id):
+def editarAtividade(request, id):
 
     if request.session['permissao'] != 1:
 
-        messages.add_message(request,messages.INFO,"Usuário não têm acesso a esse recurso")
+        messages.add_message(request, messages.INFO,
+                             "Usuário não têm acesso a esse recurso")
         return redirect("login")
 
     if request.method == 'GET':
 
-        documento = get_object_or_404(DocumentModel,id=id)
+        documento = get_object_or_404(DocumentModel, id=id)
         relatos = RelatoModel.objects.filter(documento=documento)
 
         context = {
 
             "documento": documento,
-            "relatos":relatos
+            "relatos": relatos
         }
-       
-    return render(request,'aluno/editarRelatorio.html',context)
+
+    return render(request, 'aluno/editarRelatorio.html', context)
 
 
 @login_required(login_url='login')
@@ -1012,9 +1049,9 @@ def update_relatorio(request):
         atividades = request.POST.getlist("atividades")
         relato_ids = request.POST.getlist("id_relato")
 
-        documento = get_object_or_404(DocumentModel,id=documento_id)
+        documento = get_object_or_404(DocumentModel, id=documento_id)
 
-        for indice,id_relato in enumerate(relato_ids):
+        for indice, id_relato in enumerate(relato_ids):
 
             relato = RelatoModel.objects.get(id=id_relato)
             relato.conteudo = atividades[indice]
@@ -1023,11 +1060,13 @@ def update_relatorio(request):
 
         try:
             documento.assinarDocumento()
-            messages.add_message(request,messages.SUCCESS,"Documento alterado com sucesso!")
+            messages.add_message(request, messages.SUCCESS,
+                                 "Documento alterado com sucesso!")
 
         except Exception:
 
-            messages.add_message(request,messages.ERROR,"Documento não pode ser alterado")
+            messages.add_message(request, messages.ERROR,
+                                 "Documento não pode ser alterado")
 
         return redirect("aluno_home")
 
@@ -1035,26 +1074,26 @@ def update_relatorio(request):
 @login_required(login_url='login')
 def excluirDocumento(request):
 
-
     if request.method == 'POST':
-        
+
         id = request.POST.get('id')
-        documento = get_object_or_404(DocumentModel,id=id)
+        documento = get_object_or_404(DocumentModel, id=id)
 
         try:
-            
+
             documento.delete()
-            messages.add_message(request,messages.SUCCESS,"Documento deletado com sucesso!")
+            messages.add_message(request, messages.SUCCESS,
+                                 "Documento deletado com sucesso!")
 
         except Exception:
 
-            messages.add_message(request,messages.ERROR,"Documento não pode ser deletado")
+            messages.add_message(request, messages.ERROR,
+                                 "Documento não pode ser deletado")
 
     if request.session.get('permissao') == 2:
 
         return redirect('tutor_home')
-        
-    
+
     return redirect('aluno_home')
 
 
@@ -1063,7 +1102,7 @@ def excluirDocumento(request):
 @login_required(login_url="login")
 def enviarAvisos(request):
 
-    usuario = get_object_or_404(UsuarioModel,id=request.user.id)
+    usuario = get_object_or_404(UsuarioModel, id=request.user.id)
 
     if request.method == 'POST':
 
@@ -1084,19 +1123,17 @@ def enviarAvisos(request):
         #     messages.add_message(request,messages.WARNING,"Nenhum aluno foi encontrado. Cadastre primeiramente algum aluno")
         #     return redirect('avisos')
 
-
-
         for aluno in destinatarios:
 
             emails.append(aluno.email)
 
-    
-        enviado = enviar_email(assunto=assunto,body_email=conteudo,destinatarios=emails)
+        enviado = enviar_email(
+            assunto=assunto, body_email=conteudo, destinatarios=emails)
 
         if enviado:
 
             aviso = AvisoModel()
-            aviso.conteudo =conteudo
+            aviso.conteudo = conteudo
             aviso.email_origem = EMAIL_HOST_USER
             aviso.usuario_remetente = usuario
             aviso.assunto = assunto
@@ -1107,16 +1144,17 @@ def enviarAvisos(request):
 
                 aviso.aluno.add(aluno)
                 aviso.save()
-            
-            messages.add_message(request,messages.SUCCESS,"Aviso enviado com sucesso!")
+
+            messages.add_message(request, messages.SUCCESS,
+                                 "Aviso enviado com sucesso!")
 
         else:
 
-            messages.add_message(request,messages.ERROR,"Ocorreu um erro ao enviar o aviso!")
+            messages.add_message(request, messages.ERROR,
+                                 "Ocorreu um erro ao enviar o aviso!")
 
-
-     
     return redirect('avisos')
+<<<<<<< HEAD
 
    
 @login_required(login_url="login")
@@ -1136,3 +1174,5 @@ def assinarDocumento(request):
         assinatura.validada = True
 
         
+=======
+>>>>>>> 4edf5800a732b39c64140ae2ad907be33f467d7d
