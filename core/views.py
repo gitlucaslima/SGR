@@ -1105,7 +1105,7 @@ def enviarAvisos(request):
             emails.append(aluno.email)
 
         enviado = enviar_email(
-            assunto=assunto, body_email=conteudo, destinatarios=emails)
+            assunto=assunto, body_email=conteudo,remetente=get_object_or_404(UsuarioModel,id=request.user.id),destinatarios=emails)
 
         if enviado:
 
