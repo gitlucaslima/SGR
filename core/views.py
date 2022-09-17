@@ -1056,7 +1056,7 @@ def update_relatorio(request):
         except Exception:
 
             messages.add_message(request, messages.ERROR,
-                                 "Documento não pode ser alterado")
+                                 "Documento não pode ser alterado.")
 
         return redirect("aluno_home")
 
