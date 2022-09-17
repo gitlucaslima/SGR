@@ -1105,6 +1105,13 @@ def enviarAvisos(request):
         enviado = enviar_email(
             assunto=assunto, body_email=conteudo,remetente=get_object_or_404(UsuarioModel,id=request.user.id),destinatarios=destinatarios)
 
+        if not enviado:
+
+            messages.add_message(request,messages.ERROR,"Aviso não pode ser enviado")
+
+        else:
+
+            messages.add_message(request,messages.SUCCESS,"Aviso enviado com sucesso")
 
     return redirect('avisos')
 
