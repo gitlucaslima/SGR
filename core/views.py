@@ -1017,7 +1017,7 @@ def editarAtividade(request, id):
         if documento.tutor:
 
             messages.add_message(request,messages.INFO,"Documento já foi assinado, não pode mais ser editado")
-            return render(request, 'aluno/editarRelatorio.html', context)
+            return render(request, 'aluno_home')
 
         relatos = RelatoModel.objects.filter(documento=documento)
 
