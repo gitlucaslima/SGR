@@ -1093,42 +1093,18 @@ def enviarAvisos(request):
 
             destinatarios = UsuarioModel.objects.filter(permissao=1)
 
-        emails = []
+      
 
-        # if not emails:
+        if not destinatarios:
 
-        #     messages.add_message(request,messages.WARNING,"Nenhum aluno foi encontrado. Cadastre primeiramente algum aluno")
-        #     return redirect('avisos')
+            messages.add_message(request,messages.WARNING,"Nenhum aluno foi encontrado. Cadastre primeiramente algum aluno")
+            return redirect('avisos')
 
-        for aluno in destinatarios:
-
-            emails.append(aluno.email)
+      
 
         enviado = enviar_email(
-            assunto=assunto, body_email=conteudo,remetente=get_object_or_404(UsuarioModel,id=request.user.id),destinatarios=emails)
+            assunto=assunto, body_email=conteudo,remetente=get_object_or_404(UsuarioModel,id=request.user.id),destinatarios=destinatarios)
 
-        if enviado:
-
-            aviso = AvisoModel()
-            aviso.conteudo = conteudo
-            aviso.email_origem = EMAIL_HOST_USER
-            aviso.usuario_remetente = usuario
-            aviso.assunto = assunto
-            aviso.data_envio = datetime.now()
-            aviso.save()
-
-            for aluno in destinatarios:
-
-                aviso.aluno.add(aluno)
-                aviso.save()
-
-            messages.add_message(request, messages.SUCCESS,
-                                 "Aviso enviado com sucesso!")
-
-        else:
-
-            messages.add_message(request, messages.ERROR,
-                                 "Ocorreu um erro ao enviar o aviso!")
 
     return redirect('avisos')
 
