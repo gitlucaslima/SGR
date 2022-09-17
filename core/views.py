@@ -1073,22 +1073,23 @@ def excluirDocumento(request):
 
             messages.add_message(request, messages.WARNING,
                                 "O período de edição do relatório já passou")
-            return redirect('aluno_home')
 
-        if documento.tutor:
+        elif documento.tutor:
 
             messages.add_message(request,messages.INFO,"Documento não pode ser excluido, pois já foi assinado")
-            return redirect('aluno_home')
-        try:
 
-            documento.delete()
-            messages.add_message(request, messages.SUCCESS,
-                                 "Documento deletado com sucesso!")
+        else:
+            
+            try:
 
-        except Exception:
+                documento.delete()
+                messages.add_message(request, messages.SUCCESS,
+                                    "Documento deletado com sucesso!")
 
-            messages.add_message(request, messages.ERROR,
-                                 "Documento não pode ser deletado")
+            except Exception:
+
+                messages.add_message(request, messages.ERROR,
+                                    "Documento não pode ser deletado")
 
     if request.session.get('permissao') == 2:
 
