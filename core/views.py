@@ -859,6 +859,7 @@ def editaRelatorio(request):
 
         relatorio = get_object_or_404(RelatorioModel, id=id)
 
+        
         anoAtual = datetime.now().year
 
         mesRelatorio = mesRelatorio if int(
@@ -1006,6 +1007,18 @@ def editarAtividade(request, id):
     if request.method == 'GET':
 
         documento = get_object_or_404(DocumentModel, id=id)
+
+        if not isDatePassou(documento.relatorio.data_limite):
+
+            messages.add_message(request, messages.WARNING,
+                                "Período para entrega do relatório já passou!")
+            return redirect('aluno_home')
+
+        if documento.tutor:
+
+            messages.add_message(request,messages.INFO,"Documento já foi assinado, não pode mais ser editado")
+            return render(request, 'aluno/editarRelatorio.html', context)
+
         relatos = RelatoModel.objects.filter(documento=documento)
 
         context = {
