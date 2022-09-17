@@ -2,8 +2,6 @@ import base64
 import io
 import sys
 from datetime import datetime
-from msilib.schema import Error
-
 from django.contrib import messages
 from django.contrib.auth import login as login_check
 from django.contrib.auth import logout as logout_django
@@ -596,7 +594,7 @@ def cadastrarDisciplina(request):
             messages.add_message(
                 request, messages.ERROR, 'Já existe uma disciplina cadastrada com este nome')
 
-        except Error:
+        except Exception:
 
             messages.add_message(request, messages.ERROR, 'Ocorreu algum erro')
 
@@ -642,7 +640,7 @@ def editarDisciplina(request):
         messages.add_message(request, messages.ERROR,
                              'Já existe uma disciplina cadastrada com este nome')
 
-    except Error:
+    except Exception:
 
         messages.add_message(request, messages.ERROR, 'Ocorreu algum erro')
 
