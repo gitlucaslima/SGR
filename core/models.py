@@ -1,19 +1,9 @@
 
-
-import io
 import os
-import sys
-from asyncore import read
-from datetime import date, datetime
-from ntpath import join
-from platform import python_compiler
-
 from django.contrib.auth.models import User
-from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.signing import TimestampSigner
 from django.db import models
 from django_unused_media import cleanup
-from docx2pdf import convert
 from docxtpl import DocxTemplate
 from sgr.settings import BASE_DIR
 

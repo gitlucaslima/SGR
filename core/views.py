@@ -1,8 +1,6 @@
 import base64
 import io
-from pydoc import doc
 import sys
-from asyncio.windows_events import NULL
 from datetime import datetime
 from msilib.schema import Error
 
@@ -16,12 +14,10 @@ from django.db import IntegrityError
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from PIL import Image
-from sgr.settings import EMAIL_BACKEND, EMAIL_HOST_USER
 from core.funcoes_auxiliares.data import isDateMaior, isDatePassou
 from core.funcoes_auxiliares.send_email import enviar_email
 from core.models import *
-from sgr.settings import EMAIL_BACKEND, EMAIL_HOST_USER
-from django.db.models import Q
+from sgr.settings import EMAIL_HOST_USER
 
 # Controllers do aluno
 
@@ -214,7 +210,7 @@ def coordenadorHome(request):
                   for relatorio in RelatorioModel.objects.all().order_by("-data_relatorio")]
 
     relatoriosEnviados = len(relatorios[0][1] if relatorios else [])
-    ultimoRelatorio = relatorios[0][0] if relatorios else NULL
+    ultimoRelatorio = relatorios[0][0] if relatorios else None
     numAlunos = dados.count()
     relatoriosPendentes = numAlunos - relatoriosEnviados
 
