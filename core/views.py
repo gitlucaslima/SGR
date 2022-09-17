@@ -1068,18 +1068,19 @@ def excluirDocumento(request):
 
         id = request.POST.get('id')
         documento = get_object_or_404(DocumentModel, id=id)
+        permissao_usuario = request.session.get('permissao')
 
-        if not isDatePassou(documento.relatorio.data_limite):
+        if not isDatePassou(documento.relatorio.data_limite) and permissao_usuario != 2:
 
             messages.add_message(request, messages.WARNING,
                                 "O período de edição do relatório já passou")
 
-        elif documento.tutor:
+        elif documento.tutor and permissao_usuario != 2:
 
             messages.add_message(request,messages.INFO,"Documento não pode ser excluido, pois já foi assinado")
 
         else:
-            
+
             try:
 
                 documento.delete()
@@ -1091,7 +1092,7 @@ def excluirDocumento(request):
                 messages.add_message(request, messages.ERROR,
                                     "Documento não pode ser deletado")
 
-    if request.session.get('permissao') == 2:
+    if permissao_usuario == 2:
 
         return redirect('tutor_home')
 
